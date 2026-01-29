@@ -1,5 +1,5 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
 
 const app = express();
 const PORT = 3000;
@@ -12,7 +12,7 @@ app.use(express.json());
 let candidates = [];
 
 // --- API NHẬN DỮ LIỆU TỪ TEST SCRIPT CỦA BẠN ---
-app.post('/api/cv', (req, res) => {
+app.post("/api/cv", (req, res) => {
   const { candidateName, rawData } = req.body;
 
   console.log(`\n📩 Nhận được yêu cầu từ Test Script:`);
@@ -27,7 +27,7 @@ app.post('/api/cv', (req, res) => {
     receivedAt: new Date().toLocaleTimeString(),
     // Giả lập một số kỹ năng để Frontend hiển thị cho đẹp
     skills: ["Auto-Generated", "Testing"],
-    yearsOfExperience: Math.floor(Math.random() * 10)
+    yearsOfExperience: Math.floor(Math.random() * 10),
   };
 
   candidates.push(newCandidate);
@@ -36,13 +36,19 @@ app.post('/api/cv', (req, res) => {
   res.status(201).json({
     success: true,
     message: "Đã nhận dữ liệu thành công!",
-    receivedData: newCandidate
+    receivedData: newCandidate,
   });
 });
 
 // --- API CHO FRONTEND LẤY DANH SÁCH ---
-app.get('/api/cv', (req, res) => {
+app.get("/api/cv", (req, res) => {
   res.json(candidates);
+});
+
+app.post("/api/match", (req, res) => {
+  res.json({
+    result: "CV Nguyễn Văn A – phù hợp 85%",
+  });
 });
 
 app.listen(PORT, () => {
