@@ -16,5 +16,4 @@ indexAdminRoute(app);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend đang chạy tại: http://localhost:${PORT}`);
-  console.log(`👉 Đang chờ dữ liệu từ hàm testSendCV của bạn...`);
 });
