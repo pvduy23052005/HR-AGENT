@@ -1,0 +1,10 @@
+
+@base_url = http://localhost:3000
+
+###
+POST {{base_url}}/admin/create
+Content-Type: application/json
+
+{
+  "test" : "ok"
+}
