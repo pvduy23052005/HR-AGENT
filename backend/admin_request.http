@@ -2,11 +2,21 @@
 @base_url = http://localhost:3000
 
 ###
-POST {{base_url}}/admin/account/create
+POST {{base_url}}/admin/auth/login
 Content-Type: application/json
 
 {
   "fullName": "Phung Van Duy",
   "email": "admin@gmail.com",
   "password": "123"
+}
+
+### 
+POST {{base_url}}/admin/user/create 
+Content-Type:  application/json
+
+{
+  "fullName" : "hr-test" ,
+  "email" : "hr1@gmail.com",
+  "password" : "123"
 }

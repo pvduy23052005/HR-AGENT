@@ -1,11 +1,12 @@
 
 @base_url = http://localhost:3000
 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5N2RkNzc3NzAzOTE0MTEzMThiN2Q2MyIsImVtYWlsIjoiaHIxQGdtYWlsLmNvbSIsImlhdCI6MTc2OTg1NDk1MCwiZXhwIjoxNzY5OTQxMzUwfQ.wEmis1wXwZcG-UwmW9NcaQlUi_zL1w3jilOtEnMmJTw
 ###
 POST {{base_url}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "admin@gmail.com",
+  "email": "hr1@gmail.com",
   "password": "123"
 }
