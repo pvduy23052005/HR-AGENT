@@ -10,3 +10,31 @@ Content-Type: application/json
   "email": "hr1@gmail.com",
   "password": "123"
 }
+
+###
+POST {{base_url}}/user/password/forgot
+Content-Type: application/json
+
+{
+  "email": "hr1@gmail.com"
+}
+
+###
+POST {{base_url}}/user/password/otp
+Content-Type: application/json
+
+{
+  "email": "hr1@gmail.com",
+  "otp": "78466028"
+}
+
+###
+POST {{base_url}}/user/password/reset
+Content-Type: application/json
+
+{
+  "email": "hr1@gmail.com",
+  "otp": "78466028",
+  "password": "123456",
+  "confirmPassword": "123456"
+}
