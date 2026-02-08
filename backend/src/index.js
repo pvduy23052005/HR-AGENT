@@ -19,5 +19,5 @@ indexClientRoute(app);
 
 
 app.listen(PORT, () => {
-  console.log(`🚀 Backend admin đang chạy tại: http://localhost:${PORT}`);
+  console.log(`Backend admin đang chạy tại: http://localhost:${PORT}`);
 });

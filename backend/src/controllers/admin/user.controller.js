@@ -33,7 +33,7 @@ export const createUserPost = async (req, res) => {
     res.json({
       code: 200,
       message: "Tạo tài khoản HR thành công!",
-      data: {
+      user: {
         id: newUser.id,
         fullName: newUser.fullName,
         email: newUser.email,

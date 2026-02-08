@@ -1,6 +1,8 @@
 import ForgotPassword from "../../models/forgot-password.model.js";
 import { randomNumber } from "../../helpers/randomNumber.helper.js";
 import User from "../../models/user.model.js";
+import { sendEmail_helper } from "../../helpers/sendMail.helper.js";
+import { htmlEmailOtp } from "../../templates/email/otp.js";
 
 // [post] /user/password/forgot
 export const forgotPassword = async (req, res) => {
@@ -19,6 +21,23 @@ export const forgotPassword = async (req, res) => {
       });
     }
 
+    // Check if OTP was sent within last 60 seconds
+    const recentOtp = await ForgotPassword.findOne({
+      email: email,
+    }).sort({ createdAt: -1 });
+
+    if (recentOtp) {
+      const timeDiff =
+        (Date.now() - new Date(recentOtp.createdAt).getTime()) / 1000;
+      if (timeDiff < 60) {
+        const waitTime = Math.ceil(60 - timeDiff);
+        return res.status(429).json({
+          success: false,
+          message: `Vui lòng đợi ${waitTime} giây trước khi yêu cầu mã OTP mới!`,
+        });
+      }
+    }
+
     // random forgot password .
     const forgotPasswordRecord = new ForgotPassword({
       email: email,
@@ -28,6 +47,9 @@ export const forgotPassword = async (req, res) => {
     await forgotPasswordRecord.save();
 
     // 3. send email .
+    const subject = "Mã OTP lấy lại mật khẩu";
+    const content = htmlEmailOtp(forgotPasswordRecord.otp);
+    sendEmail_helper(email, subject, content);
 
     res.status(200).json({
       success: true,

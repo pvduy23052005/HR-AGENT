@@ -11,12 +11,16 @@ Content-Type: application/json
   "password": "123"
 }
 
+
+// api_user
 ### 
 POST {{base_url}}/admin/user/create 
 Content-Type:  application/json
 
 {
   "fullName" : "hr-test" ,
-  "email" : "hr1@gmail.com",
+  "email" : "2351170598@e.tlu.edu.vn",
   "password" : "123"
 }
+
+// end api_user

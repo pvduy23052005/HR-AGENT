@@ -11,12 +11,14 @@ Content-Type: application/json
   "password": "123"
 }
 
+// api_user
+
 ###
 POST {{base_url}}/user/password/forgot
 Content-Type: application/json
 
 {
-  "email": "hr1@gmail.com"
+  "email": "2351170598@e.tlu.edu.vn"
 }
 
 ###
@@ -38,3 +40,5 @@ Content-Type: application/json
   "password": "123456",
   "confirmPassword": "123456"
 }
+
+// end api_user
