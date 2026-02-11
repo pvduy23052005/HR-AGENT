@@ -67,7 +67,7 @@ export const loginPost = async (req, res) => {
       success: true,
       message: "Đăng nhập Admin thành công!",
       token: token,
-      data: {
+      admin: {
         id: admin.id,
         fullName: admin.fullName,
         email: admin.email,

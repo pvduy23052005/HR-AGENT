@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { data, useNavigate } from "react-router-dom";
 import { MdEmail, MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import authServiceAPI from "../../../services/admin/authService";
 import { toast } from "react-toastify";
 import "../../../styles/admin/pages/auth.css";
+import { AppContext } from "../../../context/admin/app/AppContext";
 
 function Auth() {
   const navigate = useNavigate();
+  const { login } = useContext(AppContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +25,7 @@ function Auth() {
       const res = await authServiceAPI.login({ email, password });
       if (res.success) {
         toast.success("Đăng nhập thành công!");
+        login(res.admin);
         navigate("/admin/dashboard");
       }
     } catch (error) {
