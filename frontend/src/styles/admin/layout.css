@@ -1,0 +1,26 @@
+/* ===== Admin Layout ===== */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.admin-layout__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 260px;
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+}
+
+.admin-layout__content {
+  flex: 1;
+  padding: 28px 32px;
+  overflow-y: auto;
+}

@@ -1,0 +1,41 @@
+:root {
+  /* 1. Brand Colors (Lấy từ dải màu bạn đưa - image_98b1c0.png) */
+  --color-primary: #0087f1; /* Màu xanh chủ đạo chính (Blue) */
+  --color-primary-dark: #0072f7; /* Xanh đậm hơn cho trạng thái Active */
+  --color-primary-light: #e7f3ff; /* Xanh nhạt cho background mã OTP hoặc highlight */
+
+  /* 2. Text Colors (image_9915b9.png) */
+  --color-text-primary: #1f2936; /* Màu chữ tiêu đề (Xám đen) */
+  --color-text-secondary: #555555; /* Màu chữ nội dung/mô tả */
+  --color-text-placeholder: #798eae; /* Màu placeholder */
+
+  /* 3. Background Colors (Căn chỉnh theo phong cách Clean UI) */
+  --color-bg-primary: #f9fafb; /* Nền chính của ứng dụng */
+  --color-bg-secondary: #f0f2f5; /* Nền phụ (Input, Chat Bubble người khác) */
+  --color-bg-sidebar: #ffffff; /* Nền trắng cho Sidebar/Card */
+
+  /* 4. Action & States */
+  --color-border: #e2e8f0; /* Màu viền nhẹ nhàng */
+  --color-hover-bg: #f3f4f6; /* Màu nền khi hover nhẹ */
+  --color-success: #00a77a; /* Màu xanh lá từ dải màu cuối cùng (Success state) */
+  --color-error: #ef4444; /* Màu đỏ cho cảnh báo/lỗi */
+
+  /* 5. Effects */
+  --color-shadow: rgba(0, 0, 0, 0.05);
+  --border-radius-lg: 12px; /* Bo góc lớn cho Card/Modal */
+  --border-radius-md: 8px; /* Bo góc cho Button/Input */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}

@@ -31,7 +31,7 @@ export const forgotPassword = async (req, res) => {
         (Date.now() - new Date(recentOtp.createdAt).getTime()) / 1000;
       if (timeDiff < 60) {
         const waitTime = Math.ceil(60 - timeDiff);
-        return res.status(429).json({
+        return res.status(400).json({
           success: false,
           message: `Vui lòng đợi ${waitTime} giây trước khi yêu cầu mã OTP mới!`,
         });
@@ -72,7 +72,6 @@ export const otpPassword = async (req, res) => {
 
     if (!email || !otp) {
       return res.status(400).json({
-        code: 400,
         success: false,
         message: "Vui lòng nhập đầy đủ email và mã OTP!",
       });
@@ -85,7 +84,6 @@ export const otpPassword = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
-        code: 400,
         success: false,
         message: "Email không tồn tại trong hệ thống!",
       });
@@ -98,14 +96,12 @@ export const otpPassword = async (req, res) => {
 
     if (!resultOtp) {
       return res.status(400).json({
-        code: 400,
         success: false,
         message: "OTP không chính xác hoặc đã hết hạn!",
       });
     }
 
     res.status(200).json({
-      code: 200,
       success: true,
       message: "Xác thực OTP thành công!",
     });
@@ -125,7 +121,6 @@ export const resetPassword = async (req, res) => {
 
     if (password !== confirmPassword) {
       return res.status(400).json({
-        code: 400,
         success: false,
         message: "Mật khẩu xác nhận không khớp!",
       });
@@ -137,7 +132,6 @@ export const resetPassword = async (req, res) => {
 
     if (!otpValid) {
       return res.status(400).json({
-        code: 400,
         success: false,
         message: "Phiên giao dịch đã hết hạn, vui lòng lấy lại mã OTP!",
       });
@@ -151,11 +145,11 @@ export const resetPassword = async (req, res) => {
 
     await ForgotPassword.deleteOne({ email: email });
 
-    res.json({
-      code: 200,
+    res.status(200).json({
+      success: true,
       message: "Đổi mật khẩu thành công! Vui lòng đăng nhập lại.",
     });
   } catch (error) {
-    res.status(500).json({ code: 500, message: "Lỗi đổi mật khẩu" });
+    res.status(500).json({ success: false, message: "Lỗi đổi mật khẩu" });
   }
 };
