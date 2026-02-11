@@ -4,4 +4,4 @@ const router = express.Router();
 
 router.post("/login", controller.loginPost);
 
-export const accountRoute = router;
+export const authRoute = router;
