@@ -5,10 +5,13 @@ import * as database from "./config/database.js";
 import indexAdminRoute from "./routes/admin/index.route.js";
 import indexClientRoute from "./routes/client/index.route.js";
 
+import cookieParser from "cookie-parser";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config();
 
+app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",

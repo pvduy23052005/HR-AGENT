@@ -5,6 +5,7 @@ import routeDashboard from "./admin/routeDashboard";
 import routeUser from "./admin/routeUser";
 import routeAiConfig from "./admin/routeAiConfig";
 import routeStatistics from "./admin/routeStatistics";
+import routeAuth from "./admin/routeAuth";
 
 const routes = [
   {
@@ -13,8 +14,12 @@ const routes = [
     children: [routeDashboard, routeUser, routeAiConfig, routeStatistics],
   },
   {
+    path: "/admin",
+    children: [routeAuth],
+  },
+  {
     path: "*",
-    element: <Navigate to="/admin/dashboard" replace />,
+    element: <Navigate to="/admin/auth/login" replace />,
   },
 ];
 

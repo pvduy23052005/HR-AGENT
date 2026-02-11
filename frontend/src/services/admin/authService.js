@@ -1,8 +1,13 @@
 import API from "./index";
 
 const authServiceAPI = {
-  login: (data) => {
-    return API.post("/admin/auth/login", data);
+  login: async (data) => {
+    const res = await API.post("/admin/auth/login", {
+      email: data.email,
+      password: data.password,
+    });
+
+    return res;
   },
 };
 

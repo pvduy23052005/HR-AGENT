@@ -46,9 +46,25 @@ export const loginPost = async (req, res) => {
       });
     }
 
+    const payload = {
+      userID: admin.id,
+    };
+
+    const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      path: "/",
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
     // Trả về kết quả
-    res.json({
-      code: 200,
+    res.status(200).json({
+      success: true,
       message: "Đăng nhập Admin thành công!",
       token: token,
       data: {
