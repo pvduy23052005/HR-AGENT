@@ -1,5 +1,5 @@
 import AccountAdmin from "../../models/accountAdmin.model.js";
-import jwt from "jsonwebtoken"; // Cần cài: pnpm add jsonwebtoken
+import jwt from "jsonwebtoken";
 
 // [POST] /admin/auth/login
 export const loginPost = async (req, res) => {
@@ -56,9 +56,9 @@ export const loginPost = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "none",
+      sameSite: "lax",
       path: "/",
-      secure: true,
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -78,6 +78,25 @@ export const loginPost = async (req, res) => {
     console.error("Login Admin Error:", error);
     res.status(500).json({
       code: 500,
+      success: false,
+      message: "Lỗi hệ thống",
+      error: error.message,
+    });
+  }
+};
+
+// [POST] /admin/auth/logout
+export const logout = (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({
+      success: true,
+      message: "Đăng xuất thành công!",
+    });
+  } catch (error) {
+    console.error("Logout Admin Error:", error);
+    res.status(500).json({
+      success: false,
       message: "Lỗi hệ thống",
       error: error.message,
     });

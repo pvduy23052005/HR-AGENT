@@ -9,6 +9,10 @@ const authServiceAPI = {
 
     return res;
   },
+  logout: async () => {
+    const res = await API.post("/admin/auth/logout");
+    return res;
+  },
 };
 
 export default authServiceAPI;

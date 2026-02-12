@@ -15,8 +15,8 @@ export const authStore = {
   set: (dataAdmin) => {
     localStorage.setItem("admin", JSON.stringify(dataAdmin));
   },
-  
+
   clear: () => {
-    localStorage.clear("admin");
+    localStorage.removeItem("admin");
   },
 };

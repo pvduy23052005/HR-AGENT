@@ -1,14 +1,10 @@
-import {
-  MdMailOutline,
-  MdChevronRight,
-} from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { MdMailOutline, MdLogout } from "react-icons/md";
 import "../../../../styles/admin/ui/header.css";
-
 
 function Header() {
   return (
     <header className="header">
-
       <div className="header__actions">
         <button className="header__action-btn" title="Tin nhắn">
           <MdMailOutline />

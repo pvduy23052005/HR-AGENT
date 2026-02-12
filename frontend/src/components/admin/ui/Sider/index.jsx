@@ -6,7 +6,10 @@ import {
   MdBarChart,
   MdLogout,
 } from "react-icons/md";
+import { useContext } from "react";
 import "../../../../styles/admin/ui/sider.css";
+import authServiceAPI from "../../../../services/admin/authService";
+import { AppContext } from "../../../../context/admin/app/AppContext";
 
 const menuItems = [
   { path: "/admin/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
@@ -17,10 +20,19 @@ const menuItems = [
 
 function Sider() {
   const navigate = useNavigate();
+  const { logout } = useContext(AppContext);
 
-  const handleLogout = () => {
-    // localStorage.clear();
-    // navigate("/login");
+  const handleLogout = async () => {
+    try {
+      const res = await authServiceAPI.logout();
+      console.log(res);
+      if (res.success) {
+        logout();
+        navigate("/admin/auth/login");
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
