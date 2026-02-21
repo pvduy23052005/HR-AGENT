@@ -5,17 +5,24 @@ import routeUser from "./admin/routeUser";
 import routeAiConfig from "./admin/routeAiConfig";
 import routeStatistics from "./admin/routeStatistics";
 import routeAuth from "./admin/routeAuth";
+import routeClientAuth from "./client/routeClientAuth";
 
 import ProtectedRoute from "./ProtectedRoute";
 
 const routes = [
-  // public route
+  // Client public routes
+  {
+    path: "/",
+    children: [routeClientAuth],
+  },
+
+  // Admin public route
   {
     path: "/admin",
     children: [routeAuth],
   },
 
-  // private route
+  // Admin private route
   {
     element: <ProtectedRoute />,
     children: [
@@ -28,7 +35,7 @@ const routes = [
   },
   {
     path: "*",
-    element: <Navigate to="/admin/auth/login" replace />,
+    element: <Navigate to="/auth/login" replace />,
   },
 ];
 
