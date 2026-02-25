@@ -1,152 +1,66 @@
-import ForgotPassword from "../../models/forgot-password.model.js";
-import { randomNumber } from "../../helpers/randomNumber.helper.js";
-import User from "../../models/user.model.js";
-import { sendEmail_helper } from "../../utils/sendMail.helper.js";
-import { htmlEmailOtp } from "../../templates/email/otp.js";
+import * as userService from "../../services/client/user.service.js";
 
-// [post] /user/password/forgot
+// [POST] /user/password/forgot
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const user = await User.findOne({
-      email: email,
-      deleted: false,
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Email không tồn tại trong hệ thống!",
-      });
-    }
-
-    const recentOtp = await ForgotPassword.findOne({
-      email: email,
-    }).sort({ createdAt: -1 });
-
-    if (recentOtp) {
-      const timeDiff =
-        (Date.now() - new Date(recentOtp.createdAt).getTime()) / 1000;
-      if (timeDiff < 60) {
-        const waitTime = Math.ceil(60 - timeDiff);
-        return res.status(400).json({
-          success: false,
-          message: `Vui lòng đợi ${waitTime} giây trước khi yêu cầu mã OTP mới!`,
-        });
-      }
-    }
-
-    const forgotPasswordRecord = new ForgotPassword({
-      email: email,
-      otp: randomNumber(8),
-    });
-
-    await forgotPasswordRecord.save();
-
-    const subject = "Mã OTP lấy lại mật khẩu";
-    const content = htmlEmailOtp(forgotPasswordRecord.otp);
-    sendEmail_helper(email, subject, content);
+    const result = await userService.forgotPassword(email);
 
     res.status(200).json({
       success: true,
       message: "Mã OTP đã được gửi đến email của bạn!",
-      email: email,
-      otp: forgotPasswordRecord.otp,
+      email: result.email,
+      otp: result.otp,
     });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ success: false, message: "Lỗi gửi mail", error: error.message });
+    console.error("Forgot Password Error:", error);
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({
+      success: false,
+      message: error.message || "Lỗi gửi mail",
+    });
   }
 };
 
-// [post] /user/password/otp
+// [POST] /user/password/otp
 export const otpPassword = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    if (!email || !otp) {
-      return res.status(400).json({
-        success: false,
-        message: "Vui lòng nhập đầy đủ email và mã OTP!",
-      });
-    }
-
-    const user = await User.findOne({
-      email: email,
-      deleted: false,
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: "Email không tồn tại trong hệ thống!",
-      });
-    }
-
-    const resultOtp = await ForgotPassword.findOne({
-      email: email,
-      otp: otp,
-    });
-
-    if (!resultOtp) {
-      return res.status(400).json({
-        success: false,
-        message: "OTP không chính xác hoặc đã hết hạn!",
-      });
-    }
+    await userService.verifyOtp(email, otp);
 
     res.status(200).json({
       success: true,
       message: "Xác thực OTP thành công!",
     });
   } catch (error) {
-    res.status(500).json({
-      code: 500,
+    console.error("OTP Verify Error:", error);
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({
       success: false,
-      message: "Lỗi hệ thống",
+      message: error.message || "Lỗi hệ thống",
     });
   }
 };
 
-// [post] /user/password/reset
+// [POST] /user/password/reset
 export const resetPassword = async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({
-        success: false,
-        message: "Mật khẩu xác nhận không khớp!",
-      });
-    }
-
-    const otpValid = await ForgotPassword.findOne({
-      email: email,
-    });
-
-    if (!otpValid) {
-      return res.status(400).json({
-        success: false,
-        message: "Phiên giao dịch đã hết hạn, vui lòng lấy lại mã OTP!",
-      });
-    }
-
-    const newPassword = password;
-
-    const user = await User.findOne({ email: email });
-    user.password = newPassword;
-    await user.save();
-
-    await ForgotPassword.deleteOne({ email: email });
+    await userService.resetPassword(email, password, confirmPassword);
 
     res.status(200).json({
       success: true,
       message: "Đổi mật khẩu thành công! Vui lòng đăng nhập lại.",
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Lỗi đổi mật khẩu" });
+    console.error("Reset Password Error:", error);
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({
+      success: false,
+      message: error.message || "Lỗi đổi mật khẩu",
+    });
   }
 };
