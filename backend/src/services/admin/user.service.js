@@ -28,3 +28,7 @@ export const createUser = async (dataUser) => {
     status: newUser.status,
   };
 };
+
+export const getUsers = async () => {
+  return await userRepository.findAll();
+};

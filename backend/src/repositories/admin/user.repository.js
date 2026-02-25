@@ -11,3 +11,7 @@ export const createUser = async (data) => {
   const newUser = new User(data);
   return await newUser.save();
 };
+
+export const findAll = async () => {
+  return await User.find({ deleted: false }).sort({ createdAt: -1 }).select("-password").lean();
+};

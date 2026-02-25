@@ -1,7 +1,7 @@
 
 @base_url = http://localhost:5050
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2OTdkZDA3Y2FiNDE3YmRjMDk1MzU4ZTQiLCJpYXQiOjE3NzIwMDkwNTcsImV4cCI6MTc3MjA5NTQ1N30.oJrxTZgLleNZUh9go4tu65Cs8EEgWk_3re0rhLLhx9E
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2OTdkZDA3Y2FiNDE3YmRjMDk1MzU4ZTQiLCJpYXQiOjE3NzIwMTIyODIsImV4cCI6MTc3MjA5ODY4Mn0.uwDeb4hkPhOW1q-b1nYTJwEmEI9AtKcv_VHZ3xrgjVc
 
 ###
 POST {{base_url}}/admin/auth/login
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 // api_user
 ### 
-POST {{base_url}}/admin/user/create 
+POST {{base_url}}/admin/users/create 
 Content-Type:  application/json
 header : Bearer {{token}}
 
@@ -25,5 +25,9 @@ header : Bearer {{token}}
   "email" : "test1@gmail.com",
   "password" : "123"
 }
+
+###
+GET  {{base_url}}/admin/users 
+header : Bearer {{token}}
 
 // end api_user
