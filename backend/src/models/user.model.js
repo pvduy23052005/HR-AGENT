@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "active",
+      enum: ["active", "inactive"],
     },
     deleted: {
       type: Boolean,

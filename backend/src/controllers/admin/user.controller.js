@@ -38,3 +38,28 @@ export const getUsers = async (req, res) => {
     });
   }
 };
+
+// [POST] /admin/user/change-status
+export const changeStatus = async (req, res) => {
+  try {
+    const { id, status } = req.body;
+
+    console.log(status);
+    const result = await userService.changeStatus(id, status);
+
+    res.json({
+      code: 200,
+      success: true,
+      message:
+        status === "active" ? "Đã mở khóa tài khoản!" : "Đã khóa tài khoản!",
+      user: result,
+    });
+  } catch (error) {
+    console.error("Lỗi đổi trạng thái:", error);
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({
+      code: statusCode,
+      message: error.message || "Lỗi hệ thống",
+    });
+  }
+};

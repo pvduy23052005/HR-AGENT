@@ -13,5 +13,16 @@ export const createUser = async (data) => {
 };
 
 export const findAll = async () => {
-  return await User.find({ deleted: false }).sort({ createdAt: -1 }).select("-password").lean();
+  return await User.find({ deleted: false })
+    .sort({ createdAt: -1 })
+    .select("-password")
+    .lean();
+};
+
+export const findById = async (id) => {
+  return await User.findOne({ _id: id, deleted: false });
+};
+
+export const updateStatus = async (id, status) => {
+  return await User.updateOne({ _id: id }, { status: status });
 };

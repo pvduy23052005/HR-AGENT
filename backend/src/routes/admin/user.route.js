@@ -7,4 +7,6 @@ router.post("/create", validate.createUserValidate, controller.createUserPost);
 
 router.get("/", controller.getUsers);
 
+router.post("/change-status", controller.changeStatus);
+
 export const userRoute = router;

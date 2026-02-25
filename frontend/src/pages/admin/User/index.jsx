@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   MdSearch,
   MdAdd,
-  MdEdit,
   MdDelete,
   MdLock,
   MdLockOpen,
@@ -11,7 +10,6 @@ import {
 } from "react-icons/md";
 import { toast } from "react-toastify";
 import * as userService from "../../../services/admin/userService";
-import EditModal from "./EditModal";
 import "../../../styles/admin/pages/users.css";
 
 function Users() {
@@ -20,7 +18,6 @@ function Users() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [editingUser, setEditingUser] = useState(null);
 
   // Fetch users
   const fetchUsers = useCallback(async () => {
@@ -51,14 +48,21 @@ function Users() {
   });
 
   // Toggle lock
-  const handleToggleLock = async (user) => {
+  const handleChangeStatus = async (user) => {
     try {
       const newStatus = user.status === "active" ? "inactive" : "active";
-      await userService.updateUser(user._id, { status: newStatus });
-      toast.success(
-        newStatus === "active" ? "Đã mở khóa tài khoản!" : "Đã khóa tài khoản!",
+      const data = await userService.changeStatus(
+        user._id.toString(),
+        newStatus,
       );
-      fetchUsers();
+      if (data.success) {
+        toast.success(
+          newStatus === "active"
+            ? "Đã mở khóa tài khoản!"
+            : "Đã khóa tài khoản!",
+        );
+        fetchUsers();
+      }
     } catch (error) {
       toast.error("Lỗi cập nhật trạng thái!");
     }
@@ -178,15 +182,9 @@ function Users() {
                       {formatDate(user.createdAt)}
                     </span>
                   </td>
+                  {/* action */}
                   <td>
                     <div className="users-table__actions">
-                      <button
-                        className="users-table__action-btn"
-                        title="Chỉnh sửa"
-                        onClick={() => setEditingUser(user)}
-                      >
-                        <MdEdit />
-                      </button>
                       <button
                         className="users-table__action-btn users-table__action-btn--warning"
                         title={
@@ -194,7 +192,7 @@ function Users() {
                             ? "Khóa tài khoản"
                             : "Mở khóa"
                         }
-                        onClick={() => handleToggleLock(user)}
+                        onClick={() => handleChangeStatus(user)}
                       >
                         {user.status === "active" ? <MdLock /> : <MdLockOpen />}
                       </button>
@@ -212,18 +210,6 @@ function Users() {
           </tbody>
         </table>
       </div>
-
-      {/* Edit Modal */}
-      {editingUser && (
-        <EditModal
-          user={editingUser}
-          onClose={() => setEditingUser(null)}
-          onSuccess={() => {
-            setEditingUser(null);
-            fetchUsers();
-          }}
-        />
-      )}
     </>
   );
 }

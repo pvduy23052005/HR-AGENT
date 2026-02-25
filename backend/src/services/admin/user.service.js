@@ -32,3 +32,20 @@ export const createUser = async (dataUser) => {
 export const getUsers = async () => {
   return await userRepository.findAll();
 };
+
+export const changeStatus = async (id, status) => {
+  const user = await userRepository.findById(id);
+
+  if (!user) {
+    const error = new Error("Người dùng không tồn tại!");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  await userRepository.updateStatus(id, status);
+
+  return {
+    id: user.id,
+    status: status,
+  };
+};

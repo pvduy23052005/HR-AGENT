@@ -30,4 +30,15 @@ header : Bearer {{token}}
 GET  {{base_url}}/admin/users 
 header : Bearer {{token}}
 
+
+### 
+POST   {{base_url}}/admin/users/change-status
+Content-Type: application/json
+header : Beaer {{token}}
+
+{
+  "id" : "699eb7fc1fd4eaac6fa35a0d" ,
+  "status" : "active"
+}
+
 // end api_user
