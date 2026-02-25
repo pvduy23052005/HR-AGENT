@@ -1,13 +1,13 @@
 
-@base_url = http://localhost:3000
+@base_url = http://localhost:5050
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5N2RkNzc3NzAzOTE0MTEzMThiN2Q2MyIsImVtYWlsIjoiaHIxQGdtYWlsLmNvbSIsImlhdCI6MTc2OTg1NDk1MCwiZXhwIjoxNzY5OTQxMzUwfQ.wEmis1wXwZcG-UwmW9NcaQlUi_zL1w3jilOtEnMmJTw
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2OTllYjdmYzFmZDRlYWFjNmZhMzVhMGQiLCJpYXQiOjE3NzIwMTAwNDYsImV4cCI6MTc3MjA5NjQ0Nn0.t7DwwjOXZDdpmldh1EDRWMko3ues5eku-KG6l8mCtI4
 ###
 POST {{base_url}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "hr1@gmail.com",
+  "email": "test1@gmail.com",
   "password": "123"
 }
 

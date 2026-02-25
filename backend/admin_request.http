@@ -1,5 +1,7 @@
 
-@base_url = http://localhost:3000
+@base_url = http://localhost:5050
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2OTdkZDA3Y2FiNDE3YmRjMDk1MzU4ZTQiLCJpYXQiOjE3NzIwMDkwNTcsImV4cCI6MTc3MjA5NTQ1N30.oJrxTZgLleNZUh9go4tu65Cs8EEgWk_3re0rhLLhx9E
 
 ###
 POST {{base_url}}/admin/auth/login
@@ -16,10 +18,11 @@ Content-Type: application/json
 ### 
 POST {{base_url}}/admin/user/create 
 Content-Type:  application/json
+header : Bearer {{token}}
 
 {
-  "fullName" : "hr-test" ,
-  "email" : "2351170598@e.tlu.edu.vn",
+  "fullName" : "hr-test1" ,
+  "email" : "test1@gmail.com",
   "password" : "123"
 }
 
