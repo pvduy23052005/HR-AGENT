@@ -10,7 +10,7 @@ const indexAdminRoute = (app) => {
 
   app.use(`${BASE_URL}/auth`, authRoute);
 
-  app.use(`${BASE_URL}/user`, authMiddleware, userRoute);
+  app.use(`${BASE_URL}/users`, authMiddleware, userRoute);
   app.use(`${BASE_URL}/dashboard`, authMiddleware, dashboardRoute);
   app.use(`${BASE_URL}/statistics`, authMiddleware, statisticsRoute);
   app.use(`${BASE_URL}/aiconfig`, authMiddleware, aiconfigRoute);

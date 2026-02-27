@@ -40,6 +40,6 @@ const accountSchema = new mongoose.Schema(
   },
 );
 
-const AccountAdmin = mongoose.model("AccountAdmin", accountSchema, "accountAdmins");
+const Account = mongoose.model("AccountAdmin", accountSchema, "accountAdmins");
 
-export default AccountAdmin;
+export default Account;

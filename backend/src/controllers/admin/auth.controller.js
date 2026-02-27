@@ -1,58 +1,10 @@
-import AccountAdmin from "../../models/accountAdmin.model.js";
-import jwt from "jsonwebtoken";
+import * as authService from "../../services/admin/auth.service.js";
 
 // [POST] /admin/auth/login
-export const loginPost = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!email) {
-      return res.status(400).json({
-        code: 400,
-        message: "Vui lòng nhập Email!",
-      });
-    }
-
-    if (!password) {
-      return res.status(400).json({
-        code: 400,
-        message: "Vui lòng nhập mật khẩu!",
-      });
-    }
-
-    const admin = await AccountAdmin.findOne({
-      email: email,
-      deleted: false,
-    });
-
-    if (!admin) {
-      return res.status(400).json({
-        code: 400,
-        message: "Email không tồn tại!",
-      });
-    }
-
-    if (admin.status === "inactive") {
-      return res.status(400).json({
-        code: 400,
-        message: "Tài khoản Admin đã bị khóa!",
-      });
-    }
-
-    if (password !== admin.password) {
-      return res.status(400).json({
-        code: 400,
-        message: "Mật khẩu không chính xác!",
-      });
-    }
-
-    const payload = {
-      userID: admin.id,
-    };
-
-    const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: "1d",
-    });
+    const { admin, token } = await authService.login(email, password);
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -62,25 +14,19 @@ export const loginPost = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    // Trả về kết quả
     res.status(200).json({
       success: true,
       message: "Đăng nhập Admin thành công!",
       token: token,
-      admin: {
-        id: admin.id,
-        fullName: admin.fullName,
-        email: admin.email,
-        role: admin.role_id,
-      },
+      admin: admin,
     });
   } catch (error) {
     console.error("Login Admin Error:", error);
-    res.status(500).json({
-      code: 500,
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({
+      code: statusCode,
       success: false,
-      message: "Lỗi hệ thống",
-      error: error.message,
+      message: error.message || "Lỗi hệ thống",
     });
   }
 };

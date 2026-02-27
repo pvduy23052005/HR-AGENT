@@ -8,6 +8,7 @@ import {
   MdPerson,
 } from "react-icons/md";
 import { toast } from "react-toastify";
+import authService from "../../../services/client/authService";
 import "../../../styles/client/pages/auth.css";
 
 function ClientSignUp() {
@@ -67,14 +68,25 @@ function ClientSignUp() {
     }
 
     setLoading(true);
-    // TODO: Gọi API signup ở đây
-    // const res = await authServiceAPI.signup(formData);
-
-    setTimeout(() => {
-      toast.success("Đăng kí thành công! Vui lòng đăng nhập.");
+    try {
+      const res = await authService.signup(
+        formData.fullName,
+        formData.email,
+        formData.password,
+        formData.confirmPassword
+      );
+      if (res.success) {
+        toast.success("Đăng kí thành công! Vui lòng đăng nhập.");
+        setLoading(false);
+        navigate("/auth/login");
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại";
+      toast.error(message);
+    } finally {
       setLoading(false);
-      navigate("/auth/login");
-    }, 1000);
+    }
   };
 
   return (

@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-const forgotPasswordSchema = new mongoose.Schema(
+const otpSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: true, 
+      required: true,
     },
     otp: {
       type: String,
@@ -13,14 +13,14 @@ const forgotPasswordSchema = new mongoose.Schema(
     expireAt: {
       type: Date,
       default: Date.now,
-      index: { expires: 60 }, 
+      index: { expires: 60 },
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const ForgotPassword = mongoose.model("ForgotPassword", forgotPasswordSchema, "forgot-password");
+const OTP = mongoose.model("OTP", otpSchema, "otp");
 
-export default ForgotPassword;
+export default OTP;

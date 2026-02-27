@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEmail, MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { toast } from "react-toastify";
+import authService from "../../../services/client/authService";
 import "../../../styles/client/pages/auth.css";
 
 function ClientLogin() {
@@ -28,14 +29,21 @@ function ClientLogin() {
     }
 
     setLoading(true);
-    // TODO: Gọi API login ở đây
-    // const res = await authServiceAPI.login({ email, password });
-    
-    setTimeout(() => {
-      toast.success("Đăng nhập thành công!");
+    try {
+      const res = await authService.login(email, password);
+      if (res.code === 200) {
+        toast.success("Đăng nhập thành công!");
+        localStorage.setItem("token", res.token);
+        // TODO: Thay đổi route khi có dashboard user
+        navigate("/");
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại";
+      toast.error(message);
+    } finally {
       setLoading(false);
-      // navigate("/dashboard");
-    }, 1000);
+    }
   };
 
   return (

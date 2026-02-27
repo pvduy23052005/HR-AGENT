@@ -14,6 +14,7 @@
   "packageManager": "pnpm@10.28.1",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",

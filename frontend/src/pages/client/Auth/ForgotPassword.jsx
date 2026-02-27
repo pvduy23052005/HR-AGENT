@@ -1,25 +1,93 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdEmail, MdArrowBack } from "react-icons/md";
+import { MdEmail, MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { toast } from "react-toastify";
+import forgotPasswordService from "../../../services/client/forgotPasswordService";
 import "../../../styles/client/pages/auth.css";
 
 function ClientForgotPassword() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState({});
+  const [step, setStep] = useState(1);
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const handleSubmit = async (e) => {
+  // Bước 1: Gửi email yêu cầu OTP
+  const handleRequestForgotPassword = async (e) => {
     e.preventDefault();
     setErrors({});
 
-    // Validate
+    if (!email) {
+      setErrors({ email: "Vui lòng nhập email" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await forgotPasswordService.requestForgotPassword(email);
+      if (res.success) {
+        toast.success("Mã OTP đã được gửi đến email của bạn!");
+        setStep(2);
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Bước 2: Xác nhận OTP
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setErrors({});
+
+    if (!otp) {
+      setErrors({ otp: "Vui lòng nhập mã OTP" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await forgotPasswordService.verifyOTP(email, otp);
+      if (res.success) {
+        toast.success("Xác nhận OTP thành công!");
+        setStep(3);
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Mã OTP không chính xác";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Bước 3: Reset mật khẩu
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setErrors({});
+
     let newErrors = {};
-    if (!email) newErrors.email = "Vui lòng nhập email";
-    if (email && !email.includes("@")) newErrors.email = "Email không hợp lệ";
+
+    if (!password) {
+      newErrors.password = "Vui lòng nhập mật khẩu mới";
+    } else if (password.length < 6) {
+      newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
+    }
+
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Vui lòng xác nhận mật khẩu";
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Mật khẩu không khớp";
+    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -27,19 +95,34 @@ function ClientForgotPassword() {
     }
 
     setLoading(true);
-    // TODO: Gọi API quên mật khẩu ở đây
-    // const res = await authServiceAPI.forgotPassword({ email });
-
-    setTimeout(() => {
-      toast.success("Kiểm tra email để đặt lại mật khẩu!");
-      setSent(true);
-      setLoading(false);
-      // Redirect sau 2s
-      setTimeout(() => {
+    try {
+      const res = await forgotPasswordService.resetPassword(
+        email,
+        password,
+        confirmPassword
+      );
+      if (res.success) {
+        toast.success("Đặt lại mật khẩu thành công!");
         navigate("/auth/login");
-      }, 2000);
-    }, 1000);
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const goBack = () => {
+    if (step > 1) {
+      setStep(step - 1);
+      setErrors({});
+    } else {
+      navigate("/auth/login");
+    }
+  };
+
 
   return (
     <div className="client-auth">
@@ -71,27 +154,26 @@ function ClientForgotPassword() {
           </div>
         </div>
 
-        {/* Right - Forgot Password Form */}
+        {/* Right - Form */}
         <div className="client-auth__form-wrapper">
-          {!sent ? (
+          {/* Step 1: Enter Email */}
+          {step === 1 && (
             <form
               className="client-auth__form"
-              onSubmit={handleSubmit}
+              onSubmit={handleRequestForgotPassword}
               noValidate
             >
               <div className="client-auth__form-header">
                 <h1 className="client-auth__form-title">Quên mật khẩu?</h1>
                 <p className="client-auth__form-subtitle">
-                  Không lo, chúng tôi sẽ giúp bạn khôi phục mật khẩu. Vui lòng
-                  nhập địa chỉ email của bạn.
+                  Vui lòng nhập email để nhận mã xác nhận
                 </p>
               </div>
 
-              {/* Email */}
+              {/* Email Field */}
               <div
-                className={`client-auth__field ${
-                  errors.email ? "client-auth__field--error" : ""
-                }`}
+                className={`client-auth__field ${errors.email ? "client-auth__field--error" : ""
+                  }`}
               >
                 <label className="client-auth__label" htmlFor="email">
                   Email
@@ -116,37 +198,202 @@ function ClientForgotPassword() {
 
               <button
                 type="submit"
-                className={`client-auth__submit ${
-                  loading ? "client-auth__submit--loading" : ""
-                }`}
+                className={`client-auth__submit ${loading ? "client-auth__submit--loading" : ""
+                  }`}
                 disabled={loading}
               >
                 {loading ? (
                   <span className="client-auth__spinner"></span>
                 ) : (
-                  "Gửi liên kết khôi phục"
+                  "Tiếp tục"
                 )}
               </button>
 
               <button
                 type="button"
-                className="client-auth__back-btn"
+                className="client-auth__back-link"
                 onClick={() => navigate("/auth/login")}
               >
-                <MdArrowBack /> Quay lại đăng nhập
+                ← Quay lại đăng nhập
               </button>
             </form>
-          ) : (
-            <div className="client-auth__success-message">
-              <div className="client-auth__success-icon">✓</div>
-              <h2 className="client-auth__success-title">Kiểm tra email</h2>
-              <p className="client-auth__success-text">
-                Chúng tôi đã gửi liên kết khôi phục mật khẩu đến <strong>{email}</strong>
-              </p>
-              <p className="client-auth__success-hint">
-                Đang chuyển hướng...
-              </p>
-            </div>
+          )}
+
+          {/* Step 2: Verify OTP */}
+          {step === 2 && (
+            <form
+              className="client-auth__form"
+              onSubmit={handleVerifyOTP}
+              noValidate
+            >
+              <div className="client-auth__form-header">
+                <h1 className="client-auth__form-title">Xác nhận OTP</h1>
+                <p className="client-auth__form-subtitle">
+                  Nhập mã OTP được gửi đến {email}
+                </p>
+              </div>
+
+              {/* OTP Field */}
+              <div
+                className={`client-auth__field ${errors.otp ? "client-auth__field--error" : ""
+                  }`}
+              >
+                <label className="client-auth__label" htmlFor="otp">
+                  Mã OTP
+                </label>
+
+                <input
+                  id="otp"
+                  type="text"
+                  name="otp"
+                  className="client-auth__input"
+                  placeholder="Nhập 8 chữ số"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                  maxLength="8"
+                />
+                {errors.otp && (
+                  <span className="client-auth__error">{errors.otp}</span>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className={`client-auth__submit ${loading ? "client-auth__submit--loading" : ""
+                  }`}
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="client-auth__spinner"></span>
+                ) : (
+                  "Xác nhận"
+                )}
+              </button>
+
+              <button
+                type="button"
+                className="client-auth__back-link"
+                onClick={goBack}
+              >
+                ← Quay lại
+              </button>
+            </form>
+          )}
+
+          {/* Step 3: Reset Password */}
+          {step === 3 && (
+            <form
+              className="client-auth__form"
+              onSubmit={handleResetPassword}
+              noValidate
+            >
+              <div className="client-auth__form-header">
+                <h1 className="client-auth__form-title">Đặt mật khẩu mới</h1>
+                <p className="client-auth__form-subtitle">
+                  Nhập mật khẩu mới của bạn
+                </p>
+              </div>
+
+              {/* Password Field */}
+              <div
+                className={`client-auth__field ${errors.password ? "client-auth__field--error" : ""
+                  }`}
+              >
+                <label className="client-auth__label" htmlFor="password">
+                  Mật khẩu mới
+                </label>
+                <div className="client-auth__input-wrapper">
+                  <MdLock className="client-auth__input-icon" />
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    className="client-auth__input"
+                    placeholder="Nhập mật khẩu"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="client-auth__toggle-pw"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <span className="client-auth__error">
+                    {errors.password}
+                  </span>
+                )}
+              </div>
+
+              {/* Confirm Password Field */}
+              <div
+                className={`client-auth__field ${errors.confirmPassword ? "client-auth__field--error" : ""
+                  }`}
+              >
+                <label
+                  className="client-auth__label"
+                  htmlFor="confirmPassword"
+                >
+                  Xác nhận mật khẩu
+                </label>
+                <div className="client-auth__input-wrapper">
+                  <MdLock className="client-auth__input-icon" />
+                  <input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    className="client-auth__input"
+                    placeholder="Nhập lại mật khẩu"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="client-auth__toggle-pw"
+                    onClick={() =>
+                      setShowConfirmPassword((prev) => !prev)
+                    }
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? (
+                      <MdVisibilityOff />
+                    ) : (
+                      <MdVisibility />
+                    )}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <span className="client-auth__error">
+                    {errors.confirmPassword}
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className={`client-auth__submit ${loading ? "client-auth__submit--loading" : ""
+                  }`}
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="client-auth__spinner"></span>
+                ) : (
+                  "Đặt mật khẩu mới"
+                )}
+              </button>
+
+              <button
+                type="button"
+                className="client-auth__back-link"
+                onClick={goBack}
+              >
+                ← Quay lại
+              </button>
+            </form>
           )}
         </div>
       </div>

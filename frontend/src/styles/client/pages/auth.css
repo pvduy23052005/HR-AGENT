@@ -335,6 +335,25 @@
   transform: translateY(-2px);
 }
 
+/* ===== Back Link ===== */
+.client-auth__back-link {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 16px;
+  transition: color 0.2s;
+  text-align: center;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.client-auth__back-link:hover {
+  color: #0087f1;
+}
+
 /* ===== Back Button ===== */
 .client-auth__back-btn {
   width: 100%;

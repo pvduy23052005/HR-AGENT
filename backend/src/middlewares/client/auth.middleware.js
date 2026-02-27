@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import Account from "../../models/accountAdmin.model.js";
+import User from "../../models/user.model.js";
 
 export const authMiddleware = async (req, res, next) => {
   try {
@@ -22,13 +22,13 @@ export const authMiddleware = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    const admin = await Account.findOne({
+    const user = await User.findOne({
       _id: decoded.userID,
       deleted: false,
       status: "active",
     });
 
-    if (!admin) {
+    if (!user) {
       res.clearCookie("token");
       return res.status(401).json({
         success: false,
@@ -36,7 +36,7 @@ export const authMiddleware = async (req, res, next) => {
       });
     }
 
-    res.locals.admin = admin;
+    res.locals.user = user;
 
     next();
   } catch (error) {

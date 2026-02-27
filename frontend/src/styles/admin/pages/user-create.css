@@ -1,0 +1,205 @@
+/* ===== Create User Page ===== */
+
+.user-create {
+  max-width: 100%;
+}
+
+/* --- Header --- */
+.user-create__header {
+  margin-bottom: 28px;
+}
+
+.user-create__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: color 0.15s;
+}
+
+.user-create__back:hover {
+  color: var(--color-primary);
+}
+
+.user-create__title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.user-create__subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+/* --- Card --- */
+.user-create__card {
+  background: #fff;
+  border-radius: var(--border-radius-lg);
+  box-shadow:
+    0 1px 3px var(--color-shadow),
+    0 4px 16px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--color-border);
+  padding: 32px;
+}
+
+/* --- Form --- */
+.user-create__form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.user-create__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-create__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.user-create__label-icon {
+  font-size: 18px;
+  color: var(--color-text-placeholder);
+}
+
+.user-create__required {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.user-create__input,
+.user-create__select {
+  padding: 12px 16px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  background: #fff;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+}
+
+/* --- Password toggle --- */
+.user-create__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-create__input-wrapper .user-create__input {
+  padding-right: 44px;
+}
+
+.user-create__eye-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--color-text-placeholder);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.user-create__eye-btn:hover {
+  color: var(--color-primary);
+}
+
+.user-create__input:focus,
+.user-create__select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 135, 241, 0.1);
+}
+
+.user-create__input::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.user-create__select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23798eae' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* --- Divider --- */
+.user-create__divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 4px 0;
+}
+
+/* --- Actions --- */
+.user-create__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.user-create__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.user-create__btn--cancel {
+  background: #fff;
+  color: var(--color-text-primary);
+  border: 1.5px solid var(--color-border);
+}
+
+.user-create__btn--cancel:hover {
+  background: var(--color-hover-bg);
+  border-color: var(--color-text-placeholder);
+}
+
+.user-create__btn--save {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.user-create__btn--save:hover {
+  background: var(--color-primary-dark);
+  box-shadow: 0 4px 14px rgba(0, 135, 241, 0.3);
+  transform: translateY(-1px);
+}
+
+.user-create__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
