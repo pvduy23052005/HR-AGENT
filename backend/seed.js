@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 import User from "./src/models/user.model.js";
 import AccountAdmin from "./src/models/accountAdmin.model.js";
 import dotenv from "dotenv";
@@ -11,16 +12,19 @@ const seedDatabase = async () => {
     await mongoose.connect(process.env.MONGODB_URI || "");
     console.log("Database connected successfully");
 
-    // Xóa dữ liệu cũ
-    await User.deleteMany({});
-    await AccountAdmin.deleteMany({});
-    console.log("🗑️  Dữ liệu cũ đã xóa");
+    // Không xóa dữ liệu cũ nữa
+    console.log("Đang thêm/cập nhật dữ liệu...");
+
+    // Hash password trước khi lưu
+    const hashedPassword = await bcrypt.hash("123456", 10);
+    const hashedAdminPassword = await bcrypt.hash("admin123", 10);
+    const hashedHrPassword = await bcrypt.hash("hr123", 10);
 
     // Thêm user demo
     const users = [
       {
-        fullName: "Nguyễn Văn A",
-        email: "nguyenvana@gmail.com",
+        fullName: "Phạm Văn Hùng",
+        email: "pvhtx22@gmail.com",
         password: "123456",
         avatar: "",
         status: "active",
@@ -29,7 +33,7 @@ const seedDatabase = async () => {
       {
         fullName: "Trần Thị B",
         email: "tranthib@gmail.com",
-        password: "123456",
+        password: hashedPassword,
         avatar: "",
         status: "active",
         deleted: false,
@@ -37,7 +41,7 @@ const seedDatabase = async () => {
       {
         fullName: "Lê Hoàng C",
         email: "lehoangc@gmail.com",
-        password: "123456",
+        password: hashedPassword,
         avatar: "",
         status: "active",
         deleted: false,
@@ -49,7 +53,7 @@ const seedDatabase = async () => {
       {
         fullName: "Admin Hệ Thống",
         email: "admin@hragent.com",
-        password: "admin123",
+        password: hashedAdminPassword,
         role_id: "admin",
         status: "active",
         avatar: "",
@@ -58,7 +62,7 @@ const seedDatabase = async () => {
       {
         fullName: "HR Manager",
         email: "hr@hragent.com",
-        password: "hr123",
+        password: hashedHrPassword,
         role_id: "hr",
         status: "active",
         avatar: "",

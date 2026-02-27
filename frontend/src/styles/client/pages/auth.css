@@ -24,7 +24,12 @@
 /* ===== Left Branding ===== */
 .client-auth__branding {
   flex: 1;
-  background: linear-gradient(160deg, #0a1628 0%, #0d2137 40%, #0f2b4a 100%);
+  --gradient: linear-gradient(135deg,
+      hsl(210, 85%, 65%),
+      hsl(250, 85%, 55%),
+      hsl(300, 85%, 45%),
+      hsl(10, 85%, 40%));
+  background: #0a1628;
   padding: 48px 40px;
   display: flex;
   flex-direction: column;
@@ -36,28 +41,52 @@
 .client-auth__branding::before {
   content: "";
   position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 135, 241, 0.15), transparent 70%);
+  inset: -100%;
+  background: var(--gradient);
+  animation: bgMove 7s ease-in-out infinite;
+  z-index: 0;
 }
 
 .client-auth__branding::after {
   content: "";
   position: absolute;
-  bottom: -60px;
-  left: -80px;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 135, 241, 0.1), transparent 70%);
+  inset: -100%;
+  background: linear-gradient(120deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 65%);
+  animation: lightSweep 3.5s ease-in-out infinite;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+@keyframes bgMove {
+  0% {
+    transform: translate(-25%, -25%);
+  }
+
+  50% {
+    transform: translate(25%, 25%);
+  }
+
+  100% {
+    transform: translate(-25%, -25%);
+  }
+}
+
+@keyframes lightSweep {
+  0% {
+    transform: translate(-70%, -70%);
+  }
+
+  100% {
+    transform: translate(70%, 70%);
+  }
 }
 
 .client-auth__branding-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .client-auth__branding-logo {
@@ -433,6 +462,7 @@
     transform: scale(0);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -440,9 +470,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.6;
   }
+
   50% {
     opacity: 1;
   }

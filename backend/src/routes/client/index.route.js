@@ -5,7 +5,8 @@ import { authMiddleware } from "../../middlewares/client/auth.middleware.js";
 const indexClientRoute = (app) => {
   app.use("/auth", authRoute);
 
-  app.use("/user", authMiddleware, userRoute);
+  // Note: userRoute now handles its own middleware per-endpoint or some endpoints are public (like forgot password).
+  app.use("/user", userRoute);
 };
 
 export default indexClientRoute;

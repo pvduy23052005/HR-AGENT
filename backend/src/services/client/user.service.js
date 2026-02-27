@@ -34,7 +34,13 @@ export const forgotPassword = async (email) => {
 
   const subject = "Mã OTP lấy lại mật khẩu";
   const content = htmlEmailOtp(record.otp);
-  sendEmail_helper(email, subject, content);
+
+  console.log("=== GỬI EMAIL OTP ===");
+  console.log("To:", email);
+  console.log("OTP:", record.otp);
+
+  const emailSent = await sendEmail_helper(email, subject, content);
+  console.log("Email sent:", emailSent ? "✅ THÀNH CÔNG" : "❌ THẤT BẠI");
 
   return {
     email: email,
