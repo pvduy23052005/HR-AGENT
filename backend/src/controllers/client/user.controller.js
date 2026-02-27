@@ -11,6 +11,7 @@ export const forgotPassword = async (req, res) => {
       success: true,
       message: "Mã OTP đã được gửi đến email của bạn!",
       email: result.email,
+      otp: result.otp,
     });
   } catch (error) {
     console.error("Forgot Password Error:", error);
