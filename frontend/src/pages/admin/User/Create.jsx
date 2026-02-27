@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdArrowBack, MdPerson, MdEmail, MdLock, MdSave } from "react-icons/md";
+import {
+  MdArrowBack,
+  MdPerson,
+  MdEmail,
+  MdLock,
+  MdSave,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
 import { toast } from "react-toastify";
 import * as userService from "../../../services/admin/userService";
 import "../../../styles/admin/pages/user-create.css";
@@ -14,6 +22,7 @@ function CreateUser() {
     status: "active",
   });
   const [saving, setSaving] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,14 +36,17 @@ function CreateUser() {
       toast.warning("Vui lòng nhập Họ tên!");
       return;
     }
+
     if (!formData.email.trim()) {
       toast.warning("Vui lòng nhập Email!");
       return;
     }
+
     if (!formData.password) {
       toast.warning("Vui lòng nhập Mật khẩu!");
       return;
     }
+
     if (formData.password.length < 6) {
       toast.warning("Mật khẩu phải có ít nhất 6 ký tự!");
       return;
@@ -115,14 +127,28 @@ function CreateUser() {
               <MdLock className="user-create__label-icon" />
               Mật khẩu <span className="user-create__required">*</span>
             </label>
-            <input
-              type="password"
-              className="user-create__input"
-              name="password"
-              placeholder="Tối thiểu 6 ký tự"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
+            <div className="user-create__input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="user-create__input"
+                name="password"
+                placeholder="Tối thiểu 6 ký tự"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+              <button
+                type="button"
+                className="user-create__eye-btn"
+                onClick={() => setShowPassword((v) => !v)}
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <MdVisibilityOff size={18} />
+                ) : (
+                  <MdVisibility size={18} />
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Status */}

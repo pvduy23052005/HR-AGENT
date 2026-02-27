@@ -13,10 +13,7 @@ export const createUser = async (data) => {
 };
 
 export const findAll = async () => {
-  return await User.find({ deleted: false })
-    .sort({ createdAt: -1 })
-    .select("-password")
-    .lean();
+  return await User.find({ deleted: false }).sort({ createdAt: -1 }).lean();
 };
 
 export const findById = async (id) => {

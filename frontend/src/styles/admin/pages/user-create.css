@@ -100,6 +100,34 @@
   width: 100%;
 }
 
+/* --- Password toggle --- */
+.user-create__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-create__input-wrapper .user-create__input {
+  padding-right: 44px;
+}
+
+.user-create__eye-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--color-text-placeholder);
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.user-create__eye-btn:hover {
+  color: var(--color-primary);
+}
+
 .user-create__input:focus,
 .user-create__select:focus {
   border-color: var(--color-primary);

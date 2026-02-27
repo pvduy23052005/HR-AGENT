@@ -3,8 +3,8 @@ import { randomNumber } from "../../helpers/randomNumber.helper.js";
 import { sendEmail_helper } from "../../utils/sendMail.helper.js";
 import { htmlEmailOtp } from "../../templates/email/otp.js";
 import * as userRepository from "../../repositories/client/user.repository.js";
+import * as otpRepository from "../../repositories/client/otp.repository.js";
 
-// Forgot password — business logic
 export const forgotPassword = async (email) => {
   const user = await userRepository.findUserByEmail(email);
 
@@ -14,7 +14,7 @@ export const forgotPassword = async (email) => {
     throw error;
   }
 
-  const recentOtp = await userRepository.findRecentOtp(email);
+  const recentOtp = await otpRepository.findRecentOTP(email);
 
   if (recentOtp) {
     const timeDiff =
@@ -30,7 +30,7 @@ export const forgotPassword = async (email) => {
   }
 
   const otp = randomNumber(8);
-  const record = await userRepository.createOtp(email, otp);
+  const record = await otpRepository.createOTP(email, otp);
 
   const subject = "Mã OTP lấy lại mật khẩu";
   const content = htmlEmailOtp(record.otp);
@@ -42,7 +42,6 @@ export const forgotPassword = async (email) => {
   };
 };
 
-// Verify OTP — business logic
 export const verifyOtp = async (email, otp) => {
   const user = await userRepository.findUserByEmail(email);
 
@@ -52,7 +51,7 @@ export const verifyOtp = async (email, otp) => {
     throw error;
   }
 
-  const resultOtp = await userRepository.findOtp(email, otp);
+  const resultOtp = await otpRepository.findByEmailAndOTP(email, otp);
 
   if (!resultOtp) {
     const error = new Error("OTP không chính xác hoặc đã hết hạn!");
@@ -61,7 +60,6 @@ export const verifyOtp = async (email, otp) => {
   }
 };
 
-// Reset password — business logic
 export const resetPassword = async (email, password, confirmPassword) => {
   if (password !== confirmPassword) {
     const error = new Error("Mật khẩu xác nhận không khớp!");
@@ -69,7 +67,7 @@ export const resetPassword = async (email, password, confirmPassword) => {
     throw error;
   }
 
-  const otpSession = await userRepository.findOtpByEmail(email);
+  const otpSession = await otpRepository.findOTPByEmail(email);
 
   if (!otpSession) {
     const error = new Error(
@@ -82,5 +80,5 @@ export const resetPassword = async (email, password, confirmPassword) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await userRepository.updateUserPassword(email, hashedPassword);
-  await userRepository.deleteOtp(email);
+  await otpRepository.deleteOTP(email);
 };
