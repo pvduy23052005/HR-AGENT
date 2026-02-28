@@ -4,7 +4,7 @@ import * as authRepository from "../../repositories/admin/auth.repository.js";
 // Login admin — business logic
 export const login = async (email, password) => {
   const admin = await authRepository.findAccountByEmail(email);
-  
+
   if (!admin) {
     const error = new Error("Email không tồn tại!");
     error.statusCode = 400;

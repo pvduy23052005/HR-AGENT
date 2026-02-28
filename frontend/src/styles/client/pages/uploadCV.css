@@ -1,0 +1,410 @@
+/* ===== UPLOAD CV PAGE ===== */
+.upload-cv-page {
+    min-height: 100vh;
+    background: #0f0f1a;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+.upload-cv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+}
+
+.upload-cv-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.upload-cv-header .logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: white;
+}
+
+.upload-cv-header .logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.5px;
+}
+
+.upload-cv-header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.upload-cv-header .user-name {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.upload-cv-header .btn-logout {
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-cv-header .btn-logout:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+}
+
+/* ===== MAIN CONTENT ===== */
+.upload-cv-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.upload-cv-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.upload-cv-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* ===== DROP ZONE ===== */
+.upload-dropzone {
+    width: 100%;
+    max-width: 560px;
+    border: 2px dashed rgba(102, 126, 234, 0.3);
+    border-radius: 20px;
+    padding: 60px 40px;
+    text-align: center;
+    background: rgba(102, 126, 234, 0.04);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragging {
+    border-color: rgba(102, 126, 234, 0.6);
+    background: rgba(102, 126, 234, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+}
+
+.upload-dropzone .upload-icon {
+    font-size: 56px;
+    margin-bottom: 20px;
+    display: block;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.upload-dropzone .upload-text {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.upload-dropzone .upload-hint {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.upload-dropzone .upload-hint span {
+    color: #667eea;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.upload-dropzone .upload-formats {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.upload-dropzone .format-badge {
+    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.upload-dropzone input[type="file"] {
+    display: none;
+}
+
+/* ===== FILE PREVIEW ===== */
+.file-preview {
+    width: 100%;
+    max-width: 560px;
+    margin-top: 24px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.file-preview .file-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.file-preview .file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-preview .file-name {
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-preview .file-size {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.file-preview .file-remove {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.file-preview .file-remove:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+/* ===== UPLOAD BUTTON ===== */
+.btn-upload {
+    margin-top: 24px;
+    width: 100%;
+    max-width: 560px;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-upload:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-upload:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-upload.uploading {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-upload.uploading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    to {
+        left: 100%;
+    }
+}
+
+/* ===== UPLOADED LIST ===== */
+.uploaded-list {
+    width: 100%;
+    max-width: 560px;
+    margin-top: 40px;
+}
+
+.uploaded-list h3 {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.uploaded-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+}
+
+.uploaded-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.uploaded-item .item-icon {
+    font-size: 28px;
+}
+
+.uploaded-item .item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.uploaded-item .item-name {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.uploaded-item .item-date {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.uploaded-item .item-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+/* ===== SUCCESS MESSAGE ===== */
+.upload-success {
+    width: 100%;
+    max-width: 560px;
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 12px;
+    color: #22c55e;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.3s ease;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .upload-cv-header {
+        padding: 16px 20px;
+    }
+
+    .upload-cv-title {
+        font-size: 24px;
+    }
+
+    .upload-dropzone {
+        padding: 40px 24px;
+    }
+
+    .upload-dropzone .upload-icon {
+        font-size: 42px;
+    }
+}

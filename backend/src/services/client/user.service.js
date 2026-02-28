@@ -29,18 +29,12 @@ export const forgotPassword = async (email) => {
     }
   }
 
-  const otp = randomNumber(8);
+  const otp = randomNumber(6);
   const record = await otpRepository.createOTP(email, otp);
 
   const subject = "Mã OTP lấy lại mật khẩu";
   const content = htmlEmailOtp(record.otp);
-
-  console.log("=== GỬI EMAIL OTP ===");
-  console.log("To:", email);
-  console.log("OTP:", record.otp);
-
-  const emailSent = await sendEmail_helper(email, subject, content);
-  console.log("Email sent:", emailSent ? "✅ THÀNH CÔNG" : "❌ THẤT BẠI");
+  sendEmail_helper(email, subject, content);
 
   return {
     email: email,

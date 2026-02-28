@@ -3,6 +3,7 @@ import API from "./index";
 const forgotPasswordService = {
   // Bước 1: Gửi email yêu cầu OTP
   requestForgotPassword: async (email) => {
+    console.log(email);
     const res = await API.post("/user/password/forgot", { email });
     return res;
   },

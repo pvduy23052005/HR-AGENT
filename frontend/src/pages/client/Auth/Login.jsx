@@ -34,8 +34,8 @@ function ClientLogin() {
       if (res.code === 200) {
         toast.success("Đăng nhập thành công!");
         localStorage.setItem("token", res.token);
-        // TODO: Thay đổi route khi có dashboard user
-        navigate("/");
+        localStorage.setItem("user", JSON.stringify(res.user));
+        navigate("/upload-cv");
       }
     } catch (error) {
       const message =
@@ -88,9 +88,8 @@ function ClientLogin() {
 
             {/* Email */}
             <div
-              className={`client-auth__field ${
-                errors.email ? "client-auth__field--error" : ""
-              }`}
+              className={`client-auth__field ${errors.email ? "client-auth__field--error" : ""
+                }`}
             >
               <label className="client-auth__label" htmlFor="email">
                 Email
@@ -115,9 +114,8 @@ function ClientLogin() {
 
             {/* Password */}
             <div
-              className={`client-auth__field ${
-                errors.password ? "client-auth__field--error" : ""
-              }`}
+              className={`client-auth__field ${errors.password ? "client-auth__field--error" : ""
+                }`}
             >
               <label className="client-auth__label" htmlFor="password">
                 Mật khẩu
@@ -156,9 +154,8 @@ function ClientLogin() {
 
             <button
               type="submit"
-              className={`client-auth__submit ${
-                loading ? "client-auth__submit--loading" : ""
-              }`}
+              className={`client-auth__submit ${loading ? "client-auth__submit--loading" : ""
+                }`}
               disabled={loading}
             >
               {loading ? (

@@ -4,7 +4,6 @@ import * as authService from "../../services/client/auth.service.js";
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("=== LOGIN REQUEST ===", { email, password });
 
     const { token, user } = await authService.login(email, password);
 
@@ -23,29 +22,6 @@ export const login = async (req, res) => {
     console.error("Login Error:", error);
     const statusCode = error.statusCode || 500;
     res.status(statusCode).json({
-      code: statusCode,
-      message: error.message || "Lỗi hệ thống",
-    });
-  }
-};
-
-// [POST] /auth/signup
-export const signup = async (req, res) => {
-  try {
-    const { fullName, email, password, confirmPassword } = req.body;
-
-    const user = await authService.signup(fullName, email, password, confirmPassword);
-
-    res.status(201).json({
-      success: true,
-      message: "Đăng kí thành công!",
-      user: user,
-    });
-  } catch (error) {
-    console.error("Signup Error:", error);
-    const statusCode = error.statusCode || 500;
-    res.status(statusCode).json({
-      success: false,
       code: statusCode,
       message: error.message || "Lỗi hệ thống",
     });

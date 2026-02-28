@@ -8,12 +8,25 @@ import routeAuth from "./admin/routeAuth";
 import routeClientAuth from "./client/routeClientAuth";
 
 import ProtectedRoute from "./ProtectedRoute";
+import ClientProtectedRoute from "./ClientProtectedRoute";
+import UploadCV from "../pages/client/UploadCV/UploadCV";
 
 const routes = [
   // Client public routes
   {
     path: "/",
     children: [routeClientAuth],
+  },
+
+  // Client protected routes
+  {
+    element: <ClientProtectedRoute />,
+    children: [
+      {
+        path: "/upload-cv",
+        element: <UploadCV />,
+      },
+    ],
   },
 
   // Admin public route

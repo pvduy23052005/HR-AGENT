@@ -18,16 +18,7 @@ export const login = async (email, password) => {
     throw error;
   }
 
-  // Hỗ trợ cả password plain text và bcrypt hash
-  let passwordMatch = false;
-
-
-  if (user.password.startsWith("$2b$")) {
-    passwordMatch = await bcrypt.compare(password, user.password);
-  } else {
-    passwordMatch = password === user.password;
-  }
-
+  const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (!passwordMatch) {
     const error = new Error("Mật khẩu không chính xác!");
@@ -53,37 +44,5 @@ export const login = async (email, password) => {
       email: user.email,
       avatar: user.avatar,
     },
-  };
-};
-
-// Signup user — business logic
-export const signup = async (fullName, email, password, confirmPassword) => {
-  if (password !== confirmPassword) {
-    const error = new Error("Mật khẩu xác nhận không khớp!");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const existingUser = await authRepository.findUserByEmail(email);
-  if (existingUser) {
-    const error = new Error("Email đã được sử dụng!");
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await authRepository.createUser({
-    fullName,
-    email,
-    password: hashedPassword,
-    status: "active",
-    deleted: false,
-  });
-
-  return {
-    id: user._id,
-    fullName: user.fullName,
-    email: user.email,
   };
 };

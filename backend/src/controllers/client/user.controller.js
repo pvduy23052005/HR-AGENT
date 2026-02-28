@@ -4,7 +4,7 @@ import * as userService from "../../services/client/user.service.js";
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
-
+  
     const result = await userService.forgotPassword(email);
 
     res.status(200).json({
