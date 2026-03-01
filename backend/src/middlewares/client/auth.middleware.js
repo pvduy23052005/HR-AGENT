@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../../models/user.model.js";
+import * as userRepository from "../../repositories/client/user.repository";
 
 export const authMiddleware = async (req, res, next) => {
   try {
@@ -22,11 +22,7 @@ export const authMiddleware = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    const user = await User.findOne({
-      _id: decoded.userID,
-      deleted: false,
-      status: "active",
-    });
+    const user = await userRepository.findUserByID(decoded.userID);
 
     if (!user) {
       res.clearCookie("token");

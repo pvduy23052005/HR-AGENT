@@ -7,6 +7,14 @@ export const findUserByEmail = async (email) => {
   });
 };
 
+export const findUserByID = async (userID) => {
+  return await User.findOne({
+    _id: userID,
+    deleted: false,
+    status: "active"
+  });
+};
+
 export const updateUserPassword = async (email, password) => {
   const user = await User.findOne({ email: email });
   user.password = password;
