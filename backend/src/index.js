@@ -3,9 +3,9 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import * as database from "./config/database.js";
-import indexAdminRoute from "./routes/admin/index.route.js";
-import indexClientRoute from "./routes/client/index.route.js";
+import * as database from "./infrastructure/config/database.js";
+import indexAdminRoute from "./interface/http/routes/admin/index.route.js";
+import indexClientRoute from "./interface/http/routes/client/index.route.js";
 
 import cookieParser from "cookie-parser";
 
