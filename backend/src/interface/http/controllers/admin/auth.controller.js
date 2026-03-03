@@ -1,10 +1,18 @@
 import * as authUseCase from "../../../../application/use-case/admin/auth.use-case.js";
+import * as tokenService from "../../../../infrastructure/external-service/token.service.js";
+import * as authRepository from "../../../../infrastructure/database/repositories/admin/auth.repository.js";
 
 // [POST] /admin/auth/login
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const { admin, token } = await authUseCase.login(email, password);
+
+    const { admin, token } = await authUseCase.login(
+      tokenService,
+      authRepository,
+      email,
+      password,
+    );
 
     res.cookie("token", token, {
       httpOnly: true,

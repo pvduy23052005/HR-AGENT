@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import Account from "../../../../infrastructure/database/models/accountAdmin.model.js";
+import * as tokenService from "../../../../infrastructure/external-service/token.service.js";
+import * as authRepository from "../../../../infrastructure/database/repositories/admin/auth.repository.js";
 
 export const authMiddleware = async (req, res, next) => {
   try {
@@ -20,13 +20,9 @@ export const authMiddleware = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = tokenService.verifyToken(token);
 
-    const admin = await Account.findOne({
-      _id: decoded.userID,
-      deleted: false,
-      status: "active",
-    });
+    const admin = await authRepository.findAccountByID(decoded.userID);
 
     if (!admin) {
       res.clearCookie("token");

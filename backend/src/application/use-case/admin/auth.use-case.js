@@ -1,41 +1,27 @@
-import jwt from "jsonwebtoken";
-import * as authRepository from "../../../infrastructure/database/repositories/admin/auth.repository.js";
+
 
 // Login admin — business logic
-export const login = async (email, password) => {
+export const login = async (tokenService, authRepository, email, password) => {
   const admin = await authRepository.findAccountByEmail(email);
 
   if (!admin) {
-    const error = new Error("Email không tồn tại!");
-    error.statusCode = 400;
-    throw error;
+    throw new Error("Email không tồn tại!");
   }
 
-  if (admin.status === "inactive") {
-    const error = new Error("Tài khoản Admin đã bị khóa!");
-    error.statusCode = 400;
-    throw error;
+  if (!admin.isActive()) {
+    throw new Error("Tài khoản Admin đã bị khóa!");
   }
 
-  if (password !== admin.password) {
-    const error = new Error("Mật khẩu không chính xác!");
-    error.statusCode = 400;
-    throw error;
+  if (!admin.verifyPassword(password)) {
+    throw new Error("Mật khẩu không chính xác!");
   }
 
   const payload = { userID: admin.id };
 
-  const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "1d",
-  });
+  const token = tokenService.generateToken(payload);
 
   return {
     token,
-    admin: {
-      id: admin.id,
-      fullName: admin.fullName,
-      email: admin.email,
-      role: admin.role_id,
-    },
+    admin: admin.getProfile(),
   };
 };
