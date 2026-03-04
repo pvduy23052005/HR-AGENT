@@ -1,5 +1,5 @@
 import Account from "../../models/accountAdmin.model.js";
-import { AdminEntity } from "../../../../domain/entities/admin/user.entity.js";
+import { AdminEntity } from "../../../../domain/entities/admin/accoutAdmin.entity.js";
 
 const maptoEntity = (document) => {
   if (!document) return null;

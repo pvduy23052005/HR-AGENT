@@ -9,6 +9,8 @@ export const createUser = async (data) => {
 };
 
 export const changeStatus = async (id, status) => {
+  console.log(id);
+  console.log(status);
   return await API.post("/admin/users/change-status", {
     id: id,
     status: status,

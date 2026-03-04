@@ -52,7 +52,7 @@ function Users() {
     try {
       const newStatus = user.status === "active" ? "inactive" : "active";
       const data = await userService.changeStatus(
-        user._id.toString(),
+        user.id.toString(),
         newStatus,
       );
       if (data.success) {
@@ -158,7 +158,7 @@ function Users() {
               </tr>
             ) : (
               filteredUsers.map((user) => (
-                <tr key={user._id}>
+                <tr key={user.id}>
                   <td>
                     <div className="users-table__user">
                       <div className="users-table__avatar">

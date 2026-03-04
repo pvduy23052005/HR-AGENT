@@ -1,51 +1,37 @@
-import bcrypt from "bcrypt";
-import * as userRepository from "../../../infrastructure/database/repositories/admin/user.repository.js";
-
-export const createUser = async (dataUser) => {
+export const createUser = async (userRepository, passwordService, dataUser) => {
   const { fullName, email, password } = dataUser;
 
   const emailExist = await userRepository.findByEmail(email);
-
   if (emailExist) {
-    const error = new Error("Email này đã tồn tại trong hệ thống!");
-    error.statusCode = 400;
-    throw error;
+    throw new Error("Email này đã tồn tại trong hệ thống!");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await passwordService.hash(password);
 
   const newUser = await userRepository.createUser({
-    fullName: fullName,
-    email: email,
+    fullName,
+    email,
     password: hashedPassword,
+    status: "active",
     deleted: false,
   });
 
-  return {
-    id: newUser.id,
-    fullName: newUser.fullName,
-    email: newUser.email,
-    status: newUser.status,
-  };
+  return newUser.getProfile();
 };
 
-export const getUsers = async () => {
-  return await userRepository.findAll();
+export const getUsers = async (userRepository) => {
+  const users = await userRepository.findAll();
+  return users.map((user) => user.getProfile());
 };
 
-export const changeStatus = async (id, status) => {
+export const changeStatus = async (userRepository, id, status) => {
   const user = await userRepository.findById(id);
 
   if (!user) {
-    const error = new Error("Người dùng không tồn tại!");
-    error.statusCode = 404;
-    throw error;
+    throw new Error("Người dùng không tồn tại!");
   }
 
-  await userRepository.updateStatus(id, status);
+  const updatedUser = await userRepository.updateStatus(id, status);
 
-  return {
-    id: user.id,
-    status: status,
-  };
+  return updatedUser.getProfile();
 };

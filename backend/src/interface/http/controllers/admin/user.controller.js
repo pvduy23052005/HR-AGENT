@@ -1,9 +1,15 @@
-import * as userService from "../../../../application/use-case/admin/user.use-case.js";
+import * as userUseCase from "../../../../application/use-case/admin/user.use-case.js";
+import * as passwordService from "../../../../infrastructure/external-service/password.service.js";
+import * as userRepository from "../../../../infrastructure/database/repositories/admin/user.repository.js";
 
 // [POST] /admin/users/create
 export const createUserPost = async (req, res) => {
   try {
-    const user = await userService.createUser(req.body);
+    const user = await userUseCase.createUser(
+      userRepository,
+      passwordService,
+      req.body,
+    );
 
     res.json({
       code: 200,
@@ -23,7 +29,7 @@ export const createUserPost = async (req, res) => {
 // [GET] /admin/user
 export const getUsers = async (req, res) => {
   try {
-    const users = await userService.getUsers();
+    const users = await userUseCase.getUsers(userRepository);
 
     res.json({
       code: 200,
@@ -44,8 +50,11 @@ export const changeStatus = async (req, res) => {
   try {
     const { id, status } = req.body;
 
-    console.log(status);
-    const result = await userService.changeStatus(id, status);
+    console.log(id, status);
+
+    const result = await userUseCase.changeStatus(userRepository, id, status);
+
+    console.log(result);
 
     res.json({
       code: 200,

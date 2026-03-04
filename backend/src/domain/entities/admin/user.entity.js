@@ -1,38 +1,48 @@
-export class AdminEntity {
+export class UserEntity {
   constructor({
     id,
     fullName,
     email,
     password,
-    role = "admin",
-    status,
-    deleted,
+    avatar = "",
+    status = "active",
+    deleted = false,
+    deletedAt = null,
+    createdAt,
+    updatedAt,
   }) {
     this.id = id;
     this.fullName = fullName;
     this.email = email;
     this.password = password;
-    this.role = role;
+    this.avatar = avatar;
     this.status = status;
     this.deleted = deleted;
+    this.deletedAt = deletedAt;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   isActive() {
-    return this.status == "active";
+    return this.status === "active" && this.deleted === false;
   }
 
-  verifyPassword(password) {
-    return this.password === password;
+  async hashPassword(plainPassword, passwordService) {
+    return await passwordService.hash(plainPassword);
+  }
+
+  async verifyPassword(plainPassword, passwordService) {
+    return await passwordService.compare(plainPassword, this.password);
   }
 
   getProfile() {
-    const object = {
+    return {
       id: this.id,
-      fullNam: this.fullName,
+      fullName: this.fullName,
       email: this.email,
-      role: this.role_id,
+      avatar: this.avatar,
       status: this.status,
+      createdAt: this.createdAt,
     };
-    return object;
   }
 }
