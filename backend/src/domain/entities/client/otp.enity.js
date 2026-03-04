@@ -12,5 +12,4 @@ export class OTPEntity {
     const now = new Date();
     return now > new Date(this.expireAt);
   }
-
 }

@@ -50,12 +50,10 @@ const candidateSchema = new mongoose.Schema(
     jobId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Job",
-      required: true,
     },
     addedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     status: {
       type: Boolean,

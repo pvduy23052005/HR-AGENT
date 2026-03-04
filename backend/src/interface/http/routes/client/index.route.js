@@ -9,7 +9,7 @@ const indexClientRoute = (app) => {
 
   app.use("/user", userRoute);
 
-  app.use("/upload", authMiddleware, uploadRoute);
+  app.use("/upload", uploadRoute);
 };
 
 export default indexClientRoute;

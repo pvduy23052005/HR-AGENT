@@ -1,68 +1,40 @@
 import * as uploadService from "../../../../infrastructure/external-service/upload.service.js";
-import { extractCVData } from "../../../../infrastructure/external-service/gemini.service.js";
-import { getDocumentProxy, extractText } from "unpdf";
+import { extractCVDataFromPDF } from "../../../../infrastructure/external-service/gemini.service.js";
 import Candidate from "../../../../infrastructure/database/models/candidate.model.js";
 
 export const uploadCV = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
     const fileUrls = await uploadService.uploadCloud([req.file]);
-
-    if (!fileUrls || fileUrls.length === 0 || !fileUrls[0]) {
-      return res.status(500).json({ message: "Upload to Cloudinary failed" });
-    }
-
+    if (!fileUrls || fileUrls.length === 0)
+      return res.status(500).json({ message: "Upload failed" });
     const cvLink = fileUrls[0];
-    let extractedData = null;
 
-    if (req.file.mimetype === "application/pdf") {
-      try {
-        const pdfDoc = await getDocumentProxy(new Uint8Array(req.file.buffer));
-        const { text: textDataCV } = await extractText(pdfDoc, {
-          mergePages: true,
-        });
+    let dataCV = null;
 
-        extractedData = await extractCVData(textDataCV);
+    if (
+      req.file.mimetype === "application/pdf" ||
+      req.file.mimetype.startsWith("image/")
+    ) {
+      console.log("Đang ném file cho Gemini làm OCR...");
 
-        if (extractedData) {
-          if (!extractedData.personal) extractedData.personal = {};
-          extractedData.personal.cvLink = cvLink;
-          extractedData.fullTextContent = textDataCV;
-        }
-      } catch (parseError) {
-        console.error("Error parsing PDF:", parseError);
+      dataCV = await extractCVDataFromPDF(req.file.buffer, req.file.mimetype);
+
+      if (dataCV) {
+        dataCV.personal = dataCV.personal || {};
+        dataCV.personal.cvLink = cvLink;
       }
     }
 
-    const { jobId, addedBy } = req.body;
-    let savedCandidate = null;
+    const newCandiate = new Candidate(dataCV);
 
-    if (jobId && addedBy && extractedData) {
-      try {
-        const candidate = new Candidate({
-          jobId,
-          addedBy,
-          objective: extractedData.objective,
-          fullTextContent: extractedData.fullTextContent,
-          personal: extractedData.personal,
-          educations: extractedData.educations,
-          experiences: extractedData.experiences,
-          projects: extractedData.projects,
-        });
-        savedCandidate = await candidate.save();
-      } catch (dbError) {
-        console.error("Error saving Candidate:", dbError);
-      }
-    }
+    await newCandiate.save();
 
     return res.status(200).json({
       message: "CV processed successfully",
       cvLink: cvLink,
-      extractedData: extractedData || null,
-      savedCandidate: savedCandidate || null,
+      dataCV: dataCV,
     });
   } catch (error) {
     console.error("Error in uploadCV:", error);
