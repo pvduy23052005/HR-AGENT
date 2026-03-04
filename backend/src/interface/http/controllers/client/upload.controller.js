@@ -1,5 +1,5 @@
-import { uploadCloud } from "../../../../shared/utils/upload.util.js";
-import { extractCVData } from "../../../../shared/utils/gemini.util.js";
+import * as uploadService from "../../../../infrastructure/external-service/upload.service.js";
+import { extractCVData } from "../../../../infrastructure/external-service/gemini.service.js";
 import { getDocumentProxy, extractText } from "unpdf";
 import Candidate from "../../../../infrastructure/database/models/candidate.model.js";
 
@@ -9,7 +9,7 @@ export const uploadCV = async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const fileUrls = await uploadCloud([req.file]);
+    const fileUrls = await uploadService.uploadCloud([req.file]);
 
     if (!fileUrls || fileUrls.length === 0 || !fileUrls[0]) {
       return res.status(500).json({ message: "Upload to Cloudinary failed" });
@@ -42,7 +42,6 @@ export const uploadCV = async (req, res) => {
 
     if (jobId && addedBy && extractedData) {
       try {
-        // Build the Candidate applying the extracted valid data
         const candidate = new Candidate({
           jobId,
           addedBy,

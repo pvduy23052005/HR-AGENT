@@ -12,7 +12,7 @@ router.post(
 router.post(
   "/password/otp",
   validate.otpPasswordValidate,
-  controller.otpPassword,
+  controller.verifyOTP,
 );
 
 router.post(

@@ -18,7 +18,7 @@ POST {{base_url}}/user/password/forgot
 Content-Type: application/json
 
 {
-  "email": "2351170598@e.tlu.edu.vn"
+  "email": "phungvanduy23052005@gmail.com"
 }
 
 ###
@@ -26,8 +26,8 @@ POST {{base_url}}/user/password/otp
 Content-Type: application/json
 
 {
-  "email": "hr1@gmail.com",
-  "otp": "78466028"
+  "email": "phungvanduy23052005@gmail.com",
+  "otp": "795055"
 }
 
 ###

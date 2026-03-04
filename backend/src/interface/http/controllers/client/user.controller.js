@@ -1,11 +1,22 @@
-import * as userService from "../../../../application/use-case/client/user.use-case.js";
+import * as userUseCase from "../../../../application/use-case/client/user.use-case.js";
+
+import * as userRepository from "../../../../infrastructure/database/repositories/client/user.repository.js";
+import * as otpRepository from "../../../../infrastructure/database/repositories/client/otp.repository.js";
+import * as emailService from "../../../../infrastructure/external-service/mail.service.js";
+
+import * as passwordService from "../../../../infrastructure/external-service/password.service.js";
 
 // [POST] /user/password/forgot
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const result = await userService.forgotPassword(email);
+    const result = await userUseCase.forgotPassword(
+      userRepository,
+      otpRepository,
+      emailService,
+      email,
+    );
 
     res.status(200).json({
       success: true,
@@ -24,11 +35,11 @@ export const forgotPassword = async (req, res) => {
 };
 
 // [POST] /user/password/otp
-export const otpPassword = async (req, res) => {
+export const verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    await userService.verifyOtp(email, otp);
+    await userUseCase.verifyOtp(userRepository, otpRepository, email, otp);
 
     res.status(200).json({
       success: true,
@@ -49,7 +60,14 @@ export const resetPassword = async (req, res) => {
   try {
     const { email, password, confirmPassword } = req.body;
 
-    await userService.resetPassword(email, password, confirmPassword);
+    await userUseCase.resetPassword(
+      userRepository,
+      otpRepository,
+      passwordService,
+      email,
+      password,
+      confirmPassword,
+    );
 
     res.status(200).json({
       success: true,

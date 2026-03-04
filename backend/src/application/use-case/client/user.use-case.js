@@ -1,31 +1,29 @@
-import bcrypt from "bcrypt";
 import { randomNumber } from "../../../helpers/randomNumber.helper.js";
-import { sendEmail_helper } from "../../../shared/utils/sendMail.util.js";
 import { htmlEmailOtp } from "../../../templates/email/otp.js";
-import * as userRepository from "../../../infrastructure/database/repositories/client/user.repository.js";
-import * as otpRepository from "../../../infrastructure/database/repositories/client/otp.repository.js";
 
-export const forgotPassword = async (email) => {
+export const forgotPassword = async (
+  userRepository,
+  otpRepository,
+  mailService,
+  email,
+) => {
   const user = await userRepository.findUserByEmail(email);
 
+  
+
   if (!user) {
-    const error = new Error("Email không tồn tại trong hệ thống!");
-    error.statusCode = 400;
-    throw error;
+    throw new Error("Email không tồn tại trong hệ thống!");
   }
 
   const recentOtp = await otpRepository.findRecentOTP(email);
 
   if (recentOtp) {
-    const timeDiff =
+    const secondsPassed =
       (Date.now() - new Date(recentOtp.createdAt).getTime()) / 1000;
-    if (timeDiff < 60) {
-      const waitTime = Math.ceil(60 - timeDiff);
-      const error = new Error(
-        `Vui lòng đợi ${waitTime} giây trước khi yêu cầu mã OTP mới!`,
+    if (secondsPassed < 60) {
+      throw new Error(
+        `Vui lòng đợi ${Math.ceil(60 - secondsPassed)} giây trước khi yêu cầu mã mới!`,
       );
-      error.statusCode = 400;
-      throw error;
     }
   }
 
@@ -34,50 +32,51 @@ export const forgotPassword = async (email) => {
 
   const subject = "Mã OTP lấy lại mật khẩu";
   const content = htmlEmailOtp(record.otp);
-  sendEmail_helper(email, subject, content);
+  await mailService.sendEmail(email, subject, content);
 
   return {
     email: email,
-    otp: record.otp,
   };
 };
 
-export const verifyOtp = async (email, otp) => {
+export const verifyOtp = async (userRepository, otpRepository, email, otp) => {
   const user = await userRepository.findUserByEmail(email);
 
   if (!user) {
-    const error = new Error("Email không tồn tại trong hệ thống!");
-    error.statusCode = 400;
-    throw error;
+    throw new Error("Email không tồn tại trong hệ thống!");
   }
 
   const resultOtp = await otpRepository.findByEmailAndOTP(email, otp);
 
   if (!resultOtp) {
-    const error = new Error("OTP không chính xác hoặc đã hết hạn!");
-    error.statusCode = 400;
-    throw error;
+    throw new Error("OTP không chính xác hoặc đã hết hạn!");
   }
 };
 
-export const resetPassword = async (email, password, confirmPassword) => {
+export const resetPassword = async (
+  userRepository,
+  otpRepository,
+  passwordService,
+  email,
+  password,
+  confirmPassword,
+) => {
   if (password !== confirmPassword) {
-    const error = new Error("Mật khẩu xác nhận không khớp!");
-    error.statusCode = 400;
-    throw error;
+    throw new Error("Mật khẩu xác nhận không khớp!");
   }
 
   const otpSession = await otpRepository.findOTPByEmail(email);
 
   if (!otpSession) {
-    const error = new Error(
-      "Phiên giao dịch đã hết hạn, vui lòng lấy lại mã OTP!",
-    );
-    error.statusCode = 400;
-    throw error;
+    throw new Error("Phiên giao dịch đã hết hạn, vui lòng lấy lại mã OTP!");
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await userRepository.findUserByEmail(email);
+  if (!user) {
+    throw new Error("Email không tồn tại trong hệ thống!");
+  }
+
+  const hashedPassword = await passwordService.hash(password);
 
   await userRepository.updateUserPassword(email, hashedPassword);
   await otpRepository.deleteOTP(email);
