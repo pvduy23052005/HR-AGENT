@@ -1,7 +1,7 @@
 import express from "express";
 import * as controller from "../../controllers/admin/auth.controller.js";
 import { authMiddleware } from "../../middlewares/admin/auth.middleware.js";
-import { loginValidate } from "../../../../shared/validates/admin/auth.validate.js";
+import { loginValidate } from "../../../../shared/validators/admin/auth.validate.js";
 const router = express.Router();
 
 router.post("/login", loginValidate, controller.login);

@@ -1,4 +1,4 @@
-import { randomNumber } from "../../../helpers/randomNumber.helper.js";
+import { randomNumber } from "../../../shared/utils/randomNumber.util.js";
 import { htmlEmailOtp } from "../../../templates/email/otp.js";
 
 export const forgotPassword = async (
@@ -8,8 +8,6 @@ export const forgotPassword = async (
   email,
 ) => {
   const user = await userRepository.findUserByEmail(email);
-
-  
 
   if (!user) {
     throw new Error("Email không tồn tại trong hệ thống!");
