@@ -47,3 +47,12 @@ export const updateJobById = async (id, data) => {
   );
   return mapToEntity(updatedJob);
 };
+
+export const deleteJobById = async (id) => {
+  const deletedJob = await Job.findOneAndUpdate(
+    { _id: id, deleted: false },
+    { deleted: true },
+    { new: true },
+  );
+  return mapToEntity(deletedJob);
+};

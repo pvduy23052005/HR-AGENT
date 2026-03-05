@@ -61,3 +61,45 @@ export const updateJob = async (req, res) => {
     });
   }
 };
+
+// [get] /jobs
+export const getAllJob = async (req, res) => {
+  try {
+    const userID = res.locals.user.id;
+
+    const jobs = await jobUseCase.getAllJob(jobRepository, userID);
+
+    res.status(200).json({
+      success: true,
+      messag: "Thành công",
+      jobs: jobs,
+    });
+  } catch (error) {
+    console.error("Error get all job:", error);
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Đã xảy ra lỗi khi tải danh sách công việc!",
+    });
+  }
+};
+
+// [delete] /job/delete/:id
+export const deleteJob = async (req, res) => {
+  try {
+    const userID = res.locals.user.id || res.locals.user._id;
+    const jobId = req.params.id;
+
+    await jobUseCase.deleteJob(jobRepository, jobId, userID);
+
+    return res.status(200).json({
+      success: true,
+      message: "Xóa công việc thành công!",
+    });
+  } catch (error) {
+    console.error("Error deleting job:", error);
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Đã xảy ra lỗi khi xóa công việc!",
+    });
+  }
+};
