@@ -42,3 +42,16 @@ Content-Type: application/json
 }
 
 // end api_user
+
+###
+POST {{base_url}}/job/create
+Content-Type: application/json
+
+{
+  "title": "Software Engineer",
+  "description": "We are looking for a skilled software engineer to join our team.",
+  "requirements": "3+ years of Node.js, Express, React.",
+  "userID": "64f1a2b3c4d5e6f7a8b9c0d1" 
+}
+
+//
