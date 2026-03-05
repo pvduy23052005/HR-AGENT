@@ -1,7 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { candidatePrompt } from "../../prompts/candiate.prompt.js";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -58,7 +57,7 @@ const generateWithRetry = async (contents, maxRetries = 3, delayMs = 25000) => {
   );
 };
 
-export const extractCVDataFromPDF = async (fileBuffer, mimeType) => {
+export const extractCV = async (fileBuffer, mimeType) => {
   try {
     const filePart = {
       inlineData: {
