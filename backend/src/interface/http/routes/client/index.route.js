@@ -1,6 +1,7 @@
 import { authRoute } from "./auth.route.js";
 import { userRoute } from "./user.route.js";
 import { uploadRoute } from "./upload.route.js";
+import { jobRoute } from "./job.route.js";
 
 import { authMiddleware } from "../../middlewares/client/auth.middleware.js";
 
@@ -9,7 +10,9 @@ const indexClientRoute = (app) => {
 
   app.use("/user", userRoute);
 
-  app.use("/upload", uploadRoute);
+  app.use("/upload", authMiddleware, uploadRoute);
+
+  app.use("/job", authMiddleware, jobRoute);
 };
 
 export default indexClientRoute;

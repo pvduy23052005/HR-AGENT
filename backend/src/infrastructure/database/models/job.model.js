@@ -7,7 +7,7 @@ const jobSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    userId: {
+    userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -22,7 +22,11 @@ const jobSchema = new mongoose.Schema(
     },
     status: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {
@@ -30,7 +34,6 @@ const jobSchema = new mongoose.Schema(
   },
 );
 
-// Tạo và export Model
-const Job = mongoose.model("Job", jobSchema);
+const Job = mongoose.model("Job", jobSchema, "jobs");
 
 export default Job;
