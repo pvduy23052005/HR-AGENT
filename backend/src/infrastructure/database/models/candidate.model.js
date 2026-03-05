@@ -47,7 +47,7 @@ const projectSchema = new mongoose.Schema(
 
 const candidateSchema = new mongoose.Schema(
   {
-    jobId: {
+    jobID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Job",
     },

@@ -1,7 +1,7 @@
 export class CandidateEntity {
   constructor({
     id,
-    jobId,
+    jobID,
     addedBy,
     status = true,
     objective = "",
@@ -14,7 +14,7 @@ export class CandidateEntity {
     updatedAt,
   }) {
     this.id = id ? id.toString() : null;
-    this.jobId = jobId ? jobId.toString() : null;
+    this.jobID = jobID ? jobID.toString() : null;
     this.addedBy = addedBy ? addedBy.toString() : null;
     this.status = status;
     this.objective = objective;
@@ -74,7 +74,7 @@ export class CandidateEntity {
   getSummaryProfile() {
     return {
       id: this.id,
-      jobId: this.jobId,
+      jobID: this.jobID,
       fullName: this.personal.fullName,
       email: this.personal.email,
       phone: this.personal.phone,
@@ -88,7 +88,7 @@ export class CandidateEntity {
   getDetailProfile() {
     return {
       id: this.id,
-      jobId: this.jobId,
+      jobID: this.jobID,
       addedBy: this.addedBy,
       status: this.status,
       objective: this.objective,

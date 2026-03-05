@@ -1,20 +1,33 @@
 export const uploadCV = async (
   candidateRepository,
+  jobRepository,
   uploadService,
   geminiService,
+  userID,
+  jobID,
   file,
 ) => {
   if (!file) return res.status(400).json({ message: "No file uploaded" });
 
+  const job = await jobRepository.getJobById(jobID);
+
+  if (!job) {
+    throw new Error("Công việc không đúng ");
+  }
+
   const fileUrls = await uploadService.uploadCloud([file]);
 
   if (!fileUrls || fileUrls.length === 0) {
-    return res.status(500).json({ message: "Upload failed" });
+    throw new Error("Upalod CV thất bại");
   }
 
   const cvLink = fileUrls[0];
 
-  let dataCV = null;
+  let dataCV = {
+    jobId: jobID,
+    addedBy: userID,
+    personal: { cvLink: cvLink },
+  };
 
   if (
     file.mimetype === "application/pdf" ||
@@ -22,17 +35,27 @@ export const uploadCV = async (
   ) {
     console.log("Đang ném file cho Gemini làm OCR...");
 
-    dataCV = await geminiService.extractCV(file.buffer, file.mimetype);
+    const extractedData = await geminiService.extractCV(
+      file.buffer,
+      file.mimetype,
+    );
 
-    if (dataCV) {
-      dataCV.personal = dataCV.personal || {};
-      dataCV.personal.cvLink = cvLink;
+    if (extractedData) {
+      dataCV = {
+        ...extractedData,
+        jobId: jobID,
+        addedBy: userID,
+        personal: {
+          ...extractedData.personal,
+          cvLink: cvLink,
+        },
+      };
     }
   }
 
   const newCandidate = await candidateRepository.createCandidate(dataCV);
 
-   return {
+  return {
     cvLink,
     newCandidate,
     dataCV,

@@ -6,7 +6,7 @@ const mapToEntity = (doc) => {
 
   return new CandidateEntity({
     id: doc._id,
-    jobId: doc.jobId,
+    jobId: doc.jobID,
     addedBy: doc.addedBy,
     status: doc.status,
     objective: doc.objective,
@@ -23,7 +23,11 @@ const mapToEntity = (doc) => {
 export const createCandidate = async (data) => {
   const sanitizedInput = new CandidateEntity(data);
 
-  const { id, ...dataToSave } = sanitizedInput;
+  const { id, jobId, ...dataToSave } = sanitizedInput;
+
+  if (jobId) {
+    dataToSave.jobID = jobId;
+  }
 
   const newCandidate = new Candidate(dataToSave);
   const savedCandidate = await newCandidate.save();
