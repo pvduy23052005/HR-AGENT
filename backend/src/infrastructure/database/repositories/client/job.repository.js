@@ -33,3 +33,17 @@ export const getAllJob = async (userID) => {
 
   return jobs.map((job) => mapToEntity(job));
 };
+
+export const getJobById = async (id) => {
+  const job = await Job.findOne({ _id: id, deleted: false }).lean();
+  return mapToEntity(job);
+};
+
+export const updateJobById = async (id, data) => {
+  const updatedJob = await Job.findOneAndUpdate(
+    { _id: id, deleted: false },
+    data,
+    { new: true },
+  );
+  return mapToEntity(updatedJob);
+};
