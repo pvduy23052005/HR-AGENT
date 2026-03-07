@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import * as controller from "../../controllers/client/user.controller.js";
-import * as validate from "../../../../shared/validators/client/user.validate.js";
+import * as validate from "../../validators/client/user.validate.js";
 
 router.post(
   "/password/forgot",

@@ -34,3 +34,8 @@ export const createCandidate = async (data) => {
 
   return mapToEntity(savedCandidate);
 };
+
+export const getCandidateById = async (id) => {
+  const candidate = await Candidate.findById(id).lean();
+  return mapToEntity(candidate);
+};

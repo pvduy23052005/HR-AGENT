@@ -101,4 +101,8 @@ export class CandidateEntity {
       updatedAt: this.updatedAt,
     };
   }
+
+  getFulltextContent() {
+    return this.fullTextContent;
+  }
 }

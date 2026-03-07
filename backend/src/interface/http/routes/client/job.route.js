@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import * as controller from "../../controllers/client/job.controller.js";
-import * as validate from "../../../../shared/validators/client/job.validate.js";
+import * as validate from "../../validators/client/job.validate.js";
 
 router.get("/", controller.getAllJob);
 

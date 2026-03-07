@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { candidatePrompt } from "../../prompts/candiate.prompt.js";
+import { aiAnalyzePrompt } from "../../prompts/aiAnalyize.prompt.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -19,9 +20,9 @@ const generateWithRetry = async (contents, maxRetries = 3, delayMs = 25000) => {
       try {
         const response = await ai.models.generateContent({
           model: model,
-          contents: contents, 
+          contents: contents,
           config: {
-            responseMimeType: "application/json", 
+            responseMimeType: "application/json",
           },
         });
 
@@ -62,7 +63,7 @@ export const extractCV = async (fileBuffer, mimeType) => {
     const filePart = {
       inlineData: {
         data: fileBuffer.toString("base64"),
-        mimeType: mimeType, 
+        mimeType: mimeType,
       },
     };
 
@@ -73,6 +74,24 @@ export const extractCV = async (fileBuffer, mimeType) => {
     return JSON.parse(textResponse);
   } catch (error) {
     console.error("Lỗi OCR và trích xuất dữ liệu CV:", error.message);
+    return null;
+  }
+};
+
+export const analyzeCandidateWithJob = async (candidateData, jobData) => {
+  try {
+    const dataPart = JSON.stringify({
+      candidate: candidateData,
+      job: jobData,
+    });
+
+    const contents = [aiAnalyzePrompt, dataPart];
+
+    const textResponse = await generateWithRetry(contents);
+
+    return JSON.parse(textResponse);
+  } catch (error) {
+    console.error("Lỗi phân tích AI ứng viên:", error.message);
     return null;
   }
 };

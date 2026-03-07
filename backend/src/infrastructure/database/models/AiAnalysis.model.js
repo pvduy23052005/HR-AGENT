@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 
 const aiAnalysisSchema = new mongoose.Schema(
   {
-    candidateId: {
+    jobID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Candidate",
+      required: true,
+    },
+    candidateID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Candidate",
       required: true,
@@ -19,6 +24,7 @@ const aiAnalysisSchema = new mongoose.Schema(
     redFlags: [
       {
         type: String,
+        trim: true,
       },
     ],
     suggestedQuestions: [
