@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as authUseCase from '../../../../application/use-case/admin/auth.use-case';
+import * as authUseCase from '../../../../application/use-case/admin/auth';
 import * as tokenService from '../../../../infrastructure/external-service/token.service';
 import * as authRepository from '../../../../infrastructure/database/repositories/admin/auth.repository';
 

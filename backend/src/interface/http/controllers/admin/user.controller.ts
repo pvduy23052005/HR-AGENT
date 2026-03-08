@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as userUseCase from '../../../../application/use-case/admin/user.use-case';
+import * as userUseCase from '../../../../application/use-case/admin/user';
 import * as passwordService from '../../../../infrastructure/external-service/password.service';
 import * as userRepository from '../../../../infrastructure/database/repositories/admin/user.repository';
 

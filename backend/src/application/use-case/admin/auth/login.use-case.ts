@@ -1,6 +1,6 @@
-import type * as tokenService from '../../../infrastructure/external-service/token.service';
-import type * as authRepository from '../../../infrastructure/database/repositories/admin/auth.repository';
-import type { IAdminProfile } from '../../../domain/entities/admin/accountAdmin.entity';
+import type * as tokenService from '../../../../infrastructure/external-service/token.service';
+import type * as authRepository from '../../../../infrastructure/database/repositories/admin/auth.repository';
+import type { IAdminProfile } from '../../../../domain/entities/admin/accountAdmin.entity';
 
 export interface IAdminLoginResult {
   token: string;
