@@ -17,7 +17,7 @@ export interface IAdminProfile {
 }
 
 export class AdminEntity {
-  id: string | undefined;
+  id: string ;
   fullName: string;
   email: string;
   password: string;
@@ -34,7 +34,7 @@ export class AdminEntity {
     status,
     deleted,
   }: IAdminEntityProps) {
-    this.id = id;
+    this.id = id?.toString() || "";
     this.fullName = fullName;
     this.email = email;
     this.password = password;
@@ -59,5 +59,9 @@ export class AdminEntity {
       role: this.role,
       status: this.status,
     };
+  }
+
+  getID(): string {
+    return this.id;
   }
 }

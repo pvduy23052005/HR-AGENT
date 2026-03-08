@@ -1,17 +1,6 @@
-import mongoose, { Document, Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
-export interface IJobDocument extends Document {
-  title: string;
-  userID: Types.ObjectId;
-  description: string;
-  requirements: string;
-  status: boolean;
-  deleted: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const jobSchema = new mongoose.Schema<IJobDocument>(
+const jobSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -23,6 +12,6 @@ const jobSchema = new mongoose.Schema<IJobDocument>(
   { timestamps: true },
 );
 
-const Job = mongoose.model<IJobDocument>('Job', jobSchema, 'jobs');
+const Job = mongoose.model('Job', jobSchema, 'jobs');
 
 export default Job;

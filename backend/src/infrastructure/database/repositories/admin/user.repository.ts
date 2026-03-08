@@ -1,8 +1,7 @@
 import User from '../../models/user.model';
 import { UserEntity } from '../../../../domain/entities/admin/user.entity';
-import type { IUserDocument } from '../../models/user.model';
 
-const mapToEntity = (doc: (IUserDocument & { _id: { toString(): string } }) | null): UserEntity | null => {
+const mapToEntity = (doc: any | null): UserEntity | null => {
   if (!doc) return null;
   return new UserEntity({
     id: doc._id.toString(),
@@ -20,17 +19,17 @@ const mapToEntity = (doc: (IUserDocument & { _id: { toString(): string } }) | nu
 
 export const findByEmail = async (email: string): Promise<UserEntity | null> => {
   const doc = await User.findOne({ email, deleted: false }).lean();
-  return mapToEntity(doc as (IUserDocument & { _id: { toString(): string } }) | null);
+  return mapToEntity(doc);
 };
 
 export const findById = async (id: string): Promise<UserEntity | null> => {
   const doc = await User.findOne({ _id: id, deleted: false }).lean();
-  return mapToEntity(doc as (IUserDocument & { _id: { toString(): string } }) | null);
+  return mapToEntity(doc);
 };
 
 export const findAll = async (): Promise<(UserEntity | null)[]> => {
   const docs = await User.find({ deleted: false }).sort({ createdAt: -1 }).lean();
-  return docs.map((doc) => mapToEntity(doc as IUserDocument & { _id: { toString(): string } }));
+  return docs.map((doc) => mapToEntity(doc));
 };
 
 export interface ICreateUserData {
@@ -44,10 +43,10 @@ export interface ICreateUserData {
 export const createUser = async (data: ICreateUserData): Promise<UserEntity | null> => {
   const newUser = new User(data);
   const savedDoc = await newUser.save();
-  return mapToEntity(savedDoc as IUserDocument & { _id: { toString(): string } });
+  return mapToEntity(savedDoc);
 };
 
 export const updateStatus = async (id: string, status: string): Promise<UserEntity | null> => {
   const updatedDoc = await User.findOneAndUpdate({ _id: id }, { status }, { new: true });
-  return mapToEntity(updatedDoc as (IUserDocument & { _id: { toString(): string } }) | null);
+  return mapToEntity(updatedDoc);
 };

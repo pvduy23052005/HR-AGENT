@@ -43,34 +43,38 @@ const generateWithRetry = async (contents: any, maxRetries = 3, delayMs = 25000)
   throw new Error('[Gemini] Đã thử hết các Model và số lần Retry nhưng vẫn thất bại toàn tập.');
 };
 
-export const extractCV = async (fileBuffer: Buffer, mimeType: string): Promise<Record<string, any> | null> => {
-  try {
-    const contents = [
-      candidatePrompt,
-      { inlineData: { data: fileBuffer.toString('base64'), mimeType } }
-    ];
+import { IGeminiService } from '../../domain/interfaces/services/gemini.service';
 
-    const textResponse = await generateWithRetry(contents);
-    return textResponse ? JSON.parse(textResponse) : null;
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    console.error('Lỗi OCR và trích xuất dữ liệu CV:', msg);
-    return null;
+export class GeminiService implements IGeminiService {
+  public async extractCV(fileBuffer: Buffer, mimeType: string): Promise<Record<string, any> | null> {
+    try {
+      const contents = [
+        candidatePrompt,
+        { inlineData: { data: fileBuffer.toString('base64'), mimeType } }
+      ];
+
+      const textResponse = await generateWithRetry(contents);
+      return textResponse ? JSON.parse(textResponse) : null;
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      console.error('Lỗi OCR và trích xuất dữ liệu CV:', msg);
+      return null;
+    }
   }
-};
 
-export const analyzeCandidateWithJob = async (candidateData: any, jobData: any): Promise<Record<string, any> | null> => {
-  try {
-    const contents = [
-      aiAnalyzePrompt,
-      JSON.stringify({ candidate: candidateData, job: jobData })
-    ];
+  public async analyzeCandidateWithJob(candidateData: any, jobData: any): Promise<Record<string, any> | null> {
+    try {
+      const contents = [
+        aiAnalyzePrompt,
+        JSON.stringify({ candidate: candidateData, job: jobData })
+      ];
 
-    const textResponse = await generateWithRetry(contents);
-    return textResponse ? JSON.parse(textResponse) : null;
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error);
-    console.error('Lỗi phân tích AI ứng viên:', msg);
-    return null;
+      const textResponse = await generateWithRetry(contents);
+      return textResponse ? JSON.parse(textResponse) : null;
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      console.error('Lỗi phân tích AI ứng viên:', msg);
+      return null;
+    }
   }
-};
+}

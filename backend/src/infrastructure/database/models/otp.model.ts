@@ -1,14 +1,6 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-export interface IOTPDocument extends Document {
-  email: string;
-  otp: string;
-  expireAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const otpSchema = new mongoose.Schema<IOTPDocument>(
+const otpSchema = new mongoose.Schema(
   {
     email: { type: String, required: true },
     otp: { type: String, required: true },
@@ -17,6 +9,6 @@ const otpSchema = new mongoose.Schema<IOTPDocument>(
   { timestamps: true },
 );
 
-const OTP = mongoose.model<IOTPDocument>('OTP', otpSchema, 'otp');
+const OTP = mongoose.model('OTP', otpSchema, 'otp');
 
 export default OTP;

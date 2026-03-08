@@ -1,8 +1,8 @@
 import Candidate from '../../models/candidate.model';
 import { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
-import type { ICandidateDocument } from '../../models/candidate.model';
+import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
 
-const mapToEntity = (doc: (ICandidateDocument & { _id: { toString(): string } }) | null): CandidateEntity | null => {
+const mapToEntity = (doc: any | null): CandidateEntity | null => {
   if (!doc) return null;
   return new CandidateEntity({
     id: doc._id.toString(),
@@ -32,13 +32,15 @@ export interface ICandidateData {
   projects?: unknown[];
 }
 
-export const createCandidate = async (data: ICandidateData): Promise<CandidateEntity | null> => {
-  const newCandidate = new Candidate(data);
-  const savedCandidate = await newCandidate.save();
-  return mapToEntity(savedCandidate as ICandidateDocument & { _id: { toString(): string } });
-};
+export class CandidateRepository implements ICandidateRepository {
+  public async createCandidate(data: ICandidateData): Promise<CandidateEntity | null> {
+    const newCandidate = new Candidate(data);
+    const savedCandidate = await newCandidate.save();
+    return mapToEntity(savedCandidate);
+  }
 
-export const getCandidateById = async (id: string): Promise<CandidateEntity | null> => {
-  const candidate = await Candidate.findById(id).lean();
-  return mapToEntity(candidate as (ICandidateDocument & { _id: { toString(): string } }) | null);
-};
+  public async getCandidateById(id: string): Promise<CandidateEntity | null> {
+    const candidate = await Candidate.findById(id).lean();
+    return mapToEntity(candidate);
+  }
+}

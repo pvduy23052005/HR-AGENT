@@ -1,53 +1,6 @@
-import mongoose, { Document, Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
-interface IPersonalDoc {
-  fullName?: string;
-  email?: string;
-  phone?: string;
-  avatar?: string;
-  cvLink?: string;
-  githubLink?: string;
-  socialLinks?: Record<string, string>;
-}
-
-interface IEducationDoc {
-  school?: string;
-  degree?: string;
-  major?: string;
-  gpa?: string;
-  period?: string;
-}
-
-interface IExperienceDoc {
-  company?: string;
-  position?: string;
-  duration?: string;
-  description?: string;
-  techStack?: string[];
-}
-
-interface IProjectDoc {
-  title?: string;
-  description?: string;
-  techStack?: string[];
-  projectLink?: string;
-}
-
-export interface ICandidateDocument extends Document {
-  jobID: Types.ObjectId;
-  addedBy: Types.ObjectId;
-  status: boolean;
-  objective: string;
-  fullTextContent: string;
-  personal: IPersonalDoc;
-  educations: IEducationDoc[];
-  experiences: IExperienceDoc[];
-  projects: IProjectDoc[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const personalSchema = new mongoose.Schema<IPersonalDoc>(
+const personalSchema = new mongoose.Schema(
   {
     fullName: { type: String, trim: true },
     email: { type: String, trim: true },
@@ -60,7 +13,7 @@ const personalSchema = new mongoose.Schema<IPersonalDoc>(
   { _id: false },
 );
 
-const educationSchema = new mongoose.Schema<IEducationDoc>(
+const educationSchema = new mongoose.Schema(
   {
     school: { type: String, trim: true },
     degree: { type: String, trim: true },
@@ -71,7 +24,7 @@ const educationSchema = new mongoose.Schema<IEducationDoc>(
   { _id: false },
 );
 
-const experienceSchema = new mongoose.Schema<IExperienceDoc>(
+const experienceSchema = new mongoose.Schema(
   {
     company: { type: String, trim: true },
     position: { type: String, trim: true },
@@ -82,7 +35,7 @@ const experienceSchema = new mongoose.Schema<IExperienceDoc>(
   { _id: false },
 );
 
-const projectSchema = new mongoose.Schema<IProjectDoc>(
+const projectSchema = new mongoose.Schema(
   {
     title: { type: String, trim: true },
     description: { type: String, trim: true },
@@ -92,7 +45,7 @@ const projectSchema = new mongoose.Schema<IProjectDoc>(
   { _id: false },
 );
 
-const candidateSchema = new mongoose.Schema<ICandidateDocument>(
+const candidateSchema = new mongoose.Schema(
   {
     jobID: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
     addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -107,6 +60,6 @@ const candidateSchema = new mongoose.Schema<ICandidateDocument>(
   { timestamps: true },
 );
 
-const Candidate = mongoose.model<ICandidateDocument>('Candidate', candidateSchema);
+const Candidate = mongoose.model('Candidate', candidateSchema);
 
 export default Candidate;

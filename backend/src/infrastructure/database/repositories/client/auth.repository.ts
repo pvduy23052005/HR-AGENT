@@ -1,12 +1,9 @@
 import User from '../../models/user.model';
 import { UserEntity } from '../../../../domain/entities/client/user.entity';
-import type { IUserDocument } from '../../models/user.model';
 
-type UserDoc = IUserDocument | (Omit<IUserDocument, keyof Document> & { _id: unknown }) | null;
-
-const mapToEntity = (doc: UserDoc): UserEntity | null => {
+const mapToEntity = (doc: any | null): UserEntity | null => {
   if (!doc) return null;
-  const d = doc as IUserDocument & { _id: { toString(): string } };
+  const d = doc as any;
 
   return new UserEntity({
     id: d._id.toString(),
@@ -22,7 +19,11 @@ const mapToEntity = (doc: UserDoc): UserEntity | null => {
   });
 };
 
-export const findUserByEmail = async (email: string): Promise<UserEntity | null> => {
-  const user = await User.findOne({ email, deleted: false }).lean();
-  return mapToEntity(user as UserDoc);
-};
+import { IAuth } from '../../../../domain/interfaces/client/auth.interface';
+
+export class AuthRepository implements IAuth {
+  public async findUserByEmail(email: string): Promise<UserEntity | null> {
+    const user = await User.findOne({ email, deleted: false }).lean();
+    return mapToEntity(user);
+  }
+}

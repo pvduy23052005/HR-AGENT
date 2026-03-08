@@ -1,14 +1,19 @@
 import { Request, Response } from 'express';
-import * as authUseCase from '../../../../application/use-case/client/auth.use-case';
-import * as authRepository from '../../../../infrastructure/database/repositories/client/auth.repository';
-import * as passwordService from '../../../../infrastructure/external-service/password.service';
-import * as tokenService from '../../../../infrastructure/external-service/token.service';
+import { LoginUseCase } from '../../../../application/use-cases/client/auth/login.use-case';
+import { AuthRepository } from '../../../../infrastructure/database/repositories/client/auth.repository';
+import { PasswordService } from '../../../../infrastructure/external-service/password.service';
+import { TokenService } from '../../../../infrastructure/external-service/token.service';
+
+const authRepository = new AuthRepository();
+const passwordService = new PasswordService();
+const tokenService = new TokenService();
+const loginUseCase = new LoginUseCase(authRepository, passwordService, tokenService);
 
 // [POST] /auth/login
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body as { email: string; password: string };
-    const { token, user } = await authUseCase.login(authRepository, passwordService, tokenService, email, password);
+    const { token, user } = await loginUseCase.execute(email, password);
 
     res.cookie('token', token, {
       httpOnly: true,

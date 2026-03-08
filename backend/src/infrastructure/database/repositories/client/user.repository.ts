@@ -1,8 +1,8 @@
 import User from '../../models/user.model';
 import { UserEntity } from '../../../../domain/entities/client/user.entity';
-import type { IUserDocument } from '../../models/user.model';
+import type { IUserRepository } from '../../../../domain/interfaces/client/user.interface';
 
-const mapToEntity = (doc: (IUserDocument & { _id: { toString(): string } }) | null): UserEntity | null => {
+const mapToEntity = (doc: any | null): UserEntity | null => {
   if (!doc) return null;
   return new UserEntity({
     id: doc._id.toString(),
@@ -18,21 +18,23 @@ const mapToEntity = (doc: (IUserDocument & { _id: { toString(): string } }) | nu
   });
 };
 
-export const findUserByEmail = async (email: string): Promise<UserEntity | null> => {
-  const doc = await User.findOne({ email, deleted: false }).lean();
-  return mapToEntity(doc as (IUserDocument & { _id: { toString(): string } }) | null);
-};
+export class UserRepository implements IUserRepository {
+  public async findUserByEmail(email: string): Promise<UserEntity | null> {
+    const doc = await User.findOne({ email, deleted: false }).lean();
+    return mapToEntity(doc as any | null);
+  }
 
-export const findUserByID = async (userID: string): Promise<UserEntity | null> => {
-  const doc = await User.findOne({ _id: userID, deleted: false, status: 'active' }).lean();
-  return mapToEntity(doc as (IUserDocument & { _id: { toString(): string } }) | null);
-};
+  public async findUserByID(userID: string): Promise<UserEntity | null> {
+    const doc = await User.findOne({ _id: userID, deleted: false, status: 'active' }).lean();
+    return mapToEntity(doc as any | null);
+  }
 
-export const updateUserPassword = async (email: string, password: string): Promise<UserEntity | null> => {
-  const updatedDoc = await User.findOneAndUpdate(
-    { email },
-    { password },
-    { new: true },
-  ).lean();
-  return mapToEntity(updatedDoc as (IUserDocument & { _id: { toString(): string } }) | null);
-};
+  public async updateUserPassword(email: string, password: string): Promise<UserEntity | null> {
+    const updatedDoc = await User.findOneAndUpdate(
+      { email },
+      { password },
+      { new: true },
+    ).lean();
+    return mapToEntity(updatedDoc as any | null);
+  }
+}

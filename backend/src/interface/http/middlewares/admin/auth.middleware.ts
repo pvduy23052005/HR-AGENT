@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import * as tokenService from '../../../../infrastructure/external-service/token.service';
-import * as authRepository from '../../../../infrastructure/database/repositories/admin/auth.repository';
+import { TokenService } from '../../../../infrastructure/external-service/token.service';
+
+import { AuthRepository } from '../../../../infrastructure/database/repositories/admin/auth.repository';
+
+const authRepository = new AuthRepository();
+const tokenService = new TokenService();
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -15,7 +19,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
       return;
     }
 
-    const decoded = tokenService.verifyToken(token);
+    const decoded = await tokenService.verifyToken(token);
     const admin = await authRepository.findAccountByID(decoded.userID);
 
     if (!admin) {

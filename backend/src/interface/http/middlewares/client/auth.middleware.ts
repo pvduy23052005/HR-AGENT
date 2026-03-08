@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import * as userRepository from '../../../../infrastructure/database/repositories/client/user.repository';
+import { UserRepository } from '../../../../infrastructure/database/repositories/client/user.repository';
+
+import { TokenService } from '../../../../infrastructure/external-service/token.service';
+
+const userRepository = new UserRepository();
+const tokenService = new TokenService();
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -15,7 +19,8 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
       return;
     }
 
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as { userID: string };
+    const decoded = await tokenService.verifyToken(token);
+
     const user = await userRepository.findUserByID(decoded.userID);
 
     if (!user) {

@@ -1,8 +1,8 @@
 import Account from '../../models/accountAdmin.model';
 import { AdminEntity } from '../../../../domain/entities/admin/accountAdmin.entity';
-import type { IAccountAdminDocument } from '../../models/accountAdmin.model';
+import { IAccountAdmin } from '../../../../domain/interfaces/admin/accountAdmin.interface';
 
-const mapToEntity = (doc: (IAccountAdminDocument & { _id: { toString(): string } }) | null): AdminEntity | null => {
+const mapToEntity = (doc: any | null): AdminEntity | null => {
   if (!doc) return null;
   return new AdminEntity({
     id: doc._id.toString(),
@@ -15,12 +15,16 @@ const mapToEntity = (doc: (IAccountAdminDocument & { _id: { toString(): string }
   });
 };
 
-export const findAccountByEmail = async (email: string): Promise<AdminEntity | null> => {
-  const adminDoc = await Account.findOne({ email, deleted: false }).lean();
-  return mapToEntity(adminDoc as (IAccountAdminDocument & { _id: { toString(): string } }) | null);
-};
+export class AuthRepository implements IAccountAdmin {
 
-export const findAccountByID = async (ID: string): Promise<AdminEntity | null> => {
-  const adminDoc = await Account.findOne({ _id: ID, deleted: false }).lean();
-  return mapToEntity(adminDoc as (IAccountAdminDocument & { _id: { toString(): string } }) | null);
-};
+  async findAccountByEmail(email: string): Promise<AdminEntity | null> {
+    const adminDoc = await Account.findOne({ email, deleted: false }).lean();
+    return mapToEntity(adminDoc);
+  }
+
+  async findAccountByID(id: string): Promise<AdminEntity | null> {
+    const adminDoc = await Account.findOne({ _id: id, deleted: false }).lean();
+    return mapToEntity(adminDoc);
+  }
+}
+

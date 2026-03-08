@@ -1,16 +1,6 @@
-import mongoose, { Document, Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
-export interface IInterviewScheduleDocument extends Document {
-  time: Date;
-  status: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled';
-  address: string;
-  candidateId: Types.ObjectId;
-  userId: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const interviewScheduleSchema = new mongoose.Schema<IInterviewScheduleDocument>(
+const interviewScheduleSchema = new mongoose.Schema(
   {
     time: { type: Date, required: true },
     status: {
@@ -25,7 +15,7 @@ const interviewScheduleSchema = new mongoose.Schema<IInterviewScheduleDocument>(
   { timestamps: true },
 );
 
-const InterviewSchedule = mongoose.model<IInterviewScheduleDocument>(
+const InterviewSchedule = mongoose.model(
   'InterviewSchedule',
   interviewScheduleSchema,
 );

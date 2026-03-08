@@ -1,9 +1,15 @@
 import { Request, Response } from 'express';
-import * as uploadUseCase from '../../../../application/use-case/client/upload.use-case';
-import * as candidateRepository from '../../../../infrastructure/database/repositories/client/candidate.repository';
-import * as jobRepository from '../../../../infrastructure/database/repositories/client/job.repository';
-import * as uploadService from '../../../../infrastructure/external-service/upload.service';
-import * as geminiService from '../../../../infrastructure/external-service/gemini.service';
+import { UploadCVUseCase } from '../../../../application/use-cases/client/upload/upload-cv.use-case';
+import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
+import { JobRepository } from '../../../../infrastructure/database/repositories/client/job.repository';
+import { UploadService } from '../../../../infrastructure/external-service/upload.service';
+import { GeminiService } from '../../../../infrastructure/external-service/gemini.service';
+
+const candidateRepository = new CandidateRepository();
+const jobRepository = new JobRepository();
+const uploadService = new UploadService();
+const geminiService = new GeminiService();
+const uploadCVUseCase = new UploadCVUseCase(candidateRepository, jobRepository, uploadService, geminiService);
 
 export const uploadCV = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -11,11 +17,7 @@ export const uploadCV = async (req: Request, res: Response): Promise<void> => {
     const file = req.file as Express.Multer.File;
     const { jobID } = req.body as { jobID: string };
 
-    const { cvLink, newCandidate, dataCV } = await uploadUseCase.uploadCV(
-      candidateRepository,
-      jobRepository,
-      uploadService,
-      geminiService,
+    const { cvLink, newCandidate, dataCV } = await uploadCVUseCase.execute(
       userID,
       jobID,
       file,

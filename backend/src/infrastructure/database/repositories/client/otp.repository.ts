@@ -1,8 +1,8 @@
 import OTP from '../../models/otp.model';
 import { OTPEntity } from '../../../../domain/entities/client/otp.entity';
-import type { IOTPDocument } from '../../models/otp.model';
+import type { IOtpRepository } from '../../../../domain/interfaces/client/otp.interface';
 
-const mapToEntity = (doc: (IOTPDocument & { _id: { toString(): string } }) | null): OTPEntity | null => {
+const mapToEntity = (doc: any | null): OTPEntity | null => {
   if (!doc) return null;
   return new OTPEntity({
     id: doc._id.toString(),
@@ -14,27 +14,29 @@ const mapToEntity = (doc: (IOTPDocument & { _id: { toString(): string } }) | nul
   });
 };
 
-export const findRecentOTP = async (email: string): Promise<OTPEntity | null> => {
-  const doc = await OTP.findOne({ email }).sort({ createdAt: -1 }).lean();
-  return mapToEntity(doc as (IOTPDocument & { _id: { toString(): string } }) | null);
-};
+export class OtpRepository implements IOtpRepository {
+  public async findRecentOTP(email: string): Promise<OTPEntity | null> {
+    const doc = await OTP.findOne({ email }).sort({ createdAt: -1 }).lean();
+    return mapToEntity(doc);
+  }
 
-export const createOTP = async (email: string, otp: string): Promise<OTPEntity | null> => {
-  const record = new OTP({ email, otp });
-  const savedDoc = await record.save();
-  return mapToEntity(savedDoc as IOTPDocument & { _id: { toString(): string } });
-};
+  public async createOTP(email: string, otp: string): Promise<OTPEntity | null> {
+    const record = new OTP({ email, otp });
+    const savedDoc = await record.save();
+    return mapToEntity(savedDoc);
+  }
 
-export const findByEmailAndOTP = async (email: string, otp: string): Promise<OTPEntity | null> => {
-  const doc = await OTP.findOne({ email, otp }).lean();
-  return mapToEntity(doc as (IOTPDocument & { _id: { toString(): string } }) | null);
-};
+  public async findByEmailAndOTP(email: string, otp: string): Promise<OTPEntity | null> {
+    const doc = await OTP.findOne({ email, otp }).lean();
+    return mapToEntity(doc);
+  }
 
-export const findOTPByEmail = async (email: string): Promise<OTPEntity | null> => {
-  const doc = await OTP.findOne({ email }).lean();
-  return mapToEntity(doc as (IOTPDocument & { _id: { toString(): string } }) | null);
-};
+  public async findOTPByEmail(email: string): Promise<OTPEntity | null> {
+    const doc = await OTP.findOne({ email }).lean();
+    return mapToEntity(doc);
+  }
 
-export const deleteOTP = async (email: string): Promise<{ deletedCount?: number }> => {
-  return await OTP.deleteOne({ email });
-};
+  public async deleteOTP(email: string): Promise<{ deletedCount?: number }> {
+    return await OTP.deleteOne({ email });
+  }
+}

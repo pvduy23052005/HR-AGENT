@@ -1,6 +1,15 @@
 import { Request, Response } from 'express';
-import * as jobUseCase from '../../../../application/use-case/client/job.use-case';
-import * as jobRepository from '../../../../infrastructure/database/repositories/client/job.repository';
+import { CreateJobUseCase } from '../../../../application/use-cases/client/job/create-job.use-case';
+import { UpdateJobUseCase } from '../../../../application/use-cases/client/job/update-job.use-case';
+import { GetAllJobUseCase } from '../../../../application/use-cases/client/job/get-all-job.use-case';
+import { DeleteJobUseCase } from '../../../../application/use-cases/client/job/delete-job.use-case';
+import { JobRepository } from '../../../../infrastructure/database/repositories/client/job.repository';
+
+const jobRepository = new JobRepository();
+const createJobUseCase = new CreateJobUseCase(jobRepository);
+const updateJobUseCase = new UpdateJobUseCase(jobRepository);
+const getAllJobUseCase = new GetAllJobUseCase(jobRepository);
+const deleteJobUseCase = new DeleteJobUseCase(jobRepository);
 
 // [POST] /job/create
 export const createJob = async (req: Request, res: Response): Promise<void> => {
@@ -13,8 +22,9 @@ export const createJob = async (req: Request, res: Response): Promise<void> => {
       status?: boolean;
     };
 
-    const newJob = await jobUseCase.createJob(jobRepository, { title, userID, description, requirements, status });
-    res.status(201).json({ success: true, message: 'Tạo công việc thành công!', data: newJob });
+    const newJob = await createJobUseCase.execute({ title, userID, description, requirements, status });
+
+    res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
   } catch (error: unknown) {
     const e = error as { message?: string };
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi tạo công việc!' });
@@ -26,6 +36,7 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
     const jobId = req.params['id'] as string;
+
     const { title, description, requirements, status } = req.body as {
       title?: string;
       description?: string;
@@ -33,8 +44,13 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
       status?: boolean;
     };
 
-    const updatedJob = await jobUseCase.updateJob(jobRepository, jobId, userID, { title, description, requirements, status });
-    res.status(200).json({ success: true, message: 'Cập nhật công việc thành công!', data: updatedJob });
+    const updatedJob = await updateJobUseCase.execute(jobId, userID, { title, description, requirements, status });
+
+    res.status(200).json({
+      success: true,
+      message: 'Cập nhật công việc thành công!',
+      updatedJob: updatedJob
+    });
   } catch (error: unknown) {
     const e = error as { message?: string };
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi cập nhật công việc!' });
@@ -45,8 +61,10 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
 export const getAllJob = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
-    const jobs = await jobUseCase.getAllJob(jobRepository, userID);
-    res.status(200).json({ success: true, message: 'Thành công', jobs });
+
+    const jobs = await getAllJobUseCase.execute(userID);
+
+    res.status(200).json({ success: true, message: 'Thành công', jobs: jobs });
   } catch (error: unknown) {
     const e = error as { message?: string };
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi tải danh sách công việc!' });
@@ -58,7 +76,9 @@ export const deleteJob = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
     const jobId = req.params['id'] as string;
-    await jobUseCase.deleteJob(jobRepository, jobId, userID);
+
+    await deleteJobUseCase.execute(jobId, userID);
+
     res.status(200).json({ success: true, message: 'Xóa công việc thành công!' });
   } catch (error: unknown) {
     const e = error as { message?: string };

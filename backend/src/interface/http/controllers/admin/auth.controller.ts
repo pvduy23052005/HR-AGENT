@@ -1,13 +1,21 @@
 import { Request, Response } from 'express';
-import * as authUseCase from '../../../../application/use-case/admin/auth';
-import * as tokenService from '../../../../infrastructure/external-service/token.service';
-import * as authRepository from '../../../../infrastructure/database/repositories/admin/auth.repository';
+
+import { LoginUseCase } from '../../../../application/use-cases/admin/auth/login.use-case';
+
+import { AuthRepository } from '../../../../infrastructure/database/repositories/admin/auth.repository';
+
+import { TokenService } from '../../../../infrastructure/external-service/token.service';
+
+const authRepository = new AuthRepository();
+const tokenService = new TokenService();
 
 // [POST] /admin/auth/login
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body as { email: string; password: string };
-    const { admin, token } = await authUseCase.login(tokenService, authRepository, email, password);
+
+    const loginUseCase = new LoginUseCase(authRepository, tokenService);
+    const { admin, token } = await loginUseCase.execute(email, password);
 
     res.cookie('token', token, {
       httpOnly: true,
@@ -17,7 +25,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ success: true, message: 'Đăng nhập Admin thành công!', token, admin });
+    res.status(200).json({
+      success: true, message: 'Đăng nhập Admin thành công!',
+      token: token,
+      admin: admin
+    });
   } catch (error: unknown) {
     const e = error as { statusCode?: number; message?: string };
     const statusCode = e.statusCode ?? 500;

@@ -1,19 +1,6 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-export interface IAccountAdminDocument extends Document {
-  fullName: string;
-  email: string;
-  password: string;
-  role_id: string;
-  status: string;
-  avatar: string;
-  deleted: boolean;
-  deletedAt?: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const accountSchema = new mongoose.Schema<IAccountAdminDocument>(
+const accountSchema = new mongoose.Schema(
   {
     fullName: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, trim: true },
@@ -27,6 +14,7 @@ const accountSchema = new mongoose.Schema<IAccountAdminDocument>(
   { timestamps: true },
 );
 
-const Account = mongoose.model<IAccountAdminDocument>('AccountAdmin', accountSchema, 'accountAdmins');
+
+const Account = mongoose.model('AccountAdmin', accountSchema, 'accountAdmins');
 
 export default Account;

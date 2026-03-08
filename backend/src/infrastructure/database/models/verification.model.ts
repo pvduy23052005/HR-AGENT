@@ -1,16 +1,6 @@
-import mongoose, { Document, Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
-export interface IVerificationDocument extends Document {
-  candidateId: Types.ObjectId;
-  isVerified: boolean;
-  githubStars: number;
-  topLanguages: string[];
-  probedProjects?: unknown;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const verificationSchema = new mongoose.Schema<IVerificationDocument>(
+const verificationSchema = new mongoose.Schema(
   {
     candidateId: { type: mongoose.Schema.Types.ObjectId, ref: 'Candidate', required: true },
     isVerified: { type: Boolean, default: false },
@@ -21,6 +11,6 @@ const verificationSchema = new mongoose.Schema<IVerificationDocument>(
   { timestamps: true },
 );
 
-const Verification = mongoose.model<IVerificationDocument>('Verification', verificationSchema);
+const Verification = mongoose.model('Verification', verificationSchema);
 
 export default Verification;

@@ -1,10 +1,26 @@
 import { Request, Response } from 'express';
-import { executeAiAnalyize } from '../../../../application/use-case/client/aiAnalyize.use-case';
+import { ExecuteAiAnalyizeUseCase } from '../../../../application/use-cases/client/aiAnalyize/executeAiAnalyize.use-case';
+import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
+import { JobRepository } from '../../../../infrastructure/database/repositories/client/job.repository';
+import { AiAnalysisRepository } from '../../../../infrastructure/database/repositories/client/aiAnalyize.repository';
+import { GeminiService } from '../../../../infrastructure/external-service/gemini.service';
+
+const candidateRepository = new CandidateRepository();
+const jobRepository = new JobRepository();
+const aiAnalyzeRepository = new AiAnalysisRepository();
+const geminiService = new GeminiService();
+
+const executeAiAnalyizeUseCase = new ExecuteAiAnalyizeUseCase(
+  candidateRepository,
+  jobRepository,
+  aiAnalyzeRepository,
+  geminiService,
+);
 
 export const analyzeCandidate = async (req: Request, res: Response): Promise<void> => {
   try {
     const { jobID, candidateID } = req.body as { jobID: string; candidateID: string };
-    const result = await executeAiAnalyize(candidateID, jobID);
+    const result = await executeAiAnalyizeUseCase.execute(candidateID, jobID);
     res.status(200).json({ success: true, aiAnalyize: result.data, message: result.message });
   } catch (error: unknown) {
     const e = error as { message?: string };
