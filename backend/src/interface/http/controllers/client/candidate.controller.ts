@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { GetCandidatesUseCase } from '../../../../application/use-cases/client/candiate/get-candiatet.use-case';
+import { GetCandidatesUseCase } from '../../../../application/use-cases/client/candidate/get-candidate.use-case';
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
 
 const candidateRepository = new CandidateRepository();
