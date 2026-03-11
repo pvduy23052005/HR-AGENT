@@ -1,79 +1,86 @@
-import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import { candidatePrompt } from '../../prompts/candiate.prompt';
 import { aiAnalyzePrompt } from '../../prompts/aiAnalyize.prompt';
+import { extractTextFromCV } from '../services/cvTextExtractor';
+import { IGeminiService } from '../../domain/interfaces/services/gemini.service';
 
 dotenv.config();
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const LMSTUDIO_BASE_URL = process.env.LMSTUDIO_BASE_URL || 'http://localhost:1234';
+const LMSTUDIO_MODEL = process.env.LMSTUDIO_MODEL || 'lmstudio-model';
 
-const GEMINI_MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite'];
+interface ChatMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const callLmStudio = async (messages: ChatMessage[]): Promise<string> => {
+  const url = `${LMSTUDIO_BASE_URL.replace(/\/$/, '')}/v1/chat/completions`;
 
-const generateWithRetry = async (contents: any, maxRetries = 3, delayMs = 25000): Promise<string | undefined> => {
-  for (const model of GEMINI_MODELS) {
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        const response = await ai.models.generateContent({
-          model,
-          contents,
-          config: { responseMimeType: 'application/json' },
-        });
-        return response.text;
-      } catch (err: any) {
-        const status = err?.status || err?.error?.code || (err?.message?.includes('429') ? 429 : 500);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: LMSTUDIO_MODEL,
+      messages,
+      temperature: 0.2,
+    }),
+  });
 
-        if (status === 404) {
-          console.warn(`[Gemini] Model ${model} không tồn tại. Đổi model...`);
-          break;
-        }
-
-        if (status !== 429) throw err;
-
-        if (attempt < maxRetries) {
-          console.warn(`[Gemini] Quá tải ${model} (Lần ${attempt}/${maxRetries}). Đợi ${delayMs / 1000}s...`);
-          await delay(delayMs);
-        } else {
-          console.warn(`[Gemini] Cạn kiệt Quota cho ${model}. Chuyển model tiếp theo...`);
-        }
-      }
-    }
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`LM Studio error (${response.status}): ${text}`);
   }
-  throw new Error('[Gemini] Đã thử hết các Model và số lần Retry nhưng vẫn thất bại toàn tập.');
-};
 
-import { IGeminiService } from '../../domain/interfaces/services/gemini.service';
+  const data: any = await response.json();
+  const content = data?.choices?.[0]?.message?.content;
+  if (!content || typeof content !== 'string') {
+    throw new Error('LM Studio trả về nội dung không hợp lệ.');
+  }
+  return content;
+};
 
 export class GeminiService implements IGeminiService {
   public async extractCV(fileBuffer: Buffer, mimeType: string): Promise<Record<string, any> | null> {
     try {
-      const contents = [
-        candidatePrompt,
-        { inlineData: { data: fileBuffer.toString('base64'), mimeType } }
-      ];
+      const cvText = await extractTextFromCV(fileBuffer, mimeType);
 
-      const textResponse = await generateWithRetry(contents);
-      return textResponse ? JSON.parse(textResponse) : null;
+      if (!cvText.trim()) {
+        console.warn('Không trích xuất được nội dung văn bản từ CV.');
+        return null;
+      }
+
+      const prompt = candidatePrompt.replace('{{CV_TEXT}}', cvText);
+
+      const raw = await callLmStudio([
+        { role: 'user', content: prompt },
+      ]);
+
+      return JSON.parse(raw);
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);
-      console.error('Lỗi OCR và trích xuất dữ liệu CV:', msg);
+      console.error('Lỗi OCR và trích xuất dữ liệu CV (LM Studio):', msg);
       return null;
     }
   }
 
   public async analyzeCandidateWithJob(candidateData: any, jobData: any): Promise<Record<string, any> | null> {
     try {
-      const contents = [
-        aiAnalyzePrompt,
-        JSON.stringify({ candidate: candidateData, job: jobData })
-      ];
+      const combined = `${aiAnalyzePrompt}\n\nDữ liệu JSON:\n${JSON.stringify({
+        candidate: candidateData,
+        job: jobData,
+      })}`;
 
-      const textResponse = await generateWithRetry(contents);
-      return textResponse ? JSON.parse(textResponse) : null;
+      const raw = await callLmStudio([
+        { role: 'user', content: combined },
+      ]);
+
+      return JSON.parse(raw);
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);
-      console.error('Lỗi phân tích AI ứng viên:', msg);
+      console.error('Lỗi phân tích AI ứng viên (LM Studio):', msg);
       return null;
     }
   }

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 import "../../../styles/client/pages/uploadCV.css";
 
 const UploadCV = () => {
@@ -10,6 +11,9 @@ const UploadCV = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [jobId, setJobId] = useState("");
+    const [analyzing, setAnalyzing] = useState(false);
+    const [analysisResult, setAnalysisResult] = useState(null);
 
     const userName = (() => {
         try {
@@ -91,22 +95,89 @@ const UploadCV = () => {
             return;
         }
 
-        setUploading(true);
+        if (!jobId.trim()) {
+            toast.error("Vui lòng nhập Job ID trước khi upload!");
+            return;
+        }
 
-        // Giả lập upload (chưa có backend API)
-        setTimeout(() => {
+        setUploading(true);
+        setAnalysisResult(null);
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                toast.error("Bạn chưa đăng nhập.");
+                setUploading(false);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", selectedFile);
+            formData.append("jobID", jobId.trim());
+
+            const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
+            const uploadRes = await axios.post(
+                `${baseURL}/upload/cv`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    withCredentials: true,
+                }
+            );
+
+            const { cvLink, newCandidate } = uploadRes.data || {};
+            const candidateID = newCandidate?.id || newCandidate?._id;
+
             const newFile = {
-                id: Date.now(),
+                id: candidateID || Date.now(),
                 name: selectedFile.name,
                 size: selectedFile.size,
                 date: new Date().toLocaleDateString("vi-VN"),
+                cvLink,
             };
             setUploadedFiles((prev) => [newFile, ...prev]);
             setSelectedFile(null);
             if (fileInputRef.current) fileInputRef.current.value = "";
-            setUploading(false);
             toast.success("Upload CV thành công!");
-        }, 1500);
+
+            if (candidateID) {
+                setAnalyzing(true);
+                try {
+                    const analyzeRes = await axios.post(
+                        `${baseURL}/ai/analyize`,
+                        { jobID: jobId.trim(), candidateID },
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            withCredentials: true,
+                        }
+                    );
+
+                    if (analyzeRes.data?.success) {
+                        setAnalysisResult(analyzeRes.data.aiAnalyize);
+                        toast.success("Phân tích CV bằng AI thành công!");
+                    } else {
+                        toast.error(analyzeRes.data?.message || "Phân tích AI thất bại.");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    toast.error("Lỗi khi gọi API phân tích AI.");
+                } finally {
+                    setAnalyzing(false);
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error?.response?.data?.message || "Upload CV thất bại!");
+        } finally {
+            setUploading(false);
+        }
     };
 
     const getFileIcon = (name) => {
@@ -137,6 +208,20 @@ const UploadCV = () => {
                 <p className="upload-cv-subtitle">
                     Tải lên hồ sơ để ứng tuyển các vị trí phù hợp
                 </p>
+
+                {/* Job ID Input */}
+                <div className="job-id-input-wrapper">
+                    <label className="job-id-label">
+                        Job ID
+                        <input
+                            type="text"
+                            className="job-id-input"
+                            placeholder="Nhập ID công việc mà ứng viên ứng tuyển"
+                            value={jobId}
+                            onChange={(e) => setJobId(e.target.value)}
+                        />
+                    </label>
+                </div>
 
                 {/* Drop Zone */}
                 <div
@@ -187,7 +272,7 @@ const UploadCV = () => {
                     disabled={!selectedFile || uploading}
                     onClick={handleUpload}
                 >
-                    {uploading ? "Đang tải lên..." : "📤 Upload CV"}
+                    {uploading ? "Đang tải lên..." : "📤 Upload CV & Phân tích AI"}
                 </button>
 
                 {/* Uploaded Files List */}
@@ -204,6 +289,43 @@ const UploadCV = () => {
                                 <span className="item-status">Đã tải lên</span>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {/* AI Analysis Result */}
+                {analyzing && (
+                    <div className="ai-analysis-card">
+                        <h3>🧠 Đang phân tích CV bằng AI...</h3>
+                    </div>
+                )}
+
+                {analysisResult && (
+                    <div className="ai-analysis-card">
+                        <h3>🧠 Kết quả phân tích AI</h3>
+                        <p className="ai-summary">{analysisResult.summary}</p>
+                        <p className="ai-score">
+                            Điểm phù hợp: <strong>{analysisResult.matchingScore}</strong>/100
+                        </p>
+                        {analysisResult.redFlags?.length > 0 && (
+                            <div className="ai-section">
+                                <h4>Các điểm cần lưu ý:</h4>
+                                <ul>
+                                    {analysisResult.redFlags.map((flag, idx) => (
+                                        <li key={idx}>{flag}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        {analysisResult.suggestedQuestions?.length > 0 && (
+                            <div className="ai-section">
+                                <h4>Câu hỏi gợi ý cho phỏng vấn:</h4>
+                                <ul>
+                                    {analysisResult.suggestedQuestions.map((q, idx) => (
+                                        <li key={idx}>{q}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 )}
             </main>
