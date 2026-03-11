@@ -19,6 +19,7 @@ export class LoginUseCase {
     const user = await this.authRepo.findUserByEmail(email);
 
     if (!user) throw new Error('Email không tồn tại!');
+    
     if (!user.isActive()) throw new Error('Tài khoản đã bị khóa! Vui lòng liên hệ Admin.');
 
     const passwordMatch = await user.verifyPassword(password, this.passService);

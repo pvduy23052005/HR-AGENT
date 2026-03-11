@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
+
 import { ForgotPasswordUseCase } from '../../../../application/use-cases/client/user/forgot-password.use-case';
 import { VerifyOtpUseCase } from '../../../../application/use-cases/client/user/verify-otp.use-case';
 import { ResetPasswordUseCase } from '../../../../application/use-cases/client/user/reset-password.use-case';
+import { ResetPassNotOTPUseCase } from '../../../../application/use-cases/client/user/reset-pass-not-otp.use-case';
+
 import { UserRepository } from '../../../../infrastructure/database/repositories/client/user.repository';
 import { OtpRepository } from '../../../../infrastructure/database/repositories/client/otp.repository';
 import { MailService } from '../../../../infrastructure/external-service/mail.service';
@@ -16,6 +19,7 @@ const passwordService = new PasswordService();
 const forgotPasswordUseCase = new ForgotPasswordUseCase(userRepository, otpRepository, emailService);
 const verifyOtpUseCase = new VerifyOtpUseCase(userRepository, otpRepository);
 const resetPasswordUseCase = new ResetPasswordUseCase(userRepository, otpRepository, passwordService);
+const ressetPassNotOTPUseCase = new ResetPassNotOTPUseCase(userRepository, passwordService);
 
 // [POST] /user/password/forgot
 export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
@@ -62,3 +66,23 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
     res.status(e.statusCode ?? 500).json({ success: false, message: e.message ?? 'Lỗi đổi mật khẩu' });
   }
 };
+
+
+// [post] /user/password/reset-not-otp
+export const resetNotOTP = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password, confirmPassword } = req.body as {
+      email: string;
+      password: string;
+      confirmPassword: string;
+    };
+    await ressetPassNotOTPUseCase.execute(email, password, confirmPassword);
+
+    res.status(200).json({ success: true, message: 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.' });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Lỗi đổi mật khẩu'
+    });
+  }
+}

@@ -22,11 +22,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
-    res.json({ code: 200, message: 'Đăng nhập thành công!', token, user });
+    res.json({ success: true, code: 200, message: 'Đăng nhập thành công!', token, user });
   } catch (error: unknown) {
     const e = error as { statusCode?: number; message?: string };
     const statusCode = e.statusCode ?? 500;
-    res.status(statusCode).json({ code: statusCode, message: e.message ?? 'Lỗi hệ thống' });
+    res.status(statusCode).json({ success: false, code: statusCode, message: e.message ?? 'Lỗi hệ thống' });
   }
 };
 
