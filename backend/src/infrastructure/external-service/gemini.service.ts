@@ -2,6 +2,8 @@ import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import { candidatePrompt } from '../../prompts/candiate.prompt';
 import { aiAnalyzePrompt } from '../../prompts/aiAnalyize.prompt';
+import { IGeminiService } from '../../domain/interfaces/services/gemini.service';
+
 
 dotenv.config();
 
@@ -43,10 +45,8 @@ const generateWithRetry = async (contents: any, maxRetries = 3, delayMs = 25000)
   throw new Error('[Gemini] Đã thử hết các Model và số lần Retry nhưng vẫn thất bại toàn tập.');
 };
 
-import { IGeminiService } from '../../domain/interfaces/services/gemini.service';
-
 export class GeminiService implements IGeminiService {
-  public async extractCV(fileBuffer: Buffer, mimeType: string): Promise<Record<string, any> | null> {
+  public async extractCV(fileBuffer: any, mimeType: string): Promise<Record<string, any> | null> {
     try {
       const contents = [
         candidatePrompt,
