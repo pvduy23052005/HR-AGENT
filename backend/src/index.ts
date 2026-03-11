@@ -1,31 +1,23 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import express from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import * as database from './infrastructure/config/database';
-import indexAdminRoute from './interface/http/routes/admin/index.route';
-import indexClientRoute from './interface/http/routes/client/index.route';
+import express, { Request, Response } from 'express';
+import axios from 'axios';
 
 const app = express();
-const PORT: number = parseInt(process.env.PORT ?? '3000', 10);
-
-app.use(cookieParser());
-
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-  }),
-);
-
 app.use(express.json());
 
-database.connectDatabase();
-indexAdminRoute(app);
-indexClientRoute(app);
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
+const MODEL = process.env.MODEL_NAME || 'qwen2.5:3b';
 
-app.listen(PORT, () => {
-  console.log(`Backend admin đang chạy tại: http://localhost:${PORT}`);
+app.post('/ask', async (req: Request, res: Response) => {
+    try {
+        const response = await axios.post(`${OLLAMA_URL}/api/generate`, {
+            model: MODEL,
+            prompt: req.body.prompt,
+            stream: false
+        });
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: 'AI Service Unreachable' });
+    }
 });
+
+app.listen(3000, () => console.log('Backend running on port 3000'));
