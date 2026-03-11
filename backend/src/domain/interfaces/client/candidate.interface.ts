@@ -3,5 +3,6 @@ import type { ICandidateData } from '../../../infrastructure/database/repositori
 
 export interface ICandidateRepository {
   createCandidate(data: ICandidateData): Promise<CandidateEntity | null>;
+  
   getCandidateById(id: string): Promise<CandidateEntity | null>;
 }

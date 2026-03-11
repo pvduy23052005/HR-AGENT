@@ -8,6 +8,6 @@ export interface IOtpRepository {
   findByEmailAndOTP(email: string, otp: string): Promise<OTPEntity | null>;
 
   findOTPByEmail(email: string): Promise<OTPEntity | null>;
-  
+
   deleteOTP(email: string): Promise<{ deletedCount?: number }>;
 }
