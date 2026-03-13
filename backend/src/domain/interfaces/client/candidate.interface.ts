@@ -7,7 +7,7 @@ export interface ICandidateRepository {
 
   getCandidateById(id: string): Promise<CandidateEntity | null>;
 
-  getCandidates(): Promise<CandidateEntity[] | null>;
+  getCandidates(userID: string): Promise<CandidateEntity[] | null>;
 
   createVerification(candidateID: string, data: any): Promise<VerificationEntity | null>;
 }

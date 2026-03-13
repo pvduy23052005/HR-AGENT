@@ -8,11 +8,13 @@ const candidateRepository = new CandidateRepository();
 // [GET] /candidates
 export const getCandidates = async (req: Request, res: Response): Promise<void> => {
   try {
+    const userID: string = res.locals.user.id.toString() || "";
+
     const getCandidatesUseCase = new GetCandidatesUseCase(candidateRepository);
-    const candidates = await getCandidatesUseCase.execute();
+    const candidates = await getCandidatesUseCase.execute(userID);
 
     if (!candidates || candidates.length === 0) {
-      res.status(200).json({ success: true, message: 'Không có ứng viên nào!', candidates: [] });
+      res.status(200).json({ success: true, message: 'Vui lòng thêm ứng viên!', candidates: [] });
       return;
     }
 
