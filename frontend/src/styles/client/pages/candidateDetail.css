@@ -192,3 +192,109 @@
   color: #888; font-size: 15px; gap: 12px;
 }
 .cd-error { color: #ef4444; }
+
+/* ===== AI ANALYSIS PANEL ===== */
+.cd-ai-panel {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 36px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  border: 1.5px solid #d0e8ff;
+  margin-top: 24px;
+}
+
+.cd-ai-panel--loading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+  padding: 40px;
+  color: #0087f1;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1.5px dashed #90cdf4;
+  background: #f0f8ff;
+}
+
+.cd-ai-spinner {
+  font-size: 26px;
+  animation: ai-spin 1.4s linear infinite;
+  display: inline-block;
+}
+@keyframes ai-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cd-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cd-ai-icon {
+  font-size: 28px;
+}
+
+.cd-ai-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 2px;
+}
+
+.cd-ai-sub {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+/* Điểm phù hợp */
+.cd-ai-score {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0087f1;
+}
+
+/* Red flags / cảnh báo */
+.cd-ai-label--red {
+  color: #ef4444 !important;
+}
+
+/* Column layout cho list items */
+.cd-field__row--col {
+  flex-direction: column;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  padding: 12px 16px !important;
+}
+
+.cd-ai-redflag {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  color: #ef4444;
+}
+
+.cd-ai-redflag-dot {
+  font-size: 8px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.cd-ai-question {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.cd-ai-qnum {
+  font-weight: 700;
+  color: #0087f1;
+  flex-shrink: 0;
+  min-width: 18px;
+}

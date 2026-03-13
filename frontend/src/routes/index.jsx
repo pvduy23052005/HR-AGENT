@@ -14,6 +14,7 @@ import UploadCV from "../pages/client/UploadCV/UploadCV";
 import Dashbroad from "../pages/client/dashbroad/dashbroad";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
 import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
+import CandidateAIAnalysis from "../pages/client/CandidateManagement/CandidateAIAnalysis";
 
 const routes = [
   {
@@ -32,6 +33,7 @@ const routes = [
           { path: "upload_cv", element: <UploadCV /> },
           { path: "applications", element: <CandidateManagement /> },
           { path: "applications/:id", element: <CandidateDetail /> },
+          { path: "applications/:id/ai-analysis", element: <CandidateAIAnalysis /> },
         ],
       },
     ],

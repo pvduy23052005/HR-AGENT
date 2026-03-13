@@ -66,10 +66,7 @@ const CandidateDetail = () => {
 
   const statusLabel = status ? "Đã kiểm chứng" : "Rủi ro";
   const statusClass = status ? "status-verified" : "status-risk";
-
-  // Lấy thông tin học vấn đầu tiên (nếu có)
   const firstEdu = educations[0];
-  // Lấy thông tin kinh nghiệm đầu tiên (nếu có)
   const firstExp = experiences[0];
 
   return (
@@ -222,7 +219,12 @@ const CandidateDetail = () => {
         )}
         <button className="cd-btn cd-btn--schedule">Lên lịch phỏng vấn</button>
         <button className="cd-btn cd-btn--verify">Kiểm chứng</button>
-        <button className="cd-btn cd-btn--ai">Phân tích AI</button>
+        <button
+          className="cd-btn cd-btn--ai"
+          onClick={() => navigate(`/applications/${id}/ai-analysis`)}
+        >
+          🤖 Phân tích AI
+        </button>
       </div>
     </div>
   );
