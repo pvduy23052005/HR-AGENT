@@ -35,7 +35,7 @@ function ClientLogin() {
         toast.success("Đăng nhập thành công!");
         localStorage.setItem("token", res.token);
         localStorage.setItem("user", JSON.stringify(res.user));
-        navigate("/upload-cv");
+        navigate("/dashboard");
       }
     } catch (error) {
       const message =

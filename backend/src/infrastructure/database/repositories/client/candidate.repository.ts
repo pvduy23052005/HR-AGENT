@@ -64,8 +64,8 @@ export class CandidateRepository implements ICandidateRepository {
     return mapToEntity(candidate);
   }
 
-  public async getCandidates(addedBy: string): Promise<CandidateEntity[] | null> {
-    const candidates = await Candidate.find({ addedBy }).lean();
+  public async getCandidates(): Promise<CandidateEntity[] | null> {
+    const candidates = await Candidate.find().lean();
     if (!candidates || candidates.length === 0) return null;
     return candidates
       .map((doc) => mapToEntity(doc))
