@@ -76,10 +76,50 @@ export class GithubService {
    * Search GitHub users by keywords and enrich with profile details
    */
   async searchCandidates(keywords: string, limit = 10): Promise<IGithubUserResult[]> {
-    const query = encodeURIComponent(keywords);
+    let q = keywords;
+    
+    // 1. Extract location: "Ho Chi Minh", "Vietnam", "HCM", "Hanoi", "Da Nang"
+    const locationMatch = keywords.match(/(Ho Chi Minh|HCM|Hanoi|Da Nang|Vietnam)/i);
+    let locationQuery = '';
+    if (locationMatch) {
+      q = q.replace(locationMatch[0], '').trim();
+      locationQuery = `location:"${locationMatch[0]}"`;
+    }
+
+    // 2. Extract common job titles (phrases with spaces) to keep them intact
+    const jobTitles = ['machine learning engineer', 'software engineer', 'data scientist', 'frontend developer', 'backend developer', 'fullstack engineer', 'devops', 'product manager'];
+    const queryParts = [];
+    
+    for (const title of jobTitles) {
+      const titleRegex = new RegExp(title, 'i');
+      if (q.match(titleRegex)) {
+        q = q.replace(titleRegex, '').trim();
+        // Wrap the job title in quotes so GitHub searches for the exact phrase
+        queryParts.push(`"${title}"`);
+      }
+    }
+
+    // 3. Extract languages
+    const langs = ['javascript', 'typescript', 'python', 'java', 'go', 'ruby', 'c++', 'c#', 'php', 'rust', 'react', 'node', 'vue', 'angular'];
+    const parts = q.split(' ').filter(Boolean);
+    
+    for (const part of parts) {
+      if (langs.includes(part.toLowerCase())) {
+        queryParts.push(`language:${part}`);
+      } else {
+        queryParts.push(part);
+      }
+    }
+    
+    if (locationQuery) {
+      queryParts.push(locationQuery);
+    }
+    
+    const finalQuery = queryParts.join(' ').trim() || 'developer';
+
     const { data } = await axios.get(`${GITHUB_API}/search/users`, {
       headers,
-      params: { q: query, per_page: Math.min(limit, 30) },
+      params: { q: finalQuery, per_page: Math.min(limit, 30) },
       timeout: 10000,
     });
 
