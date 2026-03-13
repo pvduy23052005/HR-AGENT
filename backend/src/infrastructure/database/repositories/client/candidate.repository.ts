@@ -5,6 +5,7 @@ import type { ICandidateRepository } from '../../../../domain/interfaces/client/
 import { VerificationEntity } from '../../../../domain/entities/client/verifycation.entity';
 import Verification from '../../models/verification.model';
 
+
 const mapToEntity = (doc: any | null): CandidateEntity | null => {
   if (!doc) return null;
   return new CandidateEntity({
@@ -74,6 +75,7 @@ export class CandidateRepository implements ICandidateRepository {
     return candidates
       .map((doc) => mapToEntity(doc))
       .filter((entity): entity is CandidateEntity => entity !== null);
+
   }
 
   public async createVerification(candidateID: string, data: any): Promise<VerificationEntity | null> {
