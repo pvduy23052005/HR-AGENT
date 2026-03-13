@@ -13,6 +13,7 @@ import ClientProtectedRoute from "./ClientProtectedRoute";
 import UploadCV from "../pages/client/UploadCV/UploadCV";
 import Dashbroad from "../pages/client/dashbroad/dashbroad";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
+import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
 
 const routes = [
   {
@@ -28,14 +29,9 @@ const routes = [
         element: <LayoutClientDefault />,
         children: [
           { path: "dashboard", element: <Dashbroad /> },
-          {
-            path: "upload_cv",
-            element: <UploadCV />,
-          },
-          {
-            path: "applications",
-            element: <CandidateManagement />,
-          },
+          { path: "upload_cv", element: <UploadCV /> },
+          { path: "applications", element: <CandidateManagement /> },
+          { path: "applications/:id", element: <CandidateDetail /> },
         ],
       },
     ],

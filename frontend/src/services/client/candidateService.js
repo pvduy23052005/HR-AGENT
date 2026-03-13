@@ -6,6 +6,12 @@ const candidateService = {
     const res = await API.get("/candidates");
     return res;
   },
+
+  // Lấy chi tiết 1 ứng viên
+  getById: async (id) => {
+    const res = await API.get(`/candidates/${id}`);
+    return res;
+  },
 };
 
 export default candidateService;
