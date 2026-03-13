@@ -46,8 +46,34 @@ function ClientLogin() {
     }
   };
 
+  const handleVerify = (githubUrl) => {
+    if (!window.chrome?.runtime) return alert("Chưa cài/bật Nanobrowser!");
+
+    const payload = {
+      action: "NANO_START_TASK",
+      url: githubUrl,
+      candidateID: "69a847338e0c3696aa6f67ca",
+    };
+
+    console.log(payload);
+
+    chrome.runtime.sendMessage(
+      "jjkplkmkajifbfgiafkfgogihdoellof",
+      payload,
+      (res) => console.log("Phản hồi từ Extension:", res),
+    );
+  };
+
   return (
     <div className="client-auth">
+      <button
+        onClick={() => {
+          handleVerify("https://github.com/pvduy23052005");
+        }}
+      >
+        {" "}
+        send request
+      </button>
       <div className="client-auth__container">
         {/* Left - Branding */}
         <div className="client-auth__branding">
@@ -78,7 +104,11 @@ function ClientLogin() {
 
         {/* Right - Login Form */}
         <div className="client-auth__form-wrapper">
-          <form className="client-auth__form" onSubmit={handleSubmit} noValidate>
+          <form
+            className="client-auth__form"
+            onSubmit={handleSubmit}
+            noValidate
+          >
             <div className="client-auth__form-header">
               <h1 className="client-auth__form-title">Đăng nhập</h1>
               <p className="client-auth__form-subtitle">
@@ -88,8 +118,9 @@ function ClientLogin() {
 
             {/* Email */}
             <div
-              className={`client-auth__field ${errors.email ? "client-auth__field--error" : ""
-                }`}
+              className={`client-auth__field ${
+                errors.email ? "client-auth__field--error" : ""
+              }`}
             >
               <label className="client-auth__label" htmlFor="email">
                 Email
@@ -114,8 +145,9 @@ function ClientLogin() {
 
             {/* Password */}
             <div
-              className={`client-auth__field ${errors.password ? "client-auth__field--error" : ""
-                }`}
+              className={`client-auth__field ${
+                errors.password ? "client-auth__field--error" : ""
+              }`}
             >
               <label className="client-auth__label" htmlFor="password">
                 Mật khẩu
@@ -147,15 +179,19 @@ function ClientLogin() {
             </div>
 
             <div className="client-auth__options">
-              <a href="/auth/forgot-password" className="client-auth__forgot-link">
+              <a
+                href="/auth/forgot-password"
+                className="client-auth__forgot-link"
+              >
                 Quên mật khẩu?
               </a>
             </div>
 
             <button
               type="submit"
-              className={`client-auth__submit ${loading ? "client-auth__submit--loading" : ""
-                }`}
+              className={`client-auth__submit ${
+                loading ? "client-auth__submit--loading" : ""
+              }`}
               disabled={loading}
             >
               {loading ? (
@@ -164,8 +200,6 @@ function ClientLogin() {
                 "Đăng nhập"
               )}
             </button>
-
-
           </form>
         </div>
       </div>

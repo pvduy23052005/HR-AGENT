@@ -60,6 +60,9 @@ const manifest = withOperaSidebar(
     name: '__MSG_app_metadata_name__',
     version: packageJson.version,
     description: '__MSG_app_metadata_description__',
+    externally_connectable: {
+      matches: ['*://localhost/*', '*://127.0.0.1/*'],
+    },
     host_permissions: ['<all_urls>'],
     permissions: ['storage', 'scripting', 'tabs', 'activeTab', 'debugger', 'unlimitedStorage', 'webNavigation'],
     options_page: 'options/index.html',

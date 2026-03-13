@@ -73,7 +73,146 @@ chrome.runtime.onMessage.addListener(() => {
   // return false;
 });
 
-// Setup connection listener for long-lived connections (e.g., side panel)
+// Listen for messages from external web pages (e.g., frontend on localhost)
+chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse) => {
+  if (message.action === "NANO_START_TASK") {
+    const candidateID = message.candidateID;
+
+    chrome.tabs.create({ url: message.url, active: true }, async (newTab) => {
+      if (!newTab?.id) return;
+
+      const aiPrompt = `Analyze this GitHub profile page.
+
+        CRITICAL RULE:
+        If the page shows "404", "Not Found", or is NOT a valid GitHub profile page, immediately return exactly this JSON and nothing else:
+
+        {
+          "isVerified": false,
+          "name": null,
+          "phone": null,
+          "age": null,
+          "email : null,
+          "school": null,
+          "topLanguages": [],
+          "probedProjects": [],
+          "aiReasoning": "Link GitHub không tồn tại."
+        }
+
+        Otherwise perform these tasks:
+
+      1. Extract the candidate’s personal information from the profile README or bio:
+        - Name
+        - Phone number (if visible)
+        - School/University
+        - If a birth year (for example: 2005) appears in the username or email, calculate the age from that year. If not found, set age = null.
+
+        2. Locate the "Pinned" repositories section.
+          Only analyze repositories in this section.
+
+        3. For each pinned repository extract:
+          - projectName
+          - programming language
+          - star count
+
+        OUTPUT RULES:
+        - Return ONLY pure JSON.
+        - Do NOT use markdown.
+        - Do NOT wrap the response in code blocks.
+        - Do NOT include explanations outside the JSON.
+        - The JSON must strictly follow this structure:
+
+        {
+          "isVerified": true,
+          "name": "<string: Candidate full name>",
+          "email : "<string or null>",
+          "phone": "<string or null>",
+          "age": <number or null>,
+          "school": "<string or null>",
+          "topLanguages": ["<unique programming languages from pinned projects>"],
+          "probedProjects": [
+            {
+              "projectName": "<name of the pinned project>",
+              "language": "<programming language or null>",
+              "stars": <number, 0 if none>
+            }
+          ],
+          "aiReasoning": "<one sentence evaluation of the candidate based on pinned projects>"
+        }`;
+
+      try {
+        try {
+          await chrome.debugger.detach({ tabId: newTab.id });
+          console.log("Đã dọn dẹp debugger cũ ");
+        } catch (e) {
+        }
+
+        const taskId = crypto.randomUUID();
+        const executor = await setupExecutor(taskId, aiPrompt, browserContext);
+
+        console.log("Bắt đầu chạy AI...");
+
+        const rawResult: any = await new Promise((resolve, reject) => {
+          executor.subscribeExecutionEvents(async (event: any): Promise<void> => {
+            if (event.state === ExecutionState.TASK_OK) {
+              resolve(event.data ?? event.message);
+            } else if (event.state === ExecutionState.TASK_FAIL || event.state === ExecutionState.TASK_CANCEL) {
+              reject(new Error(event.data ?? event.message ?? 'Task failed or cancelled'));
+            }
+          });
+
+          // Phát lệnh chạy
+          executor.execute();
+        });
+
+        console.log("Đã tóm được kết quả từ AI:", rawResult);
+
+        let finalJson = {};
+        try {
+          let jsonString = typeof rawResult === 'string' ? rawResult : (rawResult?.final_answer || JSON.stringify(rawResult));
+
+          jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
+
+          finalJson = JSON.parse(jsonString);
+          console.log("JSON chuẩn bị gửi Database:", finalJson);
+        } catch (e) {
+          console.error("Lỗi Parse JSON:", e);
+          chrome.tabs.remove(newTab.id);
+          return;
+        }
+
+        await saveToDatabase(candidateID, finalJson);
+
+        chrome.tabs.remove(newTab.id);
+      } catch (error) {
+        console.error("Lỗi hệ thống AI:", error);
+      }
+    });
+    sendResponse({ status: "processing" });
+    return true;
+  }
+  return false;
+});
+
+async function saveToDatabase(candiateID: string, data: any) {
+  try {
+    console.log("Đang bắn API về Backend...");
+
+    const response = await fetch('http://localhost:5050/candidates/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        candidateID: candiateID,
+        data: data
+      })
+    });
+
+    const result = await response.json();
+    console.log("Bắn API thành công:", result);
+  } catch (err) {
+    console.error("Lỗi Fetch API (Hãy kiểm tra lại xem Server Node.js cổng 5050 đã CHẠY chưa!):", err);
+  }
+}
+
 chrome.runtime.onConnect.addListener(port => {
   if (port.name === 'side-panel-connection') {
     const senderUrl = port.sender?.url;
@@ -355,25 +494,28 @@ async function subscribeToExecutorEvents(executor: Executor) {
       event.state === ExecutionState.TASK_FAIL ||
       event.state === ExecutionState.TASK_CANCEL
     ) {
+      if (event.state === ExecutionState.TASK_OK) {
+        try {
+          // Bạn nên console.log(event) ra để xem kết quả con AI trả về nằm ở đâu 
+          // (có thể là event.result, event.data, hoặc event.message)
+          console.log("Kết quả AI cào được:", event.data);
+
+          // Bắn dữ liệu về Backend HR-AGENT của bạn
+          await fetch('http://localhost:5050/candidates/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              data: event.data // Gửi toàn bộ event về Backend để LangChain phân tích tiếp
+            })
+          });
+          console.log("Đã bắn dữ liệu về Backend thành công!");
+        } catch (apiError) {
+          console.error("Lỗi khi gọi API về Backend:", apiError);
+        }
+      }
       await currentExecutor?.cleanup();
     }
   });
 }
-
-function testSendCV() {
-  console.log('Đang thử gửi dữ liệu về Backend...');
-
-  fetch('http://localhost:3000/api/cv', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      candidateName: 'Nguyen Van Test ' + Math.floor(Math.random() * 100),
-      rawData: 'Đây là nội dung CV mẫu...',
-    }),
-  })
-    .then(res => res.json())
-    .then(data => console.log('Kết quả từ Server:', data))
-    .catch(err => console.error('Lỗi kết nối Server:', err));
-}
-
-setTimeout(testSendCV);
