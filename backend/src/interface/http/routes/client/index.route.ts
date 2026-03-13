@@ -19,7 +19,7 @@ const indexClientRoute = (app: Express): void => {
 
   app.use('/ai', authMiddleware, aiRoute);
 
-  app.use("/candidates", authMiddleware, candidateRoute)
+  app.use("/candidates", candidateRoute)
 
   app.use('/interview', authMiddleware, interviewRoute);
 };

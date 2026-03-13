@@ -3,6 +3,7 @@ import { CandidateEntity } from '../../../../domain/entities/client/candidate.en
 import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
 import { VerificationEntity } from '../../../../domain/entities/client/verifycation.entity';
 import Verification from '../../models/verification.model';
+import mongoose from 'mongoose';
 
 const mapToEntity = (doc: any | null): CandidateEntity | null => {
   if (!doc) return null;
@@ -65,14 +66,16 @@ export class CandidateRepository implements ICandidateRepository {
   }
 
   public async getCandidates(userID: string): Promise<CandidateEntity[] | null> {
+    const objectId = new mongoose.Types.ObjectId(userID);
     const candidates = await Candidate.find({
-      userID: userID,
+      addedBy: objectId,
     }).lean();
 
     if (!candidates || candidates.length === 0) return null;
     return candidates
       .map((doc) => mapToEntity(doc))
       .filter((entity): entity is CandidateEntity => entity !== null);
+
   }
 
   public async createVerification(candidateID: string, data: any): Promise<VerificationEntity | null> {
