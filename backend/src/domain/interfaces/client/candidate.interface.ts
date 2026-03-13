@@ -7,11 +7,7 @@ export interface ICandidateRepository {
 
   getCandidateById(id: string): Promise<CandidateEntity | null>;
 
-<<<<<<< Updated upstream
-  getCandidates(): Promise<CandidateEntity[] | null>;
+  getCandidates(userID: string): Promise<CandidateEntity[] | null>;
 
   createVerification(candidateID: string, data: any): Promise<VerificationEntity | null>;
-=======
-  getCandidates(addedBy: string): Promise<CandidateEntity[] | null>;
->>>>>>> Stashed changes
 }

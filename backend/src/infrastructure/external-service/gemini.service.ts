@@ -2,6 +2,7 @@ import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import { candidatePrompt } from '../../prompts/candiate.prompt';
 import { aiAnalyzePrompt } from '../../prompts/aiAnalyize.prompt';
+import { interviewEmailPrompt } from '../../prompts/interviewEmail.prompt';
 import { IGeminiService } from '../../domain/interfaces/services/gemini.service';
 
 
@@ -74,6 +75,29 @@ export class GeminiService implements IGeminiService {
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);
       console.error('Lỗi phân tích AI ứng viên:', msg);
+      return null;
+    }
+  }
+
+  public async generateInterviewEmail(
+    input: Record<string, any>,
+  ): Promise<{ subject: string; html: string } | null> {
+    try {
+      const contents = [
+        interviewEmailPrompt.replace('{{INPUT_JSON}}', JSON.stringify(input)),
+      ];
+
+      const textResponse = await generateWithRetry(contents);
+      if (!textResponse) return null;
+      const parsed = JSON.parse(textResponse) as { subject?: string; html?: string };
+
+      return {
+        subject: String(parsed.subject ?? '').trim(),
+        html: String(parsed.html ?? ''),
+      };
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      console.error('Lỗi gen email mời phỏng vấn:', msg);
       return null;
     }
   }

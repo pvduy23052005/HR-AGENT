@@ -55,3 +55,25 @@ Content-Type: application/json
 }
 
 //
+
+###
+POST {{base_url}}/ai/analyize
+Content-Type: application/json
+
+{
+  "jobID": "<jobId>",
+  "candidateID": "<candidateId>"
+}
+
+###
+POST {{base_url}}/interview/schedule
+Content-Type: application/json
+
+{
+  "candidateID": "<candidateId>",
+  "jobID": "<jobId>",
+  "time": "2026-03-20T09:00:00.000Z",
+  "durationMinutes": 60,
+  "address": "Google Meet: https://meet.google.com/xxx-yyyy-zzz",
+  "notes": "Vòng 1 (technical). Vui lòng chuẩn bị laptop và kiểm tra kết nối mạng trước 5 phút."
+}
