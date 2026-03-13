@@ -4,7 +4,7 @@ import type { ICandidateRepository } from '../../../../domain/interfaces/client/
 export class GetCandidatesUseCase {
   constructor(private readonly candidateRepo: ICandidateRepository) {}
 
-  async execute(): Promise<CandidateEntity[] | null> {
-    return await this.candidateRepo.getCandidates();
+  async execute(addedBy: string): Promise<CandidateEntity[] | null> {
+    return await this.candidateRepo.getCandidates(addedBy);
   }
 }

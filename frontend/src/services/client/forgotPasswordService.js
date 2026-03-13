@@ -3,13 +3,14 @@ import API from "./index";
 const forgotPasswordService = {
   // Bước 1: Gửi email yêu cầu OTP
   requestForgotPassword: async (email) => {
-    console.log(email);
+    console.log(`${email} đã gửi otp thành công`);
     const res = await API.post("/user/password/forgot", { email });
     return res;
   },
 
   // Bước 2: Xác nhận OTP
   verifyOTP: async (email, otp) => {
+ 
     const res = await API.post("/user/password/otp", { email, otp });
     return res;
   },
@@ -18,6 +19,15 @@ const forgotPasswordService = {
   resetPassword: async (email, password, confirmPassword) => {
     const res = await API.post("/user/password/reset", {
       email,
+      password,
+      confirmPassword,
+    });
+    return res;
+  },
+
+  // Đổi mật khẩu khi đã đăng nhập (không cần OTP)
+  resetNotOTP: async (password, confirmPassword) => {
+    const res = await API.post("/user/password/reset-not-otp", {
       password,
       confirmPassword,
     });

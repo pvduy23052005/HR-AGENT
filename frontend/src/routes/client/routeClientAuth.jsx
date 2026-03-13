@@ -2,14 +2,14 @@ import ClientLogin from "../../pages/client/Auth/Login";
 import ClientForgotPassword from "../../pages/client/Auth/ForgotPassword";
 
 const routeClientAuth = {
-  path: "auth",
+  path: "",
   children: [
     {
-      path: "login",
+      path: "",
       element: <ClientLogin />,
     },
     {
-      path: "forgot-password",
+      path: "/login/forgot",
       element: <ClientForgotPassword />,
     },
   ],
