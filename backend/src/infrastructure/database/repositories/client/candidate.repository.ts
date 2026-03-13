@@ -61,7 +61,10 @@ export class CandidateRepository implements ICandidateRepository {
   }
 
   public async getCandidateById(id: string): Promise<CandidateEntity | null> {
-    const candidate = await Candidate.findById(id).lean();
+    const objectId = new mongoose.Types.ObjectId(id);
+    const candidate = await Candidate.findOne({
+      _id: objectId
+    }).lean();
     return mapToEntity(candidate);
   }
 
@@ -75,7 +78,6 @@ export class CandidateRepository implements ICandidateRepository {
     return candidates
       .map((doc) => mapToEntity(doc))
       .filter((entity): entity is CandidateEntity => entity !== null);
-
   }
 
   public async createVerification(candidateID: string, data: any): Promise<VerificationEntity | null> {
