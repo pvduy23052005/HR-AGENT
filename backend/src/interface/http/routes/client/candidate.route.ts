@@ -4,4 +4,6 @@ const router = express.Router();
 
 router.get('/', controller.getCandidates);
 
+router.post("/verify", controller.verifyCandidate);
+
 export const candidateRoute: express.Router = router;

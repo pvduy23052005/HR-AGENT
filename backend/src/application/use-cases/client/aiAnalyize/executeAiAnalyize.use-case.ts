@@ -12,7 +12,7 @@ export interface IAiAnalyzeResult {
 export class ExecuteAiAnalyizeUseCase {
   constructor(
     private readonly candidateRepo: ICandidateRepository,
-    private readonly jobRepo:IJobRepository ,
+    private readonly jobRepo: IJobRepository,
     private readonly aiAnalyizeRepo: IAiAnalysisRepository,
     private readonly geminiService: IGeminiService,
   ) { }
