@@ -1,9 +1,10 @@
+import  mongoose  from 'mongoose'; 
 import Candidate from '../../models/candidate.model';
 import { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
 import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
 import { VerificationEntity } from '../../../../domain/entities/client/verifycation.entity';
 import Verification from '../../models/verification.model';
-import mongoose from 'mongoose';
+
 
 const mapToEntity = (doc: any | null): CandidateEntity | null => {
   if (!doc) return null;
@@ -68,12 +69,11 @@ export class CandidateRepository implements ICandidateRepository {
     return mapToEntity(candidate);
   }
 
+
   public async getCandidates(userID: string): Promise<CandidateEntity[] | null> {
     const objectId = new mongoose.Types.ObjectId(userID);
-    const candidates = await Candidate.find({
-      addedBy: objectId,
-    }).lean();
-
+    const candidates = await Candidate.find({ addedBy: objectId });
+    console.log("candidates", candidates);
     if (!candidates || candidates.length === 0) return null;
     return candidates
       .map((doc) => mapToEntity(doc))

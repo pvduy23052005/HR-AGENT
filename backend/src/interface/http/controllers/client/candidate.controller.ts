@@ -1,3 +1,4 @@
+
 import { Request, Response } from 'express';
 import { GetCandidatesUseCase } from '../../../../application/use-cases/client/candidate/get-candidate.use-case';
 import { GetCandidateDetailUseCase } from '../../../../application/use-cases/client/candidate/get-candidate-detail.use-case';
@@ -10,7 +11,7 @@ const candidateRepository = new CandidateRepository();
 export const getCandidates = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID: string = res.locals.user.id.toString() || "";
-
+    console.log("userID", userID);
     const getCandidatesUseCase = new GetCandidatesUseCase(candidateRepository);
     const candidates = await getCandidatesUseCase.execute(userID);
 
@@ -92,3 +93,4 @@ export const verifyCandidate = async (req: Request, res: Response): Promise<void
     });
   }
 };
+

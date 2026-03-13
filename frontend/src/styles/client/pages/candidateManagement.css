@@ -1,0 +1,261 @@
+/* ===== CANDIDATE MANAGEMENT PAGE ===== */
+.candidate-page {
+  padding: 32px 40px;
+  min-height: 100%;
+}
+
+/* Header */
+.candidate-page__header {
+  margin-bottom: 24px;
+}
+
+.candidate-page__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.candidate-page__subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+/* Filters */
+.candidate-page__filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.candidate-page__filter-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 14px;
+  min-width: 180px;
+}
+
+.candidate-page__filter-input .filter-icon {
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.candidate-page__filter-input input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  width: 100%;
+}
+
+.candidate-page__filter-input input::placeholder {
+  color: #aaa;
+}
+
+.candidate-page__filter-select {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  min-width: 160px;
+}
+
+.candidate-page__btn-search {
+  padding: 10px 28px;
+  background: #0087f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-left: auto;
+}
+
+.candidate-page__btn-search:hover {
+  background: #006ed0;
+}
+
+/* Table Wrapper */
+.candidate-page__table-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.candidate-page__loading {
+  padding: 60px;
+  text-align: center;
+  color: #888;
+  font-size: 15px;
+}
+
+.candidate-page__empty {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 14px;
+}
+
+/* Table */
+.candidate-page__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.candidate-page__table thead {
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.candidate-page__table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+}
+
+.candidate-page__table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.candidate-page__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.candidate-page__table tbody tr:hover {
+  background: #f8faff;
+}
+
+.candidate-page__table input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #0087f1;
+}
+
+/* User Cell */
+.candidate-page__user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.candidate-page__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0087f1, #00c6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Status Badges */
+.candidate-page__status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.candidate-page__status.status-verified {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.candidate-page__status.status-risk {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.candidate-page__status.status-interview {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+/* Footer */
+.candidate-page__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Pagination */
+.candidate-page__pagination {
+  display: flex;
+  gap: 6px;
+}
+
+.candidate-page__page-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.candidate-page__page-btn:hover {
+  background: #f0f4ff;
+  border-color: #0087f1;
+  color: #0087f1;
+}
+
+.candidate-page__page-btn.active {
+  background: #0087f1;
+  border-color: #0087f1;
+  color: #fff;
+}
+
+/* Send Email Button */
+.candidate-page__btn-email {
+  padding: 10px 24px;
+  background: #0087f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.candidate-page__btn-email:hover {
+  background: #006ed0;
+}
