@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   MdDashboard,
@@ -6,6 +6,7 @@ import {
   MdPeople,
   MdBarChart,
   MdAccountTree,
+  MdWork,
   MdLogout,
 } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -14,6 +15,7 @@ import "../../../styles/client/ui/siderbar.css";
 
 const menuItems = [
   { path: "/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
+  { path: "/jobs", icon: <MdWork />, label: "Quản lý Công việc" },
   { path: "/upload_cv", icon: <MdCloudUpload />, label: "Nộp CV" },
   { path: "/applications", icon: <MdPeople />, label: "Quản lý ứng viên" },
   { path: "/statistics", icon: <MdBarChart />, label: "Báo cáo & Thống kê" },
@@ -22,18 +24,17 @@ const menuItems = [
 
 function ClientSidebar() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch {
-        setUser(null);
-      }
+  // Read user from localStorage once on mount using lazy initialiser
+  const [user] = useState(() => {
+    try {
+      const raw = localStorage.getItem("user");
+      return raw ? JSON.parse(raw) : null;
+    // eslint-disable-next-line no-unused-vars
+    } catch (e) {
+      return null;
     }
-  }, []);
+  });
 
   const getInitial = () => {
     if (!user?.fullName) return "U";
@@ -47,7 +48,7 @@ function ClientSidebar() {
       localStorage.removeItem("user");
       toast.success("Đăng xuất thành công!");
       navigate("/auth/login");
-    } catch (error) {
+    } catch {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       navigate("/auth/login");

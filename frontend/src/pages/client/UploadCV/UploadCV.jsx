@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -14,6 +14,24 @@ const UploadCV = () => {
   const [jobId, setJobId] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
+  const [jobList, setJobList] = useState([]);
+
+  // Load job list for dropdown (mock + localStorage)
+  useEffect(() => {
+    const MOCK_JOBS = [
+      { id: "job_001", title: "Senior Frontend Developer" },
+      { id: "job_002", title: "Backend Engineer (Node.js)" },
+      { id: "job_003", title: "UI/UX Designer" },
+    ];
+    try {
+      const saved = JSON.parse(localStorage.getItem("mock_jobs") || "[]");
+      const savedMapped = saved.map((j) => ({ id: j.id, title: j.title }));
+      setJobList([...MOCK_JOBS, ...savedMapped]);
+    // eslint-disable-next-line no-unused-vars
+    } catch (e) {
+      setJobList(MOCK_JOBS);
+    }
+  }, []);
 
   const userName = (() => {
     try {
@@ -224,17 +242,22 @@ const UploadCV = () => {
           Tải lên hồ sơ để ứng tuyển các vị trí phù hợp
         </p>
 
-        {/* Job ID Input */}
+        {/* Job Dropdown */}
         <div className="job-id-input-wrapper">
           <label className="job-id-label">
-            Job ID
-            <input
-              type="text"
-              className="job-id-input"
-              placeholder="Nhập ID công việc mà ứng viên ứng tuyển"
+            Vị trí ứng tuyển
+            <select
+              className="job-id-input job-id-select"
               value={jobId}
               onChange={(e) => setJobId(e.target.value)}
-            />
+            >
+              <option value="">-- Chọn công việc --</option>
+              {jobList.map((job) => (
+                <option key={job.id} value={job.id}>
+                  {job.title}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
 
