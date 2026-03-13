@@ -7,6 +7,11 @@ export class MailService implements IMailService {
     toEmail: string,
     subject: string,
     htmlContent: string,
+    attachments?: Array<{
+      filename: string;
+      content: Buffer;
+      contentType?: string;
+    }>,
   ): Promise<boolean> {
     try {
       const transporter = nodemailer.createTransport({
@@ -22,6 +27,7 @@ export class MailService implements IMailService {
         to: toEmail,
         subject,
         html: htmlContent,
+        attachments,
       };
 
       const info = await transporter.sendMail(mailOptions);
