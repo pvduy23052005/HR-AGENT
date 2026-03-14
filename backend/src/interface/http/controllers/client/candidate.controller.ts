@@ -11,7 +11,7 @@ const candidateRepository = new CandidateRepository();
 export const getCandidates = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID: string = res.locals.user.id.toString() || "";
-    console.log("userID", userID);
+
     const getCandidatesUseCase = new GetCandidatesUseCase(candidateRepository);
     const candidates = await getCandidatesUseCase.execute(userID);
 
@@ -62,6 +62,7 @@ export const getCandidateDetail = async (req: Request, res: Response): Promise<v
   }
 };
 
+// [post] /candididate/verify
 export const verifyCandidate = async (req: Request, res: Response): Promise<void> => {
   try {
     const { candidateID, data } = req.body;

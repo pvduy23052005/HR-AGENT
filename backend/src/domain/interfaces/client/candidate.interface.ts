@@ -10,4 +10,6 @@ export interface ICandidateRepository {
   getCandidates(userID: string): Promise<CandidateEntity[] | null>;
 
   createVerification(candidateID: string, data: any): Promise<VerificationEntity | null>;
+
+  updateIsverfiy(candidateID: string, isVerify: boolean): Promise<void>;
 }

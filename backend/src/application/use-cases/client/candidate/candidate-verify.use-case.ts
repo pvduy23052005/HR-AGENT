@@ -3,11 +3,16 @@ import { ICandidateRepository } from "../../../../domain/interfaces/client/candi
 
 export class CandidateVeriFyUseCase {
   constructor(
-    private readonly candidateRepo: ICandidateRepository
-  ) {}
+    private readonly candidateRepo: ICandidateRepository,
+  ) { }
 
   async execute(candidateID: string, dataVerification: any): Promise<VerificationEntity | null> {
-    const result = await this.candidateRepo.createVerification(candidateID, dataVerification);
+
+    const [result] = await Promise.all([
+      this.candidateRepo.createVerification(candidateID, dataVerification),
+      this.candidateRepo.updateIsverfiy(candidateID, true)
+    ]);
+
     return result;
   }
 }

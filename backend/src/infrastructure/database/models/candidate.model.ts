@@ -52,6 +52,10 @@ const candidateSchema = new mongoose.Schema(
     status: { type: Boolean, default: true },
     objective: { type: String, trim: true },
     fullTextContent: { type: String, trim: true },
+    isVerify: {
+      type: Boolean,
+      default: false,
+    },
     personal: personalSchema,
     educations: [educationSchema],
     experiences: [experienceSchema],
