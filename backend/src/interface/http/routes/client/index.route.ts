@@ -6,6 +6,7 @@ import { jobRoute } from './job.route';
 import { aiRoute } from './aiAnalyize.route';
 import { candidateRoute } from "./candidate.route";
 import { interviewRoute } from './interview.route';
+import { sourcingRoute } from './sourcing.route';
 import { authMiddleware } from '../../middlewares/client/auth.middleware';
 
 const indexClientRoute = (app: Express): void => {
@@ -19,9 +20,11 @@ const indexClientRoute = (app: Express): void => {
 
   app.use('/ai', authMiddleware, aiRoute);
 
-  app.use("/candidates", candidateRoute)
+  app.use("/candidates", authMiddleware, candidateRoute);
 
   app.use('/interview', authMiddleware, interviewRoute);
+
+  app.use('/sourcing', authMiddleware, sourcingRoute);
 };
 
 export default indexClientRoute;
