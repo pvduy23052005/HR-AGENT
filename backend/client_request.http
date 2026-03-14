@@ -77,3 +77,38 @@ Content-Type: application/json
   "address": "Google Meet: https://meet.google.com/xxx-yyyy-zzz",
   "notes": "Vòng 1 (technical). Vui lòng chuẩn bị laptop và kiểm tra kết nối mạng trước 5 phút."
 }
+
+// === SOURCING VÀ TÌM KIẾM ỨNG VIÊN ===
+
+### 1. Tìm ứng viên mới (Search candidates - GitHub)
+POST {{base_url}}/sourcing/search
+Content-Type: application/json
+
+{
+  "keywords": "React TS Ho Chi Minh",
+  "sources": ["github"],
+  "limit": 5
+}
+
+### 2. Tìm ứng viên mới (Search candidates - LinkedIn)
+# Chú ý: Cần GOOGLE_CSE_ID và GOOGLE_CSE_API_KEY trong .env mới test được LinkedIn
+POST {{base_url}}/sourcing/search
+Content-Type: application/json
+
+{
+  "keywords": "Frontend Developer Vietnam",
+  "sources": ["linkedin"],
+  "limit": 5
+}
+
+### 3. Lấy danh sách tiềm năng (Get Saved Sourcing Leads)
+GET {{base_url}}/sourcing/leads
+
+### 4. Cập nhật trạng thái một Lead (ví dụ sang "contacted")
+# Thay "SourcingLeadID" bằng ID thật lấy từ list
+PATCH {{base_url}}/sourcing/leads/SourcingLeadID/status
+Content-Type: application/json
+
+{
+  "status": "contacted"
+}

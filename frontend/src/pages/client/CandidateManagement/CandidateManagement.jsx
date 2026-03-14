@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import candidateService from "../../../services/client/candidateService";
 import { toast } from "react-toastify";
 import "../../../styles/client/pages/candidateManagement.css";
@@ -6,6 +7,7 @@ import "../../../styles/client/pages/candidateManagement.css";
 const ITEMS_PER_PAGE = 5;
 
 const CandidateManagement = () => {
+  const navigate = useNavigate();
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchSkill, setSearchSkill] = useState("");
@@ -156,7 +158,11 @@ const CandidateManagement = () => {
                 </tr>
               ) : (
                 paginatedData.map((c) => (
-                  <tr key={c.id}>
+                  <tr
+                    key={c.id}
+                    onClick={() => navigate(`/applications/${c.id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <td>
                       <input
                         type="checkbox"
