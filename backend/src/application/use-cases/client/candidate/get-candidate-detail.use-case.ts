@@ -1,11 +1,10 @@
 import type { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
 import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
 
-export class GetCandidatesUseCase {
+export class GetCandidateDetailUseCase {
   constructor(private readonly candidateRepo: ICandidateRepository) { }
 
-
-  async execute(userID: string): Promise<CandidateEntity[] | null> {
-    return await this.candidateRepo.getCandidates(userID);
+  async execute(candidateID: string): Promise<CandidateEntity | null> {
+    return await this.candidateRepo.getCandidateById(candidateID);
   }
 }

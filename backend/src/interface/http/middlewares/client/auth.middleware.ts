@@ -20,7 +20,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     }
 
     const decoded = await tokenService.verifyToken(token);
-
     const user = await userRepository.findUserByID(decoded.userID);
 
     if (!user) {
