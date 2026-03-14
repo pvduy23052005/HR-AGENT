@@ -39,6 +39,7 @@ export interface ICandidateSummaryProfile {
   phone: string;
   cvLink: string;
   topSkills: string[];
+  isVerify?: boolean;
   status: boolean;
   appliedAt: Date | undefined;
 }
@@ -65,6 +66,7 @@ export interface ICandidateProps {
   status?: boolean;
   objective?: string;
   fullTextContent?: string;
+  isVerify?: boolean;
   personal?: Partial<IPersonal>;
   educations?: Partial<IEducation>[];
   experiences?: Partial<IExperience>[];
@@ -79,6 +81,7 @@ export class CandidateEntity {
   addedBy: string | null;
   status: boolean;
   objective: string;
+  isVerify?: boolean;
   fullTextContent: string;
   personal: IPersonal;
   educations: IEducation[];
@@ -93,6 +96,7 @@ export class CandidateEntity {
     addedBy,
     status = true,
     objective = '',
+    isVerify,
     fullTextContent = '',
     personal = {},
     educations = [],
@@ -107,6 +111,7 @@ export class CandidateEntity {
     this.status = status;
     this.objective = objective;
     this.fullTextContent = fullTextContent;
+    this.isVerify = isVerify;
 
     this.personal = {
       fullName: personal.fullName ?? '',
@@ -166,6 +171,7 @@ export class CandidateEntity {
       phone: this.personal.phone,
       cvLink: this.personal.cvLink,
       topSkills: this.getAllTechStacks().slice(0, 5),
+      isVerify: this.isVerify,
       status: this.status,
       appliedAt: this.createdAt,
     };

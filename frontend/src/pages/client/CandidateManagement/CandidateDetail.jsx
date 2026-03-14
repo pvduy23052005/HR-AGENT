@@ -32,6 +32,54 @@ const CandidateDetail = () => {
     return new Date(dateStr).toLocaleDateString("vi-VN");
   };
 
+  const handleVerify = (githubLink, candidateID) => {
+    if (!githubLink) {
+      toast.warning("Ứng viên này chưa có link GitHub!");
+      return;
+    }
+
+    const extensionId = import.meta.env.VITE_EXTENSION_ID;
+    if (!extensionId) {
+      toast.error("Chưa cấu hình VITE_EXTENSION_ID trong file .env!");
+      return;
+    }
+
+    if (!window.chrome?.runtime?.sendMessage) {
+      toast.error(
+        "Không tìm thấy Chrome Extension. Hãy đảm bảo extension đã được cài đặt!",
+      );
+      return;
+    }
+
+    chrome.runtime.sendMessage(
+      extensionId,
+      {
+        action: "NANO_START_TASK",
+        url: githubLink,
+        candidateID: candidateID,
+      },
+      (response) => {
+        if (chrome.runtime.lastError) {
+          console.error("Extension error:", chrome.runtime.lastError.message);
+          toast.error(
+            "Không thể kết nối extension: " + chrome.runtime.lastError.message,
+          );
+          return;
+        }
+        if (response?.status === "processing") {
+          toast.success("Đang kiểm chứng GitHub... Vui lòng chờ!");
+        }
+      },
+    );
+
+    try {
+      chrome.tabs.remove(newTab.id);
+      console.log("Đã đóng ");
+    } catch (e) {
+      console.error("Lỗi khi đóng tab:", e);
+    }
+  };
+
   if (loading) {
     return (
       <div className="cd-page">
@@ -98,7 +146,9 @@ const CandidateDetail = () => {
             <span className="cd-field__value">
               {personal.email ? (
                 <a href={`mailto:${personal.email}`}>{personal.email}</a>
-              ) : "—"}
+              ) : (
+                "—"
+              )}
             </span>
           </div>
         </div>
@@ -122,7 +172,9 @@ const CandidateDetail = () => {
                 <a href={personal.githubLink} target="_blank" rel="noreferrer">
                   {personal.githubLink}
                 </a>
-              ) : "—"}
+              ) : (
+                "—"
+              )}
             </span>
           </div>
         </div>
@@ -134,10 +186,14 @@ const CandidateDetail = () => {
             <span className="cd-field__icon">🔍</span>
             {allSkills.length > 0 ? (
               allSkills.map((s, i) => (
-                <span className="cd-skill-badge" key={i}>{s}</span>
+                <span className="cd-skill-badge" key={i}>
+                  {s}
+                </span>
               ))
             ) : (
-              <span className="cd-field__value cd-field__value--empty">Chưa có</span>
+              <span className="cd-field__value cd-field__value--empty">
+                Chưa có
+              </span>
             )}
           </div>
         </div>
@@ -184,7 +240,9 @@ const CandidateDetail = () => {
           <div className="cd-field__label">Trạng thái</div>
           <div className="cd-field__row">
             <span className="cd-field__icon">🔍</span>
-            <span className={`cd-field__value ${statusClass}`}>{statusLabel}</span>
+            <span className={`cd-field__value ${statusClass}`}>
+              {statusLabel}
+            </span>
           </div>
         </div>
 
@@ -200,7 +258,10 @@ const CandidateDetail = () => {
 
       {/* Action buttons */}
       <div className="cd-actions">
-        <button className="cd-btn cd-btn--cancel" onClick={() => navigate("/applications")}>
+        <button
+          className="cd-btn cd-btn--cancel"
+          onClick={() => navigate("/applications")}
+        >
           Huỷ
         </button>
         {personal.cvLink ? (
@@ -213,12 +274,21 @@ const CandidateDetail = () => {
             Tải CV
           </a>
         ) : (
-          <button className="cd-btn cd-btn--cv" disabled style={{ opacity: 0.5, cursor: "not-allowed" }}>
+          <button
+            className="cd-btn cd-btn--cv"
+            disabled
+            style={{ opacity: 0.5, cursor: "not-allowed" }}
+          >
             Tải CV
           </button>
         )}
         <button className="cd-btn cd-btn--schedule">Lên lịch phỏng vấn</button>
-        <button className="cd-btn cd-btn--verify">Kiểm chứng</button>
+        <button
+          className="cd-btn cd-btn--verify"
+          onClick={() => handleVerify(personal.githubLink, id)}
+        >
+          Kiểm chứng
+        </button>
         <button
           className="cd-btn cd-btn--ai"
           onClick={() => navigate(`/applications/${id}/ai-analysis`)}
