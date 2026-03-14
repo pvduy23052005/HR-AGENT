@@ -159,8 +159,6 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
               reject(new Error(event.data ?? event.message ?? 'Task failed or cancelled'));
             }
           });
-
-          // Phát lệnh chạy
           executor.execute();
         });
 
@@ -197,7 +195,7 @@ async function saveToDatabase(candiateID: string, data: any) {
   try {
     console.log("Đang bắn API về Backend...");
 
-    const response = await fetch('http://localhost:5050/candidates/verify', {
+    const response = await fetch('http://localhost:5050/verification/candidate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -496,18 +494,15 @@ async function subscribeToExecutorEvents(executor: Executor) {
     ) {
       if (event.state === ExecutionState.TASK_OK) {
         try {
-          // Bạn nên console.log(event) ra để xem kết quả con AI trả về nằm ở đâu 
-          // (có thể là event.result, event.data, hoặc event.message)
           console.log("Kết quả AI cào được:", event.data);
 
-          // Bắn dữ liệu về Backend HR-AGENT của bạn
-          await fetch('http://localhost:5050/candidates/verify', {
+          await fetch('http://localhost:5050/verification/candidate', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              data: event.data // Gửi toàn bộ event về Backend để LangChain phân tích tiếp
+              data: event.data 
             })
           });
           console.log("Đã bắn dữ liệu về Backend thành công!");

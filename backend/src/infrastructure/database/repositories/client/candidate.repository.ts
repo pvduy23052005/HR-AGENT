@@ -2,8 +2,6 @@ import mongoose from 'mongoose';
 import Candidate from '../../models/candidate.model';
 import { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
 import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
-import { VerificationEntity } from '../../../../domain/entities/client/verifycation.entity';
-import Verification from '../../models/verification.model';
 
 const mapToEntity = (doc: any | null): CandidateEntity | null => {
   if (!doc) return null;
@@ -35,24 +33,6 @@ export interface ICandidateData {
   projects?: unknown[];
 }
 
-const mapToVerificationEntity = (doc: any | null): VerificationEntity | null => {
-  if (!doc) return null;
-  return new VerificationEntity({
-    id: doc._id?.toString(),
-    candidateId: doc.candidateId?.toString(),
-    isVerified: doc.isVerified,
-    name: doc.name,
-    age: doc.age,
-    phone: doc.phone,
-    githubStars: doc.githubStars,
-    topLanguages: doc.topLanguages,
-    probedProjects: doc.probedProjects,
-    aiReasoning: doc.aiReasoning,
-    createdAt: doc.createdAt,
-    updatedAt: doc.updatedAt,
-  });
-};
-
 export class CandidateRepository implements ICandidateRepository {
   public async createCandidate(data: ICandidateData): Promise<CandidateEntity | null> {
     const newCandidate = new Candidate(data);
@@ -75,19 +55,5 @@ export class CandidateRepository implements ICandidateRepository {
     return candidates
       .map((doc) => mapToEntity(doc))
       .filter((entity): entity is CandidateEntity => entity !== null);
-  }
-
-  public async createVerification(candidateID: string, data: any): Promise<VerificationEntity | null> {
-    const newVerification = new Verification({ ...data, candidateId: candidateID });
-    const saved = await newVerification.save();
-    return mapToVerificationEntity(saved);
-  }
-
-  public async updateIsverfiy(candidateID: string, isVerify: boolean): Promise<void> {
-    await Candidate.updateOne({
-      _id: candidateID
-    }, {
-      isVerify: isVerify
-    });
   }
 }

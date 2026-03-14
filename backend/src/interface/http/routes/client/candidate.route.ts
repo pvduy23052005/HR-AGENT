@@ -7,6 +7,4 @@ router.get('/', authMiddleware, controller.getCandidates);
 
 router.get('/:candidateID', authMiddleware, controller.getCandidateDetail);
 
-router.post("/verify", controller.verifyCandidate);
-
 export const candidateRoute: express.Router = router;

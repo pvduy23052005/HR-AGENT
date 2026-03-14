@@ -7,12 +7,13 @@ const verificationSchema = new mongoose.Schema(
       ref: 'Candidate',
       required: true
     },
-    isVerified: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: true },
     name: { type: String },
     age: { type: String },
     phone: { type: String },
     email: {
       type: String,
+      default: ""
     },
     githubStars: { type: Number, default: 0 },
     topLanguages: [{ type: String }],
