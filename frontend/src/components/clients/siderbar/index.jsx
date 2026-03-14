@@ -18,7 +18,7 @@ const menuItems = [
   { path: "/jobs", icon: <MdWork />, label: "Quản lý Công việc" },
   { path: "/upload_cv", icon: <MdCloudUpload />, label: "Nộp CV" },
   { path: "/applications", icon: <MdPeople />, label: "Quản lý ứng viên" },
-  { path: "/statistics", icon: <MdBarChart />, label: "Báo cáo & Thống kê" },
+  { path: "/reports", icon: <MdBarChart />, label: "Báo cáo & Thống kê" },
   { path: "/recruitment", icon: <MdAccountTree />, label: "Quy trình tuyển dụng" },
 ];
 

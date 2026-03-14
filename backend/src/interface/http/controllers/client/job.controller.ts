@@ -17,12 +17,12 @@ export const createJob = async (req: Request, res: Response): Promise<void> => {
     const userID = res.locals.user.id;
     const { title, description, requirements, status } = req.body as {
       title: string;
-      description: string;
-      requirements: string;
+      description?: string;
+      requirements?: string[];
       status?: boolean;
     };
 
-    const newJob = await createJobUseCase.execute({ title, userID, description, requirements, status });
+    const newJob = await createJobUseCase.execute({ title, userID, description: description ?? '', requirements: requirements ?? [], status });
 
     res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
   } catch (error: unknown) {
@@ -40,7 +40,7 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
     const { title, description, requirements, status } = req.body as {
       title?: string;
       description?: string;
-      requirements?: string;
+      requirements?: string[];
       status?: boolean;
     };
 

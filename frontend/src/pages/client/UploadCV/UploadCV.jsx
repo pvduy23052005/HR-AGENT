@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import jobService from "../../../services/client/jobService";
 import "../../../styles/client/pages/uploadCV.css";
 
 const UploadCV = () => {
@@ -16,21 +17,25 @@ const UploadCV = () => {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [jobList, setJobList] = useState([]);
 
-  // Load job list for dropdown (mock + localStorage)
+  // Load job list for dropdown from API
   useEffect(() => {
-    const MOCK_JOBS = [
-      { id: "job_001", title: "Senior Frontend Developer" },
-      { id: "job_002", title: "Backend Engineer (Node.js)" },
-      { id: "job_003", title: "UI/UX Designer" },
-    ];
-    try {
-      const saved = JSON.parse(localStorage.getItem("mock_jobs") || "[]");
-      const savedMapped = saved.map((j) => ({ id: j.id, title: j.title }));
-      setJobList([...MOCK_JOBS, ...savedMapped]);
-    // eslint-disable-next-line no-unused-vars
-    } catch (e) {
-      setJobList(MOCK_JOBS);
-    }
+    const fetchJobs = async () => {
+      try {
+        const response = await jobService.getAll();
+        if (response.success && response.jobs) {
+          const fetchedJobs = response.jobs.map((j) => ({
+            id: j._id || j.id,
+            title: j.title,
+          }));
+          setJobList(fetchedJobs);
+        } else {
+          setJobList([]);
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải danh sách công việc:", error);
+      }
+    };
+    fetchJobs();
   }, []);
 
   const userName = (() => {
@@ -130,11 +135,11 @@ const UploadCV = () => {
       }
 
       const formData = new FormData();
-      formData.append("file", selectedFile);
+      formData.append("cv", selectedFile);
       formData.append("jobID", jobId.trim());
 
       const baseURL =
-        import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+        import.meta.env.VITE_API_BASE_URL || "http://localhost:5050";
 
       const uploadRes = await axios.post(`${baseURL}/upload/cv`, formData, {
         headers: {
@@ -204,9 +209,9 @@ const UploadCV = () => {
   const handleVerify = () => {
     if (!window.chrome?.runtime) return alert("❌ Chưa cài/bật Nanobrowser!");
 
-    chrome.runtime.sendMessage(
+    window.chrome.runtime.sendMessage(
       "jjkplkmkajifbfgiafkfgogihdoellof",
-      { action: "NANO_START_TASK", url: githubUrl },
+      { action: "NANO_START_TASK", url: "https://github.com/pvduy23052005" },
       (res) => console.log("✅ Phản hồi từ Extension:", res),
     );
   };

@@ -21,7 +21,7 @@ export interface IJobData {
   title: string;
   userID: string;
   description: string;
-  requirements: string;
+  requirements: string[];
   status?: boolean;
 }
 

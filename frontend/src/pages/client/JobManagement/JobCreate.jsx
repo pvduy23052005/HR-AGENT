@@ -8,6 +8,7 @@ import {
   MdClose,
   MdArrowBack,
 } from "react-icons/md";
+import jobService from "../../../services/client/jobService";
 import "../../../styles/client/pages/jobManagement.css";
 
 // ─── SkillTag Input Component ────────────────────────────────────────────────
@@ -138,27 +139,13 @@ const JobCreate = () => {
 
     setSubmitting(true);
     try {
-      // ─── CONNECT API HERE ─────────────────────────────────────────────
-      // import jobService from "../../../services/client/jobService";
-      // const res = await jobService.create(payload);
-      // if (res.success) {
-      //   toast.success("Tạo công việc thành công!");
-      //   navigate("/jobs");
-      // }
-      // ─────────────────────────────────────────────────────────────────
-
-      // --- Mock: lưu vào localStorage để JobManagement hiển thị ngay ---
-      const newJob = {
-        id: "job_" + Date.now(),
-        ...payload,
-        createdAt: new Date().toISOString(),
-      };
-      const existing = JSON.parse(localStorage.getItem("mock_jobs") || "[]");
-      localStorage.setItem("mock_jobs", JSON.stringify([...existing, newJob]));
-      // ------------------------------------------------------------------
-
-      toast.success("🎉 Tạo công việc thành công!");
-      navigate("/jobs");
+      const res = await jobService.create(payload);
+      if (res.success) {
+        toast.success("🎉 Tạo công việc thành công!");
+        navigate("/jobs");
+      } else {
+        toast.error("❌ Tạo công việc thất bại. Vui lòng thử lại.");
+      }
     } catch (error) {
       console.error("Lỗi tạo Job:", error);
       toast.error("❌ Tạo công việc thất bại. Vui lòng thử lại.");

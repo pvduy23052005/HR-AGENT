@@ -1,35 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdAdd, MdWork, MdDelete, MdEdit, MdCheckCircle, MdCancel } from "react-icons/md";
+import jobService from "../../../services/client/jobService";
 import "../../../styles/client/pages/jobManagement.css";
-
-// ─── Mock data – replace with API call ──────────────────────────────────────
-const MOCK_JOBS = [
-  {
-    id: "job_001",
-    title: "Senior Frontend Developer",
-    description: "Phát triển giao diện người dùng hiện đại bằng React.",
-    requirements: ["React", "TypeScript", "CSS", "Figma"],
-    status: true,
-    createdAt: "2026-03-10T08:00:00Z",
-  },
-  {
-    id: "job_002",
-    title: "Backend Engineer (Node.js)",
-    description: "Xây dựng RESTful API và microservices cho hệ thống HR.",
-    requirements: ["Node.js", "MongoDB", "Express", "Docker"],
-    status: true,
-    createdAt: "2026-03-11T09:30:00Z",
-  },
-  {
-    id: "job_003",
-    title: "UI/UX Designer",
-    description: "Thiết kế trải nghiệm người dùng trực quan và thẩm mỹ cao.",
-    requirements: ["Figma", "Adobe XD", "User Research"],
-    status: false,
-    createdAt: "2026-03-12T14:00:00Z",
-  },
-];
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
@@ -43,13 +16,22 @@ const JobManagement = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    // TODO: Replace with real API call — jobService.getAll()
-    // For now: merge built-in mock data with user-created jobs from localStorage
-    setTimeout(() => {
-      const saved = JSON.parse(localStorage.getItem("mock_jobs") || "[]");
-      setJobs([...MOCK_JOBS, ...saved]);
-      setLoading(false);
-    }, 400);
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+        const response = await jobService.getAll();
+        if (response.success && response.jobs) {
+          setJobs(response.jobs);
+        } else {
+          setJobs([]);
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải danh sách công việc:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJobs();
   }, []);
 
   const filteredJobs = jobs.filter((j) =>
@@ -107,7 +89,7 @@ const JobManagement = () => {
       ) : (
         <div className="job-page__grid">
           {filteredJobs.map((job) => (
-            <div key={job.id} className="job-card">
+            <div key={job.id || job._id} className="job-card">
               <div className="job-card__header">
                 <div className="job-card__icon-wrap">
                   <MdWork size={22} />
@@ -148,7 +130,7 @@ const JobManagement = () => {
                     className="job-card__action-btn"
                     title="Copy Job ID"
                     onClick={() => {
-                      navigator.clipboard.writeText(job.id);
+                      navigator.clipboard.writeText(job.id || job._id);
                     }}
                   >
                     🔗 Copy ID

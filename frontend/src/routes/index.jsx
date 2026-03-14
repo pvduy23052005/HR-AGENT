@@ -19,7 +19,7 @@ import CandidateAIAnalysis from "../pages/client/CandidateManagement/CandidateAI
 
 import JobManagement from "../pages/client/JobManagement/JobManagement";
 import JobCreate from "../pages/client/JobManagement/JobCreate";
-
+import ReportStatistics from "../pages/client/Report/ReportStatistics";
 
 const routes = [
   {
@@ -43,6 +43,7 @@ const routes = [
 
           { path: "jobs", element: <JobManagement /> },
           { path: "jobs/create", element: <JobCreate /> },
+          { path: "reports", element: <ReportStatistics /> },
           {
             path: "upload_cv",
             element: <UploadCV />,

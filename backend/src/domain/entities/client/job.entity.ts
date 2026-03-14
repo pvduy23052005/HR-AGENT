@@ -7,7 +7,7 @@ export interface IJobSummary {
 
 export interface IJobDetail extends IJobSummary {
   description: string;
-  requirements: string;
+  requirements: string[];
 }
 
 export interface IJobProps {
@@ -16,7 +16,7 @@ export interface IJobProps {
   title?: string;
   userID?: string | { toString(): string };
   description?: string;
-  requirements?: string;
+  requirements?: string[];
   status?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -27,7 +27,7 @@ export class JobEntity {
   userID: string;
   title: string;
   description: string;
-  requirements: string;
+  requirements: string[];
   status: boolean;
   createdAt: Date | undefined;
   updatedAt: Date | undefined;
@@ -38,7 +38,7 @@ export class JobEntity {
     title = '',
     userID,
     description = '',
-    requirements = '',
+    requirements = [],
     status = false,
     createdAt,
     updatedAt,
@@ -48,7 +48,7 @@ export class JobEntity {
     this.userID = userID ? userID.toString() : '';
     this.title = title ? title.trim() : '';
     this.description = description ? description.trim() : '';
-    this.requirements = requirements ? requirements.trim() : '';
+    this.requirements = Array.isArray(requirements) ? requirements : [];
     this.status = status;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
