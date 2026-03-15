@@ -29,13 +29,11 @@ const indexClientRoute = (app: Express): void => {
 
   app.use('/interview', authMiddleware, interviewRoute);
 
-
   app.use('/report', authMiddleware, reportRoute);
 
   app.use('/sourcing', authMiddleware, sourcingRoute);
 
   app.use('/verification', authMiddleware, verificationRoute);
-
 };
 
 export default indexClientRoute;

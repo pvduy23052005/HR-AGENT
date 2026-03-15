@@ -18,6 +18,7 @@ export class ExecuteAiAnalyizeUseCase {
   ) { }
 
   async execute(candidateID: string, jobID: string): Promise<IAiAnalyzeResult> {
+
     const existingAnalysis = await this.aiAnalyizeRepo.getAnalysisByCandidateId(candidateID);
     if (existingAnalysis) {
       return {
@@ -49,6 +50,7 @@ export class ExecuteAiAnalyizeUseCase {
 
     if (!savedAnalysis) throw new Error('Lỗi khi lưu kết quả phân tích.');
 
+    await this.candidateRepo.updateStatus(candidateID, { status: "analyzed" });
     return {
       message: 'Phân tích AI hoàn tất thành công.',
       data: savedAnalysis.getDetail(),

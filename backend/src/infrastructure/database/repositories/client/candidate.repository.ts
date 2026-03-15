@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Candidate from '../../models/candidate.model';
 import { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
 import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
+import type { IStatus } from '../../../../domain/interfaces/client/candidate.interface';
 
 const mapToEntity = (doc: any | null): CandidateEntity | null => {
   if (!doc) return null;
@@ -50,10 +51,23 @@ export class CandidateRepository implements ICandidateRepository {
 
   public async getCandidates(userID: string): Promise<CandidateEntity[] | null> {
     const objectId = new mongoose.Types.ObjectId(userID);
-    const candidates = await Candidate.find({ addedBy: objectId });
+    const selectedFields = "jobID status isVerify createdAt personal.fullName personal.email personal.phone personal.cvLink experiences projects";
+    const candidates = await Candidate.find({ addedBy: objectId }).select(selectedFields).lean();
     if (!candidates || candidates.length === 0) return null;
     return candidates
       .map((doc) => mapToEntity(doc))
       .filter((entity): entity is CandidateEntity => entity !== null);
+  }
+
+  public async updateStatus(candidateID: string, status: IStatus): Promise<void> {
+    try {
+      await Candidate.updateOne({
+        _id: candidateID
+      }, {
+        status: status.status
+      })
+    } catch (error) {
+      console.log("Error update status", error);
+    }
   }
 }

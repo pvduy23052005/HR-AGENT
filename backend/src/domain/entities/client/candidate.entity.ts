@@ -40,7 +40,7 @@ export interface ICandidateSummaryProfile {
   cvLink: string;
   topSkills: string[];
   isVerify?: boolean;
-  status: boolean;
+  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
   appliedAt: Date | undefined;
 }
 
@@ -48,7 +48,7 @@ export interface ICandidateDetailProfile {
   id: string | null;
   jobID: string | null;
   addedBy: string | null;
-  status: boolean;
+  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
   objective: string;
   personal: IPersonal;
   educations: IEducation[];
@@ -63,7 +63,7 @@ export interface ICandidateProps {
   id?: string | { toString(): string } | null;
   jobID?: string | { toString(): string } | null;
   addedBy?: string | { toString(): string } | null;
-  status?: boolean;
+  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
   objective?: string;
   fullTextContent?: string;
   isVerify?: boolean;
@@ -79,7 +79,7 @@ export class CandidateEntity {
   id: string | null;
   jobID: string | null;
   addedBy: string | null;
-  status: boolean;
+  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
   objective: string;
   isVerify?: boolean;
   fullTextContent: string;
@@ -94,7 +94,7 @@ export class CandidateEntity {
     id,
     jobID,
     addedBy,
-    status = true,
+    status = "unanalyzed",
     objective = '',
     isVerify,
     fullTextContent = '',
@@ -150,10 +150,6 @@ export class CandidateEntity {
     this.updatedAt = updatedAt;
   }
 
-  isActive(): boolean {
-    return this.status === true;
-  }
-
   getAllTechStacks(): string[] {
     const expTechs = this.experiences.flatMap((exp) => exp.techStack ?? []);
     const projTechs = this.projects.flatMap((proj) => proj.techStack ?? []);
@@ -196,5 +192,9 @@ export class CandidateEntity {
 
   getFulltextContent(): string {
     return this.fullTextContent;
+  }
+
+  getID(): string {
+    return this.id || "";
   }
 }

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { GetCandidatesUseCase } from '../../../../application/use-cases/client/candidate/get-candidate.use-case';
 import { GetCandidateDetailUseCase } from '../../../../application/use-cases/client/candidate/get-candidate-detail.use-case';
+import { UpdateStatusUseCase } from '../../../../application/use-cases/client/candidate/update-status.use-case';
 
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
 
@@ -58,5 +59,33 @@ export const getCandidateDetail = async (req: Request, res: Response): Promise<v
   } catch (error: unknown) {
     const e = error as { message?: string };
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi lấy thông tin ứng viên!' });
+  }
+};
+
+// [PATCH] /candidates/change-status/:id
+export const updateStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id = req.params.id.toString() || '';
+    const { status } = req.body;
+
+    if (!id) throw new Error('ID ứng viên không hợp lệ.');
+
+    const validStatuses = ['unanalyzed', 'scheduled', 'analyzed', 'risky'];
+    if (!validStatuses.includes(status)) {
+      throw new Error(`Trạng thái không hợp lệ. Các trạng thái cho phép: ${validStatuses.join(', ')}`);
+    }
+
+    const updateStatusUseCase = new UpdateStatusUseCase(candidateRepository);
+    await updateStatusUseCase.execute(id, { status: status as any });
+
+    res.status(200).json({
+      success: true,
+      message: 'Cập nhật trạng thái thành công.',
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Lỗi khi cập nhật trạng thái',
+    });
   }
 };

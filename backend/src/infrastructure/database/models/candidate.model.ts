@@ -49,7 +49,11 @@ const candidateSchema = new mongoose.Schema(
   {
     jobID: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
     addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    status: { type: Boolean, default: true },
+    status: {
+      type: String,
+      enum: ["unanalyzed", "scheduled", "analyzed", "risky"],
+      default: "unanalyzed"
+    },
     objective: { type: String, trim: true },
     fullTextContent: { type: String, trim: true },
     isVerify: {
