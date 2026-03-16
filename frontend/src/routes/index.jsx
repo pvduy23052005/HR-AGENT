@@ -16,6 +16,7 @@ import Dashbroad from "../pages/client/dashbroad/dashbroad";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
 
 import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
+import VerificationDetail from "../pages/client/VerificationDetail";
 import CandidateAIAnalysis from "../pages/client/CandidateManagement/CandidateAIAnalysis";
 import ScheduleInterviewPage from "../pages/client/CandidateManagement/ScheduleInterviewPage";
 
@@ -41,6 +42,7 @@ const routes = [
           { path: "upload_cv", element: <UploadCV /> },
           { path: "applications", element: <CandidateManagement /> },
           { path: "applications/:id", element: <CandidateDetail /> },
+          { path: "applications/:id/certy", element: <VerificationDetail /> },
           { path: "applications/:id/lên lịch", element: <ScheduleInterviewPage /> },
           { path: "applications/:id/ai-analysis", element: <CandidateAIAnalysis /> },
 

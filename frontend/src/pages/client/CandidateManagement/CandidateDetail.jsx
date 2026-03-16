@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import candidateService from "../../../services/client/candidateService";
+import verificationService from "../../../services/client/verificationService";
 import "../../../styles/client/pages/candidateDetail.css";
 
 const CandidateDetail = () => {
@@ -9,6 +10,7 @@ const CandidateDetail = () => {
   const navigate = useNavigate();
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [verifyingLoading, setVerifyingLoading] = useState(false);
 
   useEffect(() => {
     fetchDetail();
@@ -32,47 +34,79 @@ const CandidateDetail = () => {
     return new Date(dateStr).toLocaleDateString("vi-VN");
   };
 
-  const handleVerify = (githubLink, candidateID) => {
+  const handleVerify = async (githubLink, candidateID) => {
     if (!githubLink) {
       toast.warning("Ứng viên này chưa có link GitHub!");
       return;
     }
 
-    const extensionId = import.meta.env.VITE_EXTENSION_ID;
-    if (!extensionId) {
-      toast.error("Chưa cấu hình VITE_EXTENSION_ID trong file .env!");
+    // Validate GitHub URL format
+    const githubRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/;
+    if (!githubRegex.test(githubLink)) {
+      toast.error("❌ Link GitHub không hợp lệ! Format: https://github.com/username");
       return;
     }
 
-    if (!window.chrome?.runtime?.sendMessage) {
-      toast.error(
-        "Không tìm thấy Chrome Extension. Hãy đảm bảo extension đã được cài đặt!",
+    setVerifyingLoading(true);
+    toast.info("🔍 Đang kiểm chứng GitHub profile...");
+
+    try {
+      // Extract GitHub username từ URL
+      const username = githubLink
+        .replace(/^https?:\/\/(www\.)?github\.com\//, "")
+        .replace(/\/$/, "");
+
+      // Gọi GitHub API để check user existence (optional, nhưng an toàn hơn)
+      const githubCheckResponse = await fetch(
+        `https://api.github.com/users/${username}`,
+        {
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+          },
+        }
       );
-      return;
+
+      if (!githubCheckResponse.ok) {
+        toast.error("❌ GitHub user không tồn tại!");
+        setVerifyingLoading(false);
+        return;
+      }
+
+      const githubUser = await githubCheckResponse.json();
+
+      if (githubUser.message === "Not Found") {
+        toast.error("❌ GitHub user không tồn tại!");
+        setVerifyingLoading(false);
+        return;
+      }
+
+      // GitHub user hợp lệ -> gửi lên backend để lưu
+      const response = await verificationService.verifyCandidate(candidateID, {
+        githubLink,
+        githubUser: githubUser.login,
+      });
+
+      if (response.success) {
+        toast.success(
+          "✅ Kiểm chứng thành công! Chuyển sang xác nhận..."
+        );
+        // Redirect sang trang xác nhận uy tín
+        setTimeout(() => {
+          navigate(`/applications/${candidateID}/certy`);
+        }, 1000);
+      } else {
+        toast.error(response.message || "Kiểm chứng thất bại!");
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+      if (error.message.includes("Failed to fetch")) {
+        toast.error("❌ Không thể kết nối GitHub API!");
+      } else {
+        toast.error(`❌ Lỗi: ${error.message}`);
+      }
+    } finally {
+      setVerifyingLoading(false);
     }
-
-    chrome.runtime.sendMessage(
-      extensionId,
-      {
-        action: "NANO_START_TASK",
-        url: githubLink,
-        candidateID: candidateID,
-      },
-      (response) => {
-        if (chrome.runtime.lastError) {
-          console.error("Extension error:", chrome.runtime.lastError.message);
-          toast.error(
-            "Không thể kết nối extension: " + chrome.runtime.lastError.message,
-          );
-          return;
-        }
-        if (response?.status === "processing") {
-          toast.success("Đang kiểm chứng GitHub... Vui lòng chờ!");
-        }
-      },
-    );
-
-    // Note: tab management handled by extension
   };
 
   if (loading) {
@@ -298,8 +332,10 @@ const CandidateDetail = () => {
         <button
           className="cd-btn cd-btn--verify"
           onClick={() => handleVerify(personal.githubLink, id)}
+          disabled={verifyingLoading}
+          style={verifyingLoading ? { opacity: 0.6, cursor: "wait" } : {}}
         >
-          Kiểm chứng
+          {verifyingLoading ? "⏳ Đang kiểm chứng..." : "✅ Kiểm chứng GitHub"}
         </button>
         <button
           className="cd-btn cd-btn--ai"
