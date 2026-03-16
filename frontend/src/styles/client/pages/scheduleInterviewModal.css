@@ -1,0 +1,165 @@
+/* ===== SCHEDULE INTERVIEW MODAL ===== */
+.sim-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: sim-fade-in 0.2s ease;
+}
+
+@keyframes sim-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.sim-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  animation: sim-slide-up 0.25s ease;
+  overflow: hidden;
+}
+
+@keyframes sim-slide-up {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Header */
+.sim-header {
+  padding: 24px 28px 0;
+}
+
+.sim-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 20px;
+}
+
+/* Body */
+.sim-body {
+  padding: 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sim-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sim-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.sim-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #f7f8fa;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: border-color 0.2s;
+}
+
+.sim-input-wrap:focus-within {
+  border-color: #0087f1;
+  background: #fff;
+}
+
+.sim-input-wrap--readonly {
+  background: #f0f0f0;
+  cursor: default;
+}
+
+.sim-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  padding: 12px 0;
+  width: 100%;
+}
+
+.sim-input::placeholder { color: #aaa; }
+
+.sim-textarea {
+  resize: none;
+  padding: 10px 0;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+select.sim-input {
+  cursor: pointer;
+}
+
+.sim-readonly-text {
+  font-size: 14px;
+  color: #555;
+  padding: 12px 0;
+}
+
+.sim-icon {
+  font-size: 16px;
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* Footer */
+.sim-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 24px 28px;
+  margin-top: 4px;
+}
+
+.sim-btn {
+  padding: 11px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.sim-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sim-btn--cancel {
+  background: #fff;
+  border: 1.5px solid #ddd;
+  color: #555;
+}
+
+.sim-btn--cancel:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+.sim-btn--submit {
+  background: #0087f1;
+  color: #fff;
+  min-width: 120px;
+}
+
+.sim-btn--submit:hover:not(:disabled) {
+  background: #006ed0;
+}

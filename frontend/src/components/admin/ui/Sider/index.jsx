@@ -5,6 +5,7 @@ import {
   MdSmartToy,
   MdBarChart,
   MdLogout,
+  MdSchedule,
 } from "react-icons/md";
 import { useContext } from "react";
 import "../../../../styles/admin/ui/sider.css";
@@ -14,6 +15,7 @@ import { AppContext } from "../../../../context/admin/app/AppContext";
 const menuItems = [
   { path: "/admin/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
   { path: "/admin/users", icon: <MdPeople />, label: "Quản lý người dùng" },
+  { path: "/admin/interview-schedule", icon: <MdSchedule />, label: "Lịch phỏng vấn" },
   { path: "/admin/ai-config", icon: <MdSmartToy />, label: "Cấu hình AI" },
   { path: "/admin/statistics", icon: <MdBarChart />, label: "Thống kê" },
 ];

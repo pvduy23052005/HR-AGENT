@@ -43,8 +43,7 @@ const CandidateManagement = () => {
         );
       const statusMatch =
         filterStatus === "all" ||
-        (filterStatus === "active" && c.status === true) ||
-        (filterStatus === "inactive" && c.status === false);
+        c.status === filterStatus;
       return skillMatch && statusMatch;
     });
   }, [candidates, searchSkill, searchExp, filterStatus]);
@@ -68,13 +67,23 @@ const CandidateManagement = () => {
   };
 
   const getStatusLabel = (status) => {
-    if (status === true) return "Đã kiểm chứng";
-    return "Rủi ro";
+    const labels = {
+      unanalyzed: "Chưa phân tích",
+      analyzed: "Đã phân tích",
+      scheduled: "Đã lên lịch",
+      risky: "Rủi ro",
+    };
+    return labels[status] || status || "—";
   };
 
   const getStatusClass = (status) => {
-    if (status === true) return "status-verified";
-    return "status-risk";
+    const classes = {
+      unanalyzed: "status-unanalyzed",
+      analyzed: "status-verified",
+      scheduled: "status-scheduled",
+      risky: "status-risk",
+    };
+    return classes[status] || "";
   };
 
   const formatDate = (dateStr) => {
@@ -125,8 +134,10 @@ const CandidateManagement = () => {
           onChange={(e) => setFilterStatus(e.target.value)}
         >
           <option value="all">Tất cả trạng thái</option>
-          <option value="active">Đã kiểm chứng</option>
-          <option value="inactive">Rủi ro</option>
+          <option value="unanalyzed">Chưa phân tích</option>
+          <option value="analyzed">Đã phân tích</option>
+          <option value="scheduled">Đã lên lịch</option>
+          <option value="risky">Rủi ro</option>
         </select>
         <button className="candidate-page__btn-search" onClick={handleSearch}>
           Tìm kiếm
@@ -143,8 +154,8 @@ const CandidateManagement = () => {
               <tr>
                 <th style={{ width: 40 }}></th>
                 <th>Ứng viên</th>
-                <th>Chức danh</th>
-                <th>Năm kinh nghiệm</th>
+                <th>Kỹ năng nổi bật</th>
+                <th>Số kỹ năng</th>
                 <th>Ngày Lưu</th>
                 <th>Trạng thái</th>
               </tr>

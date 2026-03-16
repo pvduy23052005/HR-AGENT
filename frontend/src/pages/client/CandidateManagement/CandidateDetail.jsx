@@ -72,12 +72,7 @@ const CandidateDetail = () => {
       },
     );
 
-    try {
-      chrome.tabs.remove(newTab.id);
-      console.log("Đã đóng ");
-    } catch (e) {
-      console.error("Lỗi khi đóng tab:", e);
-    }
+    // Note: tab management handled by extension
   };
 
   if (loading) {
@@ -112,8 +107,20 @@ const CandidateDetail = () => {
     createdAt,
   } = candidate;
 
-  const statusLabel = status ? "Đã kiểm chứng" : "Rủi ro";
-  const statusClass = status ? "status-verified" : "status-risk";
+  const statusLabels = {
+    unanalyzed: "Chưa phân tích",
+    analyzed: "Đã phân tích",
+    scheduled: "Đã lên lịch",
+    risky: "Rủi ro",
+  };
+  const statusClasses = {
+    unanalyzed: "status-unanalyzed",
+    analyzed: "status-verified",
+    scheduled: "status-scheduled",
+    risky: "status-risk",
+  };
+  const statusLabel = statusLabels[status] || status || "—";
+  const statusClass = statusClasses[status] || "";
   const firstEdu = educations[0];
   const firstExp = experiences[0];
 
@@ -282,7 +289,12 @@ const CandidateDetail = () => {
             Tải CV
           </button>
         )}
-        <button className="cd-btn cd-btn--schedule">Lên lịch phỏng vấn</button>
+        <button
+          className="cd-btn cd-btn--schedule"
+          onClick={() => navigate(`/applications/${id}/lên lịch`)}
+        >
+          Lên lịch phỏng vấn
+        </button>
         <button
           className="cd-btn cd-btn--verify"
           onClick={() => handleVerify(personal.githubLink, id)}

@@ -5,6 +5,7 @@ import routeDashboard from "./admin/routeDashboard";
 import routeUser from "./admin/routeUser";
 import routeAiConfig from "./admin/routeAiConfig";
 import routeStatistics from "./admin/routeStatistics";
+import routeInterviewSchedule from "./admin/routeInterviewSchedule";
 import routeAuth from "./admin/routeAuth";
 import routeClientAuth from "./client/routeClientAuth";
 
@@ -16,6 +17,7 @@ import CandidateManagement from "../pages/client/CandidateManagement/CandidateMa
 
 import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
 import CandidateAIAnalysis from "../pages/client/CandidateManagement/CandidateAIAnalysis";
+import ScheduleInterviewPage from "../pages/client/CandidateManagement/ScheduleInterviewPage";
 
 import JobManagement from "../pages/client/JobManagement/JobManagement";
 import JobCreate from "../pages/client/JobManagement/JobCreate";
@@ -39,6 +41,7 @@ const routes = [
           { path: "upload_cv", element: <UploadCV /> },
           { path: "applications", element: <CandidateManagement /> },
           { path: "applications/:id", element: <CandidateDetail /> },
+          { path: "applications/:id/lên lịch", element: <ScheduleInterviewPage /> },
           { path: "applications/:id/ai-analysis", element: <CandidateAIAnalysis /> },
 
           { path: "jobs", element: <JobManagement /> },
@@ -76,7 +79,7 @@ const routes = [
       {
         path: "/admin",
         element: <LayoutDefault />,
-        children: [routeDashboard, routeUser, routeAiConfig, routeStatistics],
+        children: [routeDashboard, routeUser, routeAiConfig, routeStatistics, routeInterviewSchedule],
       },
     ],
   },

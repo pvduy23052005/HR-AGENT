@@ -1,0 +1,372 @@
+/* Schedule Interview Page Styles */
+
+.schedule-interview-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.sip-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.sip-back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-5px);
+}
+
+.sip-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+
+.sip-left,
+.sip-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sip-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sip-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+/* Candidate Info */
+.sip-candidate-info {
+  background: white;
+}
+
+.sip-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sip-info-item:last-child {
+  border-bottom: none;
+}
+
+.sip-info-item label {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.sip-info-value {
+  font-weight: 600;
+  color: #1f2937;
+  max-width: 50%;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* Tips */
+.sip-tips {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #fcd34d;
+}
+
+.sip-tips .sip-card-title {
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.sip-tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sip-tips-list li {
+  padding: 10px 0;
+  color: #78350f;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sip-tips-list li:before {
+  content: "✓";
+  color: #92400e;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Form */
+.sip-form-card {
+  background: white;
+  grid-column: span 1;
+}
+
+.sip-form-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sip-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sip-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sip-form-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sip-required {
+  color: #ef4444;
+  font-size: 16px;
+}
+
+.sip-form-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sip-form-input {
+  width: 100%;
+  padding: 12px 16px 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.sip-form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.sip-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.sip-form-input-wrap--readonly {
+  background: #f9fafb;
+}
+
+.sip-form-readonly {
+  padding: 12px 16px;
+  color: #374151;
+  word-break: break-all;
+}
+
+.sip-form-icon {
+  position: absolute;
+  right: 12px;
+  font-size: 18px;
+  pointer-events: none;
+  color: #6b7280;
+}
+
+.sip-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sip-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  flex: 1;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sip-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sip-btn--cancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.sip-btn--cancel:hover:not(:disabled) {
+  background: #d1d5db;
+}
+
+.sip-btn--submit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.sip-btn--submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.sip-form-note {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 12px;
+}
+
+.sip-form-note p {
+  margin: 0;
+  color: #047857;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sip-loading,
+.sip-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sip-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sip-form-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-interview-page {
+    padding: 12px;
+  }
+
+  .sip-container {
+    gap: 16px;
+  }
+
+  .sip-card {
+    padding: 16px;
+  }
+
+  .sip-form-title {
+    font-size: 20px;
+  }
+
+  .sip-form-actions {
+    flex-direction: column;
+  }
+
+  .sip-btn {
+    width: 100%;
+  }
+
+  .sip-info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .sip-info-value {
+    max-width: 100%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .schedule-interview-page {
+    padding: 8px;
+  }
+
+  .sip-back-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sip-card {
+    padding: 12px;
+  }
+
+  .sip-form-title {
+    font-size: 18px;
+  }
+
+  .sip-card-title {
+    font-size: 16px;
+  }
+}

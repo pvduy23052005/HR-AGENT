@@ -1,0 +1,173 @@
+/* Interview Schedule List Styles */
+
+.interview-schedule-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.isl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.isl-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.isl-refresh-btn {
+  padding: 10px 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.isl-refresh-btn:hover:not(:disabled) {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
+.isl-refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.isl-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.isl-table-wrapper {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.isl-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.isl-table thead {
+  background: #f3f4f6;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.isl-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.isl-table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background 0.2s ease;
+}
+
+.isl-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.isl-table td {
+  padding: 15px;
+  color: #374151;
+  font-size: 14px;
+}
+
+.isl-candidate-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.isl-address {
+  color: #6b7280;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.isl-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.isl-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.isl-btn--detail {
+  background: #e0e7ff;
+  color: #3b82f6;
+ 
+}
+
+.isl-btn--detail:hover {
+  background: #c7d2fe;
+  transform: scale(1.1);
+}
+
+.isl-btn--delete {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.isl-btn--delete:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .interview-schedule-container {
+    padding: 15px;
+  }
+
+  .isl-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .isl-header h1 {
+    font-size: 24px;
+  }
+
+  .isl-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .isl-address {
+    max-width: 150px;
+  }
+}

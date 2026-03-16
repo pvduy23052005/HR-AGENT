@@ -193,6 +193,16 @@
   color: #ef4444;
 }
 
+.candidate-page__status.status-unanalyzed {
+  background: rgba(156, 163, 175, 0.15);
+  color: #6b7280;
+}
+
+.candidate-page__status.status-scheduled {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
 .candidate-page__status.status-interview {
   background: rgba(59, 130, 246, 0.1);
   color: #2563eb;
