@@ -86,8 +86,10 @@
 .cd-field__value a:hover { text-decoration: underline; }
 
 /* Status value */
-.cd-field__value.status-verified { color: #16a34a; font-weight: 600; }
-.cd-field__value.status-risk     { color: #ef4444; font-weight: 600; }
+.cd-field__value.status-verified    { color: #16a34a; font-weight: 600; }
+.cd-field__value.status-risk        { color: #ef4444; font-weight: 600; }
+.cd-field__value.status-unanalyzed  { color: #6b7280; font-weight: 600; }
+.cd-field__value.status-scheduled   { color: #2563eb; font-weight: 600; }
 
 /* Select variant */
 .cd-field__row--select {

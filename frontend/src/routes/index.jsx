@@ -5,6 +5,7 @@ import routeDashboard from "./admin/routeDashboard";
 import routeUser from "./admin/routeUser";
 import routeAiConfig from "./admin/routeAiConfig";
 import routeStatistics from "./admin/routeStatistics";
+import routeInterviewSchedule from "./admin/routeInterviewSchedule";
 import routeAuth from "./admin/routeAuth";
 import routeClientAuth from "./client/routeClientAuth";
 
@@ -15,7 +16,11 @@ import Dashbroad from "../pages/client/dashbroad/dashbroad";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
 
 import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
+import VerificationDetail from "../pages/client/VerificationDetail";
 import CandidateAIAnalysis from "../pages/client/CandidateManagement/CandidateAIAnalysis";
+import ScheduleInterviewPage from "../pages/client/CandidateManagement/ScheduleInterviewPage";
+import EmailTemplates from "../pages/client/EmailTemplates";
+import EmailDetail from "../pages/client/EmailDetail";
 
 import JobManagement from "../pages/client/JobManagement/JobManagement";
 import JobCreate from "../pages/client/JobManagement/JobCreate";
@@ -38,7 +43,11 @@ const routes = [
 
           { path: "upload_cv", element: <UploadCV /> },
           { path: "applications", element: <CandidateManagement /> },
+          { path: "applications/emails", element: <EmailTemplates /> },
+          { path: "applications/emails/:id/detail", element: <EmailDetail /> },
           { path: "applications/:id", element: <CandidateDetail /> },
+          { path: "applications/:id/certy", element: <VerificationDetail /> },
+          { path: "applications/:id/lên lịch", element: <ScheduleInterviewPage /> },
           { path: "applications/:id/ai-analysis", element: <CandidateAIAnalysis /> },
 
           { path: "jobs", element: <JobManagement /> },
@@ -76,7 +85,7 @@ const routes = [
       {
         path: "/admin",
         element: <LayoutDefault />,
-        children: [routeDashboard, routeUser, routeAiConfig, routeStatistics],
+        children: [routeDashboard, routeUser, routeAiConfig, routeStatistics, routeInterviewSchedule],
       },
     ],
   },

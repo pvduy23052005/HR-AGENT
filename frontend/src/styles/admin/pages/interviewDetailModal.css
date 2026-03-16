@@ -1,0 +1,216 @@
+/* Interview Detail Modal Styles */
+
+.idm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.idm-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.idm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.idm-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.idm-close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.idm-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.idm-body {
+  padding: 24px;
+}
+
+.idm-field {
+  margin-bottom: 20px;
+}
+
+.idm-label {
+  display: block;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.idm-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.idm-input {
+  width: 100%;
+  padding: 12px 16px 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.idm-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.idm-input-wrap--readonly {
+  background: #f9fafb;
+}
+
+.idm-readonly-text {
+  padding: 12px 16px;
+  color: #374151;
+  word-break: break-word;
+}
+
+.idm-status-badge {
+  padding: 12px 16px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.idm-icon {
+  position: absolute;
+  right: 12px;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.idm-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid #f0f0f0;
+  background: #f9fafb;
+  flex-wrap: wrap;
+}
+
+.idm-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.idm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.idm-btn--cancel {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.idm-btn--cancel:hover:not(:disabled) {
+  background: #d1d5db;
+}
+
+.idm-btn--save {
+  background: #10b981;
+  color: white;
+}
+
+.idm-btn--save:hover:not(:disabled) {
+  background: #059669;
+}
+
+.idm-btn--edit {
+  background: #3b82f6;
+  color: white;
+}
+
+.idm-btn--edit:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .idm-modal {
+    max-width: 95vw;
+  }
+
+  .idm-header {
+    padding: 16px;
+  }
+
+  .idm-title {
+    font-size: 18px;
+  }
+
+  .idm-body {
+    padding: 16px;
+  }
+
+  .idm-footer {
+    padding: 16px;
+  }
+
+  .idm-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}

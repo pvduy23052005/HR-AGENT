@@ -43,8 +43,7 @@ const CandidateManagement = () => {
         );
       const statusMatch =
         filterStatus === "all" ||
-        (filterStatus === "active" && c.status === true) ||
-        (filterStatus === "inactive" && c.status === false);
+        c.status === filterStatus;
       return skillMatch && statusMatch;
     });
   }, [candidates, searchSkill, searchExp, filterStatus]);
@@ -68,13 +67,23 @@ const CandidateManagement = () => {
   };
 
   const getStatusLabel = (status) => {
-    if (status === true) return "Đã kiểm chứng";
-    return "Rủi ro";
+    const labels = {
+      unanalyzed: "Chưa phân tích",
+      analyzed: "Đã phân tích",
+      scheduled: "Đã lên lịch",
+      risky: "Rủi ro",
+    };
+    return labels[status] || status || "—";
   };
 
   const getStatusClass = (status) => {
-    if (status === true) return "status-verified";
-    return "status-risk";
+    const classes = {
+      unanalyzed: "status-unanalyzed",
+      analyzed: "status-verified",
+      scheduled: "status-scheduled",
+      risky: "status-risk",
+    };
+    return classes[status] || "";
   };
 
   const formatDate = (dateStr) => {
@@ -125,8 +134,10 @@ const CandidateManagement = () => {
           onChange={(e) => setFilterStatus(e.target.value)}
         >
           <option value="all">Tất cả trạng thái</option>
-          <option value="active">Đã kiểm chứng</option>
-          <option value="inactive">Rủi ro</option>
+          <option value="unanalyzed">Chưa phân tích</option>
+          <option value="analyzed">Đã phân tích</option>
+          <option value="scheduled">Đã lên lịch</option>
+          <option value="risky">Rủi ro</option>
         </select>
         <button className="candidate-page__btn-search" onClick={handleSearch}>
           Tìm kiếm
@@ -143,8 +154,8 @@ const CandidateManagement = () => {
               <tr>
                 <th style={{ width: 40 }}></th>
                 <th>Ứng viên</th>
-                <th>Chức danh</th>
-                <th>Năm kinh nghiệm</th>
+                <th>Kỹ năng nổi bật</th>
+                <th>Số kỹ năng</th>
                 <th>Ngày Lưu</th>
                 <th>Trạng thái</th>
               </tr>
@@ -158,11 +169,7 @@ const CandidateManagement = () => {
                 </tr>
               ) : (
                 paginatedData.map((c) => (
-                  <tr
-                    key={c.id}
-                    onClick={() => navigate(`/applications/${c.id}`)}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <tr key={c.id}>
                     <td>
                       <input
                         type="checkbox"
@@ -170,7 +177,10 @@ const CandidateManagement = () => {
                         onChange={() => toggleSelect(c.id)}
                       />
                     </td>
-                    <td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div className="candidate-page__user-cell">
                         <div className="candidate-page__avatar">
                           {getInitial(c.fullName)}
@@ -178,10 +188,28 @@ const CandidateManagement = () => {
                         <span>{c.fullName}</span>
                       </div>
                     </td>
-                    <td>{(c.topSkills || []).slice(0, 2).join(", ") || "—"}</td>
-                    <td>{c.topSkills?.length || 0}</td>
-                    <td>{formatDate(c.appliedAt)}</td>
-                    <td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {(c.topSkills || []).slice(0, 2).join(", ") || "—"}
+                    </td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {c.topSkills?.length || 0}
+                    </td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {formatDate(c.appliedAt)}
+                    </td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <span
                         className={`candidate-page__status ${getStatusClass(
                           c.status
@@ -213,7 +241,18 @@ const CandidateManagement = () => {
             </button>
           ))}
         </div>
-        <button className="candidate-page__btn-email">
+        <button 
+          className="candidate-page__btn-email"
+          onClick={() => {
+            if (selectedIds.length === 0) {
+              toast.warning("Vui lòng chọn ít nhất một ứng viên!");
+              return;
+            }
+            // Lưu selectedIds vào sessionStorage để dùng ở trang email
+            sessionStorage.setItem("selectedCandidates", JSON.stringify(selectedIds));
+            navigate("/applications/emails");
+          }}
+        >
           ✉ Gửi email
         </button>
       </div>
