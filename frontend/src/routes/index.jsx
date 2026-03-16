@@ -19,6 +19,8 @@ import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail
 import VerificationDetail from "../pages/client/VerificationDetail";
 import CandidateAIAnalysis from "../pages/client/CandidateManagement/CandidateAIAnalysis";
 import ScheduleInterviewPage from "../pages/client/CandidateManagement/ScheduleInterviewPage";
+import EmailTemplates from "../pages/client/EmailTemplates";
+import EmailDetail from "../pages/client/EmailDetail";
 
 import JobManagement from "../pages/client/JobManagement/JobManagement";
 import JobCreate from "../pages/client/JobManagement/JobCreate";
@@ -41,6 +43,8 @@ const routes = [
 
           { path: "upload_cv", element: <UploadCV /> },
           { path: "applications", element: <CandidateManagement /> },
+          { path: "applications/emails", element: <EmailTemplates /> },
+          { path: "applications/emails/:id/detail", element: <EmailDetail /> },
           { path: "applications/:id", element: <CandidateDetail /> },
           { path: "applications/:id/certy", element: <VerificationDetail /> },
           { path: "applications/:id/lên lịch", element: <ScheduleInterviewPage /> },

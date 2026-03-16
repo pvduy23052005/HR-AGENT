@@ -169,11 +169,7 @@ const CandidateManagement = () => {
                 </tr>
               ) : (
                 paginatedData.map((c) => (
-                  <tr
-                    key={c.id}
-                    onClick={() => navigate(`/applications/${c.id}`)}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <tr key={c.id}>
                     <td>
                       <input
                         type="checkbox"
@@ -181,7 +177,10 @@ const CandidateManagement = () => {
                         onChange={() => toggleSelect(c.id)}
                       />
                     </td>
-                    <td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <div className="candidate-page__user-cell">
                         <div className="candidate-page__avatar">
                           {getInitial(c.fullName)}
@@ -189,10 +188,28 @@ const CandidateManagement = () => {
                         <span>{c.fullName}</span>
                       </div>
                     </td>
-                    <td>{(c.topSkills || []).slice(0, 2).join(", ") || "—"}</td>
-                    <td>{c.topSkills?.length || 0}</td>
-                    <td>{formatDate(c.appliedAt)}</td>
-                    <td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {(c.topSkills || []).slice(0, 2).join(", ") || "—"}
+                    </td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {c.topSkills?.length || 0}
+                    </td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {formatDate(c.appliedAt)}
+                    </td>
+                    <td
+                      onClick={() => navigate(`/applications/${c.id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <span
                         className={`candidate-page__status ${getStatusClass(
                           c.status
@@ -224,7 +241,18 @@ const CandidateManagement = () => {
             </button>
           ))}
         </div>
-        <button className="candidate-page__btn-email">
+        <button 
+          className="candidate-page__btn-email"
+          onClick={() => {
+            if (selectedIds.length === 0) {
+              toast.warning("Vui lòng chọn ít nhất một ứng viên!");
+              return;
+            }
+            // Lưu selectedIds vào sessionStorage để dùng ở trang email
+            sessionStorage.setItem("selectedCandidates", JSON.stringify(selectedIds));
+            navigate("/applications/emails");
+          }}
+        >
           ✉ Gửi email
         </button>
       </div>
