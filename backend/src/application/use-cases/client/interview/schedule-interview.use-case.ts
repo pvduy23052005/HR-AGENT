@@ -6,6 +6,7 @@ import type { IInterviewScheduleDetail } from '../../../../domain/entities/clien
 import type { IGeminiService } from '../../../../domain/interfaces/services/gemini.service';
 import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
 import { buildInterviewCalendarInvite } from '../../../../infrastructure/external-service/calendarInvite.service';
+import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
 
 export type ScheduleInterviewInput = {
   userId: string;
@@ -93,7 +94,7 @@ export class ScheduleInterviewUseCase {
       },
     ]);
 
-    await this.candidateRepo.updateStatus(input.candidateID, { status: "scheduled" });
+    await this.candidateRepo.updateStatus(input.candidateID, { status: CandidateStatus.SCHEDULED });
 
     return { schedule: created.getDetail(), emailSent };
   }

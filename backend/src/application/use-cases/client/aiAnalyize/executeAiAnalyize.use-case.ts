@@ -3,6 +3,7 @@ import type { IJobRepository } from '../../../../domain/interfaces/client/job.in
 import type { IAiAnalysisRepository } from '../../../../domain/interfaces/client/aiAnalysis.interface';
 import type { IGeminiService } from '../../../../domain/interfaces/services/gemini.service';
 import type { IAiAnalyzeDetail } from '../../../../domain/entities/client/aiAnalyize.entity';
+import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
 
 export interface IAiAnalyzeResult {
   message: string;
@@ -50,7 +51,7 @@ export class ExecuteAiAnalyizeUseCase {
 
     if (!savedAnalysis) throw new Error('Lỗi khi lưu kết quả phân tích.');
 
-    await this.candidateRepo.updateStatus(candidateID, { status: "analyzed" });
+    await this.candidateRepo.updateStatus(candidateID, { status: CandidateStatus.VERIFIED });
     return {
       message: 'Phân tích AI hoàn tất thành công.',
       data: savedAnalysis.getDetail(),

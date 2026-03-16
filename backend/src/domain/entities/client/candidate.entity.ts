@@ -1,3 +1,10 @@
+export enum CandidateStatus {
+  UNVERIFIED = "unverified",
+  SCHEDULED = "scheduled",
+  VERIFIED = "verified",
+  RISKY = "risky",
+}
+
 export interface IPersonal {
   fullName: string;
   email: string;
@@ -40,7 +47,7 @@ export interface ICandidateSummaryProfile {
   cvLink: string;
   topSkills: string[];
   isVerify?: boolean;
-  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
+  status: CandidateStatus;
   appliedAt: Date | undefined;
 }
 
@@ -48,7 +55,7 @@ export interface ICandidateDetailProfile {
   id: string | null;
   jobID: string | null;
   addedBy: string | null;
-  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
+  status: CandidateStatus;
   objective: string;
   personal: IPersonal;
   educations: IEducation[];
@@ -63,7 +70,7 @@ export interface ICandidateProps {
   id?: string | { toString(): string } | null;
   jobID?: string | { toString(): string } | null;
   addedBy?: string | { toString(): string } | null;
-  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
+  status: CandidateStatus;
   objective?: string;
   fullTextContent?: string;
   isVerify?: boolean;
@@ -79,7 +86,7 @@ export class CandidateEntity {
   id: string | null;
   jobID: string | null;
   addedBy: string | null;
-  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
+  status: CandidateStatus;
   objective: string;
   isVerify?: boolean;
   fullTextContent: string;
@@ -94,7 +101,7 @@ export class CandidateEntity {
     id,
     jobID,
     addedBy,
-    status = "unanalyzed",
+    status = CandidateStatus.UNVERIFIED,
     objective = '',
     isVerify,
     fullTextContent = '',

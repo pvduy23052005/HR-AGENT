@@ -1,8 +1,8 @@
-import type { CandidateEntity } from '../../entities/client/candidate.entity';
+import type { CandidateEntity, CandidateStatus } from '../../entities/client/candidate.entity';
 import type { ICandidateData } from '../../../infrastructure/database/repositories/client/candidate.repository';
 
 export interface IStatus {
-  status: "unanalyzed" | "scheduled" | "analyzed" | "risky";
+  status: CandidateStatus;
 }
 
 export interface ICandidateRepository {

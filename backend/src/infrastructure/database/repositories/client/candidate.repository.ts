@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Candidate from '../../models/candidate.model';
-import { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
+import { CandidateEntity, CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
 import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
 import type { IStatus } from '../../../../domain/interfaces/client/candidate.interface';
 
@@ -25,7 +25,7 @@ const mapToEntity = (doc: any | null): CandidateEntity | null => {
 export interface ICandidateData {
   jobID?: string;
   addedBy?: string;
-  status?: boolean;
+  status?: CandidateStatus;
   objective?: string;
   fullTextContent?: string;
   personal?: Record<string, unknown>;

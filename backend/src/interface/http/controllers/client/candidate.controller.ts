@@ -4,6 +4,7 @@ import { GetCandidateDetailUseCase } from '../../../../application/use-cases/cli
 import { UpdateStatusUseCase } from '../../../../application/use-cases/client/candidate/update-status.use-case';
 
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
+import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
 
 const candidateRepository = new CandidateRepository();
 
@@ -70,8 +71,8 @@ export const updateStatus = async (req: Request, res: Response): Promise<void> =
 
     if (!id) throw new Error('ID ứng viên không hợp lệ.');
 
-    const validStatuses = ['unanalyzed', 'scheduled', 'analyzed', 'risky'];
-    if (!validStatuses.includes(status)) {
+    const validStatuses = Object.values(CandidateStatus);
+    if (!validStatuses.includes(status as any)) {
       throw new Error(`Trạng thái không hợp lệ. Các trạng thái cho phép: ${validStatuses.join(', ')}`);
     }
 
