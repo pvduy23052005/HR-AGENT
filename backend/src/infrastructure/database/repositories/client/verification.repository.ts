@@ -50,4 +50,16 @@ export class VerificationRepository implements IVerificationRepository {
     const doc = await Verification.findOne({ candidateId: objectId }).lean();
     return mapToVerificationEntity(doc);
   }
+
+  public async updateVerificationStatus(candidateID: string, isVerified: boolean): Promise<void> {
+    try {
+      const objectId = new mongoose.Types.ObjectId(candidateID);
+      await Verification.updateOne(
+        { candidateId: objectId },
+        { isVerified: isVerified }
+      );
+    } catch (error) {
+      console.log("Error updating verification status", error);
+    }
+  }
 }

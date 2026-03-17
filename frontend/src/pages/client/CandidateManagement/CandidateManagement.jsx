@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { MdSearch } from "react-icons/md";
 import candidateService from "../../../services/client/candidateService";
+import jobService from "../../../services/client/jobService";
 import { toast } from "react-toastify";
 import "../../../styles/client/pages/candidateManagement.css";
 
@@ -9,6 +11,7 @@ const ITEMS_PER_PAGE = 5;
 const CandidateManagement = () => {
   const navigate = useNavigate();
   const [candidates, setCandidates] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchSkill, setSearchSkill] = useState("");
   const [searchExp, setSearchExp] = useState("");
@@ -18,6 +21,7 @@ const CandidateManagement = () => {
 
   useEffect(() => {
     fetchCandidates();
+    fetchJobs();
   }, []);
 
   const fetchCandidates = async () => {
@@ -30,6 +34,15 @@ const CandidateManagement = () => {
       toast.error("Không thể tải danh sách ứng viên!");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchJobs = async () => {
+    try {
+      const res = await jobService.getAll();
+      setJobs(res.jobs || []);
+    } catch (error) {
+      console.error("Lỗi khi tải danh sách job:", error);
     }
   };
 
@@ -97,6 +110,12 @@ const CandidateManagement = () => {
     return name.charAt(0).toUpperCase();
   };
 
+  const getJobTitle = (jobID) => {
+    if (!jobID) return "—";
+    const job = jobs.find((j) => j.id === jobID || j._id === jobID);
+    return job ? job.title : "—";
+  };
+
   const handleSearch = () => {
     setCurrentPage(1);
   };
@@ -111,7 +130,7 @@ const CandidateManagement = () => {
       {/* Search Filters */}
       <div className="candidate-page__filters">
         <div className="candidate-page__filter-input">
-          <span className="filter-icon">🔍</span>
+          <MdSearch className="filter-icon" />
           <input
             type="text"
             placeholder="Kĩ năng"
@@ -120,7 +139,7 @@ const CandidateManagement = () => {
           />
         </div>
         <div className="candidate-page__filter-input">
-          <span className="filter-icon">🔍</span>
+          <MdSearch className="filter-icon" />
           <input
             type="text"
             placeholder="Năm kinh nghiệm"
@@ -154,8 +173,8 @@ const CandidateManagement = () => {
               <tr>
                 <th style={{ width: 40 }}></th>
                 <th>Ứng viên</th>
-                <th>Kỹ năng nổi bật</th>
-                <th>Số kỹ năng</th>
+                <th>Chức danh</th>
+                <th>Năm kinh nghiệm</th>
                 <th>Ngày Lưu</th>
                 <th>Trạng thái</th>
               </tr>
@@ -192,13 +211,13 @@ const CandidateManagement = () => {
                       onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
-                      {(c.topSkills || []).slice(0, 2).join(", ") || "—"}
+                      {getJobTitle(c.jobID)}
                     </td>
                     <td
                       onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
-                      {c.topSkills?.length || 0}
+                      {c.yearsOfExperience || c.experiences?.length || 0}
                     </td>
                     <td
                       onClick={() => navigate(`/candidates/${c.id}`)}
@@ -255,7 +274,7 @@ const CandidateManagement = () => {
               });
             }}
           >
-            ✉ Gửi email
+           Gửi email
           </button>
         </div>
       </div>

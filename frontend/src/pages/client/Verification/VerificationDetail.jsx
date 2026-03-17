@@ -41,9 +41,8 @@ const VerificationDetail = () => {
     setConfirming(true);
     
     try {
-      toast.info(
-        `Đang xử lý: ${status === "trusted" ? "Xác nhận uy tín" : "Gắn cờ rủi ro"}...`,
-      );
+      const message = status === "trusted" ? "Xác nhận uy tín..." : "Gắn cờ rủi ro...";
+      toast.info(message);
 
       // Gọi API để xác nhận status (trusted/risky)
       const response = await verificationService.confirmVerification(id, {
@@ -53,9 +52,9 @@ const VerificationDetail = () => {
 
       if (response.success) {
         if (status === "trusted") {
-          toast.success("✅ Xác nhận uy tín thành công!");
+          toast.success("Xác nhận uy tín thành công!");
         } else {
-          toast.warning("⚠️ Đã gắn cờ rủi ro cho ứng viên này!");
+          toast.warning("Đã gắn cờ rủi ro cho ứng viên này!");
         }
 
         setTimeout(() => {
@@ -77,7 +76,6 @@ const VerificationDetail = () => {
     return (
       <div className="vd-page">
         <div className="vd-loading">
-          <span style={{ fontSize: 28 }}>⏳</span>
           <span>Đang tải dữ liệu kiểm chứng...</span>
         </div>
       </div>
@@ -88,7 +86,6 @@ const VerificationDetail = () => {
     return (
       <div className="vd-page">
         <div className="vd-error">
-          <span style={{ fontSize: 28 }}>⚠️</span>
           <span>Không tìm thấy dữ liệu kiểm chứng!</span>
         </div>
       </div>
@@ -116,8 +113,8 @@ const VerificationDetail = () => {
       </button>
 
       <div className="vd-header">
-        <h1>Kiểm chứng hộ số ứng viên</h1>
-        <p>Xác nhận uy tín hoặc gắn cờ rủi ro dựa trên GitHub profile</p>
+        <h1>Kiểm chứng ứng viên</h1>
+        <p>Xem chi tiết kiểm chứng từ GitHub</p>
       </div>
 
       <div className="vd-card">
@@ -136,35 +133,21 @@ const VerificationDetail = () => {
         {/* Độ tin cậy */}
         <div className="vd-field">
           <label className="vd-label">Độ tin cậy</label>
-          <div className="vd-trust-score">
-            <div className="vd-score-bar">
-              <div
-                className="vd-score-fill"
-                style={{
-                  width: `${trustScore}%`,
-                  backgroundColor:
-                    trustScore >= 75
-                      ? "#10b981"
-                      : trustScore >= 50
-                        ? "#f59e0b"
-                        : "#ef4444",
-                }}
-              ></div>
-            </div>
-            <span className="vd-score-text">{trustScore}%</span>
+          <div className="vd-value">
+            {trustScore}%
+            <span style={{ marginLeft: "12px", fontSize: "14px", color: "#666" }}>
+              {trustScore >= 75
+                ? "(Ứng viên có kỹ năng solid)"
+                : trustScore >= 50
+                  ? "(Ứng viên có kinh nghiệm nhưng chưa đủ nổi bật)"
+                  : "(Ứng viên chưa có nhiều kinh nghiệm công khai)"}
+            </span>
           </div>
-          <p className="vd-score-reason">
-            {trustScore >= 75
-              ? "✅ Ứng viên có kỹ năng solid"
-              : trustScore >= 50
-                ? "⚠️ Ứng viên có kinh nghiệm nhưng chưa đủ nổi bật"
-                : "❌ Ứng viên chưa có nhiều kinh nghiệm công khai"}
-          </p>
         </div>
 
-        {/* Chi tiết sai lịch */}
+        {/* Chi tiết phân tích */}
         <div className="vd-field">
-          <label className="vd-label">Chi tiết sai lịch</label>
+          <label className="vd-label">Chi tiết phân tích</label>
           <div className="vd-value">{verification.aiReasoning || "—"}</div>
         </div>
 
@@ -180,8 +163,7 @@ const VerificationDetail = () => {
               github.com/{verification.name}
             </a>
             <span className="vd-stats">
-              ⭐ {verification.githubStars} stars | 📚{" "}
-              {verification.topLanguages?.length || 0} languages
+              Stars: {verification.githubStars} | Languages: {verification.topLanguages?.length || 0}
             </span>
           </div>
         </div>
@@ -200,7 +182,7 @@ const VerificationDetail = () => {
           </div>
         )}
 
-        {/* Top Projects */}
+        {/* Dự án nổi bật */}
         {verification.probedProjects &&
           verification.probedProjects.length > 0 && (
             <div className="vd-field">
@@ -216,7 +198,7 @@ const VerificationDetail = () => {
                         <span className="vd-lang">{project.language}</span>
                       )}
                       {project.stars > 0 && (
-                        <span className="vd-stars">⭐ {project.stars}</span>
+                        <span className="vd-stars">Stars: {project.stars}</span>
                       )}
                     </span>
                   </div>
@@ -246,7 +228,7 @@ const VerificationDetail = () => {
             selectedStatus === "risky" ? { opacity: 0.6, cursor: "wait" } : {}
           }
         >
-          {selectedStatus === "risky" ? "⏳ Đang xử lý..." : "🚩 Gắn cờ rủi ro"}
+          {selectedStatus === "risky" ? "Đang xử lý..." : "Gắn cờ rủi ro"}
         </button>
         <button
           className="vd-btn vd-btn--trusted"
@@ -257,8 +239,8 @@ const VerificationDetail = () => {
           }
         >
           {selectedStatus === "trusted"
-            ? "⏳ Đang xử lý..."
-            : "✅ Xác nhận uy tín"}
+            ? "Đang xử lý..."
+            : "Xác nhận uy tín"}
         </button>
       </div>
     </div>

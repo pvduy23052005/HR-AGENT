@@ -47,11 +47,11 @@ function ClientSidebar() {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       toast.success("Đăng xuất thành công!");
-      navigate("/auth/login");
+      navigate("/");
     } catch {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      navigate("/auth/login");
+      navigate("/");
     }
   };
 
@@ -86,14 +86,15 @@ function ClientSidebar() {
             </span>
             <span className="client-sider__footer-role">Ứng viên</span>
           </div>
-          <button
-            className="client-sider__footer-logout"
-            onClick={handleLogout}
-            title="Đăng xuất"
-          >
-            <MdLogout />
-          </button>
         </div>
+        <button
+          className="client-sider__footer-logout"
+          onClick={handleLogout}
+          title="Đăng xuất"
+        >
+          <MdLogout />
+          <span>Đăng xuất</span>
+        </button>
       </div>
     </aside>
   );

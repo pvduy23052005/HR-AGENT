@@ -125,37 +125,7 @@ function ClientForgotPassword() {
 
 
   return (
-    <div className="client-auth">
-      <div className="client-auth__container">
-        {/* Left - Branding */}
-        <div className="client-auth__branding">
-          <div className="client-auth__branding-content">
-            <div className="client-auth__branding-logo">
-              <div className="client-auth__branding-logo-icon">N</div>
-              <span className="client-auth__branding-logo-text">Hr-agent</span>
-            </div>
-            <h2 className="client-auth__branding-title">
-              Nền tảng tuyển dụng <br /> thông minh
-            </h2>
-            <div className="client-auth__branding-features">
-              <div className="client-auth__branding-feature">
-                <span className="client-auth__branding-feature-dot"></span>
-                Tìm kiếm công việc phù hợp
-              </div>
-              <div className="client-auth__branding-feature">
-                <span className="client-auth__branding-feature-dot"></span>
-                Quản lý hồ sơ ứng tuyển
-              </div>
-              <div className="client-auth__branding-feature">
-                <span className="client-auth__branding-feature-dot"></span>
-                Nhận thông báo mới nhất
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right - Form */}
-        <div className="client-auth__form-wrapper">
+    <>
           {/* Step 1: Enter Email */}
           {step === 1 && (
             <form
@@ -395,9 +365,7 @@ function ClientForgotPassword() {
               </button>
             </form>
           )}
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 

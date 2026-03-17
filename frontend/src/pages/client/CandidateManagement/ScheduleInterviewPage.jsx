@@ -90,167 +90,81 @@ const ScheduleInterviewPage = () => {
         ← Quay lại
       </button>
 
+      <div className="sip-header">
+        <h1 className="sip-header__title">Tạo lịch phỏng vấn</h1>
+      </div>
+
       <div className="sip-container">
-        {/* Left Side - Info */}
-        <div className="sip-left">
-          <div className="sip-card sip-candidate-info">
-            <h2 className="sip-card-title">ℹ️ Thông Tin Ứng Viên</h2>
-            <div className="sip-info-item">
-              <label>Họ Tên</label>
-              <span className="sip-info-value">
-                {candidate?.personal?.fullName || "—"}
-              </span>
+        <div className="sip-card sip-form-card">
+          <h1 className="sip-form-title">
+            Phỏng vấn: {candidate?.personal?.fullName}
+          </h1>
+
+          <form onSubmit={handleSubmit} className="sip-form">
+            {/* Thời gian */}
+            <div className="sip-form-group">
+              <label htmlFor="time" className="sip-form-label">
+                Thời gian đề xuất:
+              </label>
+              <div className="sip-form-input-wrap">
+                <input
+                  id="time"
+                  type="datetime-local"
+                  className="sip-form-input"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  required
+                />
+              </div>
             </div>
-            <div className="sip-info-item">
-              <label>Email</label>
-              <span className="sip-info-value">
-                {candidate?.personal?.email || "—"}
-              </span>
+
+            {/* Người tham gia */}
+            <div className="sip-form-group">
+              <label className="sip-form-label">Người tham gia:</label>
+              <div className="sip-form-input-wrap sip-form-input-wrap--readonly">
+                <span className="sip-form-readonly">
+                  {candidate?.personal?.email || "—"}
+                </span>
+              </div>
             </div>
-            <div className="sip-info-item">
-              <label>Điện Thoại</label>
-              <span className="sip-info-value">
-                {candidate?.personal?.phone || "—"}
-              </span>
+
+            {/* Địa điểm / Link */}
+            <div className="sip-form-group">
+              <label htmlFor="address" className="sip-form-label">
+                Địa điểm/ Link:
+              </label>
+              <div className="sip-form-input-wrap">
+                <input
+                  id="address"
+                  type="text"
+                  className="sip-form-input"
+                  placeholder="https://meet.google.com/... hoặc địa chỉ văn phòng"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                />
+              </div>
             </div>
-            <div className="sip-info-item">
-              <label>Vị Trí Ứng Tuyển</label>
-              <span className="sip-info-value">
-                {candidate?.job?.title || "—"}
-              </span>
+
+            {/* Buttons */}
+            <div className="sip-form-actions">
+              <button
+                type="button"
+                className="sip-btn sip-btn--cancel"
+                onClick={() => navigate(-1)}
+                disabled={loading}
+              >
+                Huỷ
+              </button>
+              <button
+                type="submit"
+                className="sip-btn sip-btn--submit"
+                disabled={loading}
+              >
+                {loading ? "Đang gửi..." : "Gửi lời mời"}
+              </button>
             </div>
-          </div>
-
-          <div className="sip-card sip-tips">
-            <h3 className="sip-card-title">💡 Gợi Ý</h3>
-            <ul className="sip-tips-list">
-              <li>Chọn thời gian phù hợp với cả 2 bên</li>
-              <li>Chuẩn bị một danh sách các câu hỏi</li>
-              <li>Kiểm tra đường truyền internet trước cuộc họp</li>
-              <li>Gửi lịch sớm để ứng viên có thời gian chuẩn bị</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Right Side - Form */}
-        <div className="sip-right">
-          <div className="sip-card sip-form-card">
-            <h1 className="sip-form-title">
-              📅 Lên Lịch Phỏng Vấn: {candidate?.personal?.fullName}
-            </h1>
-
-            <form onSubmit={handleSubmit} className="sip-form">
-              {/* Thời gian */}
-              <div className="sip-form-group">
-                <label htmlFor="time" className="sip-form-label">
-                  Thời gian đề xuất <span className="sip-required">*</span>
-                </label>
-                <div className="sip-form-input-wrap">
-                  <input
-                    id="time"
-                    type="datetime-local"
-                    className="sip-form-input"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    required
-                  />
-                  <span className="sip-form-icon">📅</span>
-                </div>
-              </div>
-
-              {/* Thời lượng */}
-              <div className="sip-form-group">
-                <label htmlFor="duration" className="sip-form-label">
-                  Thời lượng (phút)
-                </label>
-                <div className="sip-form-input-wrap">
-                  <select
-                    id="duration"
-                    className="sip-form-input"
-                    value={durationMinutes}
-                    onChange={(e) => setDurationMinutes(e.target.value)}
-                  >
-                    <option value={30}>30 phút</option>
-                    <option value={45}>45 phút</option>
-                    <option value={60}>60 phút</option>
-                    <option value={90}>90 phút</option>
-                    <option value={120}>120 phút</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Người tham gia */}
-              <div className="sip-form-group">
-                <label className="sip-form-label">Người tham gia</label>
-                <div className="sip-form-input-wrap sip-form-input-wrap--readonly">
-                  <span className="sip-form-readonly">
-                    {candidate?.personal?.email || "—"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Địa điểm / Link */}
-              <div className="sip-form-group">
-                <label htmlFor="address" className="sip-form-label">
-                  Địa điểm / Link <span className="sip-required">*</span>
-                </label>
-                <div className="sip-form-input-wrap">
-                  <input
-                    id="address"
-                    type="text"
-                    className="sip-form-input"
-                    placeholder="https://meet.google.com/... hoặc địa chỉ văn phòng"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    required
-                  />
-                  <span className="sip-form-icon">🔗</span>
-                </div>
-              </div>
-
-              {/* Ghi chú */}
-              <div className="sip-form-group">
-                <label htmlFor="notes" className="sip-form-label">
-                  Ghi chú (tuỳ chọn)
-                </label>
-                <div className="sip-form-input-wrap">
-                  <textarea
-                    id="notes"
-                    className="sip-form-input sip-form-textarea"
-                    placeholder="VD: Chuẩn bị thảo luận về kỹ năng leadership, background kinh nghiệm..."
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    rows={4}
-                  />
-                </div>
-              </div>
-
-              {/* Buttons */}
-              <div className="sip-form-actions">
-                <button
-                  type="button"
-                  className="sip-btn sip-btn--cancel"
-                  onClick={() => navigate(-1)}
-                  disabled={loading}
-                >
-                  Huỷ
-                </button>
-                <button
-                  type="submit"
-                  className="sip-btn sip-btn--submit"
-                  disabled={loading}
-                >
-                  {loading ? "Đang gửi..." : "✉️ Gửi lời mời"}
-                </button>
-              </div>
-            </form>
-
-            <div className="sip-form-note">
-              <p>
-                ✓ Hệ thống sẽ tự động gửi email mời và tạo sự kiện trên lịch của ứng viên
-              </p>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
