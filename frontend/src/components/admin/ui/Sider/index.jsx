@@ -1,16 +1,12 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   MdDashboard,
   MdPeople,
   MdSmartToy,
   MdBarChart,
-  MdLogout,
   MdSchedule,
 } from "react-icons/md";
-import { useContext } from "react";
 import "../../../../styles/admin/ui/sider.css";
-import authServiceAPI from "../../../../services/admin/authService";
-import { AppContext } from "../../../../context/admin/app/AppContext";
 
 const menuItems = [
   { path: "/admin/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
@@ -21,22 +17,6 @@ const menuItems = [
 ];
 
 function Sider() {
-  const navigate = useNavigate();
-  const { logout } = useContext(AppContext);
-
-  const handleLogout = async () => {
-    try {
-      const res = await authServiceAPI.logout();
-      console.log(res);
-      if (res.success) {
-        logout();
-        navigate("/admin/auth/login");
-      }
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
   return (
     <aside className="sider">
       <div className="sider__logo">
@@ -58,23 +38,6 @@ function Sider() {
           </NavLink>
         ))}
       </nav>
-
-      <div className="sider__footer">
-        <div className="sider__footer-user">
-          <div className="sider__footer-avatar">A</div>
-          <div className="sider__footer-info">
-            <span className="sider__footer-name">Admin</span>
-            <span className="sider__footer-role">Quản trị viên</span>
-          </div>
-          <button
-            className="sider__footer-logout"
-            onClick={handleLogout}
-            title="Đăng xuất"
-          >
-            <MdLogout />
-          </button>
-        </div>
-      </div>
     </aside>
   );
 }

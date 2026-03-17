@@ -105,11 +105,21 @@
   color: var(--color-text-placeholder);
 }
 
+/* Chevron icon */
+.header__chevron {
+  color: var(--color-text-placeholder);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.header__chevron--open {
+  transform: rotate(180deg);
+}
+
 /* User Dropdown */
 .header__user {
   position: relative;
-  padding-bottom: 8px; /* Bridge the gap */
-  margin-bottom: -8px; /* Compensate layout */
+  user-select: none;
 }
 
 /* Ensure the hover area extends to the dropdown */

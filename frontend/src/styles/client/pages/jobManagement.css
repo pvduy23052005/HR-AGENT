@@ -139,6 +139,7 @@
 
 .job-card:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+  border-color: rgba(0, 135, 241, 0.25);
   transform: translateY(-3px);
 }
 
@@ -255,6 +256,21 @@
   background: rgba(239, 68, 68, 0.08);
   border-color: var(--color-error);
   color: var(--color-error);
+}
+
+/* Delete button – red tinted by default */
+.job-card__action-btn--delete {
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+  padding: 6px 10px;
+}
+
+.job-card__action-btn--delete:hover {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: #ef4444;
+  color: #dc2626;
+  transform: scale(1.05);
 }
 
 /* ================================================================

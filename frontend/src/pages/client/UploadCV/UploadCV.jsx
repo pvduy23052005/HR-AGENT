@@ -8,6 +8,8 @@ import "../../../styles/client/pages/uploadCV.css";
 const UploadCV = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const userDropdownRef = useRef(null);
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -16,6 +18,7 @@ const UploadCV = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [jobList, setJobList] = useState([]);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   // Load job list for dropdown from API
   useEffect(() => {
@@ -38,6 +41,19 @@ const UploadCV = () => {
     fetchJobs();
   }, []);
 
+  // Close user dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
+        setShowUserDropdown(false);
+      }
+    };
+    if (showUserDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showUserDropdown]);
+
   const userName = (() => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -47,7 +63,11 @@ const UploadCV = () => {
     }
   })();
 
+  // Get first letter of name for avatar
+  const avatarLetter = userName.charAt(0).toUpperCase();
+
   const handleLogout = () => {
+    setShowUserDropdown(false);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     toast.success("Đăng xuất thành công!");
@@ -93,12 +113,16 @@ const UploadCV = () => {
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback((e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    handleFileSelect(file);
-  }, []);
+  const handleDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      setIsDragging(false);
+      const file = e.dataTransfer.files[0];
+      handleFileSelect(file);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const handleInputChange = (e) => {
     const file = e.target.files[0];
@@ -224,49 +248,113 @@ const UploadCV = () => {
         }}
       >
         {" "}
-        send request
+
       </button>
-      {/* Header */}
+
+      {/* ── Header ── */}
       <header className="upload-cv-header">
         <div className="logo">
           <div className="logo-icon">N</div>
           <span className="logo-text">Hr-agent</span>
         </div>
-        <div className="user-info">
-          <span className="user-name">Xin chào, {userName}</span>
-          <button className="btn-logout" onClick={handleLogout}>
-            Đăng xuất
-          </button>
+
+        {/* User dropdown trigger */}
+        <div
+          className={`ucv-user-trigger${showUserDropdown ? " ucv-user-trigger--open" : ""}`}
+          ref={userDropdownRef}
+          onClick={() => setShowUserDropdown((prev) => !prev)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && setShowUserDropdown((p) => !p)}
+        >
+          {/* Avatar circle */}
+          {/* <div className="ucv-avatar">{avatarLetter}</div> */}
+
+          {/* Name + role */}
+          {/* <div className="ucv-user-info">
+            <span className="ucv-user-name">{userName}</span>
+            <span className="ucv-user-role">Ứng viên</span>
+          </div> */}
+
+          {/* Chevron */}
+          <svg
+            className={`ucv-chevron${showUserDropdown ? " ucv-chevron--open" : ""}`}
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+
+          {/* Dropdown menu */}
+          {/* {showUserDropdown && (
+            <div className="ucv-dropdown" onClick={(e) => e.stopPropagation()}>
+              <div className="ucv-dropdown__header">
+                <span className="ucv-dropdown__name">{userName}</span>
+                <span className="ucv-dropdown__role">Ứng viên</span>
+              </div>
+              <div className="ucv-dropdown__divider" />
+              <button className="ucv-dropdown__item ucv-dropdown__item--danger" onClick={handleLogout}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Đăng xuất
+              </button>
+            </div>
+          )} */}
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* ── Main Content ── */}
       <main className="upload-cv-content">
         <h1 className="upload-cv-title">Upload CV của bạn</h1>
         <p className="upload-cv-subtitle">
           Tải lên hồ sơ để ứng tuyển các vị trí phù hợp
         </p>
 
-        {/* Job Dropdown */}
+        {/* ── Job Dropdown ── */}
         <div className="job-id-input-wrapper">
           <label className="job-id-label">
             Vị trí ứng tuyển
-            <select
-              className="job-id-input job-id-select"
-              value={jobId}
-              onChange={(e) => setJobId(e.target.value)}
-            >
-              <option value="">-- Chọn công việc --</option>
-              {jobList.map((job) => (
-                <option key={job.id} value={job.id}>
-                  {job.title}
-                </option>
-              ))}
-            </select>
+            <div className="job-select-wrap">
+              <select
+                className="job-id-select"
+                value={jobId}
+                onChange={(e) => setJobId(e.target.value)}
+              >
+                <option value="">-- Chọn công việc --</option>
+                {jobList.map((job) => (
+                  <option key={job.id} value={job.id}>
+                    {job.title}
+                  </option>
+                ))}
+              </select>
+              {/* Custom chevron overlay */}
+              <svg
+                className="job-select-chevron"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
           </label>
         </div>
 
-        {/* Drop Zone */}
+        {/* ── Drop Zone ── */}
         <div
           className={`upload-dropzone ${isDragging ? "dragging" : ""}`}
           onDragOver={handleDragOver}
@@ -293,7 +381,7 @@ const UploadCV = () => {
           />
         </div>
 
-        {/* File Preview */}
+        {/* ── File Preview ── */}
         {selectedFile && (
           <div className="file-preview">
             <div className="file-icon">{getFileIcon(selectedFile.name)}</div>
@@ -309,7 +397,7 @@ const UploadCV = () => {
           </div>
         )}
 
-        {/* Upload Button */}
+        {/* ── Upload Button ── */}
         <button
           className={`btn-upload ${uploading ? "uploading" : ""}`}
           disabled={!selectedFile || uploading}
@@ -318,7 +406,7 @@ const UploadCV = () => {
           {uploading ? "Đang tải lên..." : "📤 Upload CV & Phân tích AI"}
         </button>
 
-        {/* Uploaded Files List */}
+        {/* ── Uploaded Files List ── */}
         {uploadedFiles.length > 0 && (
           <div className="uploaded-list">
             <h3>📁 CV đã tải lên</h3>
@@ -335,7 +423,7 @@ const UploadCV = () => {
           </div>
         )}
 
-        {/* AI Analysis Result */}
+        {/* ── AI Analysis Result ── */}
         {analyzing && (
           <div className="ai-analysis-card">
             <h3>🧠 Đang phân tích CV bằng AI...</h3>

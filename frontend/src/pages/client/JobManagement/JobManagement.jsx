@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdAdd, MdWork, MdDelete, MdEdit, MdCheckCircle, MdCancel } from "react-icons/md";
+import { MdAdd, MdWork, MdDelete, MdCheckCircle, MdCancel } from "react-icons/md";
+import { toast } from "react-toastify";
 import jobService from "../../../services/client/jobService";
 import "../../../styles/client/pages/jobManagement.css";
 
@@ -33,6 +34,27 @@ const JobManagement = () => {
     };
     fetchJobs();
   }, []);
+
+  // ── Delete Handler ────────────────────────────────────────────────────────
+  const handleDelete = async (jobId) => {
+    const confirmed = window.confirm(
+      "Bạn có chắc chắn muốn xóa công việc này không?"
+    );
+    if (!confirmed) return;
+
+    try {
+      const res = await jobService.delete(jobId);
+      if (res.success) {
+        setJobs((prev) => prev.filter((j) => (j._id || j.id) !== jobId));
+        toast.success("Xóa công việc thành công!");
+      } else {
+        toast.error("Xóa công việc thất bại. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa công việc:", error);
+      toast.error("Xóa công việc thất bại. Vui lòng thử lại.");
+    }
+  };
 
   const filteredJobs = jobs.filter((j) =>
     j.title.toLowerCase().includes(search.toLowerCase())
@@ -125,22 +147,10 @@ const JobManagement = () => {
               <div className="job-card__footer">
                 <span className="job-card__date">📅 {formatDate(job.createdAt)}</span>
                 <div className="job-card__actions">
-                  {/* Copy Job ID for use in Upload CV */}
                   <button
-                    className="job-card__action-btn"
-                    title="Copy Job ID"
-                    onClick={() => {
-                      navigator.clipboard.writeText(job.id || job._id);
-                    }}
-                  >
-                    🔗 Copy ID
-                  </button>
-                  <button className="job-card__action-btn" title="Chỉnh sửa">
-                    <MdEdit size={16} />
-                  </button>
-                  <button
-                    className="job-card__action-btn job-card__action-btn--danger"
-                    title="Xóa"
+                    className="job-card__action-btn job-card__action-btn--delete"
+                    title="Xóa công việc"
+                    onClick={() => handleDelete(job._id || job.id)}
                   >
                     <MdDelete size={16} />
                   </button>
