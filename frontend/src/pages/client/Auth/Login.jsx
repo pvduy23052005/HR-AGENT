@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdEmail, MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { toast } from "react-toastify";
 import authService from "../../../services/client/authService";
@@ -18,7 +18,7 @@ function ClientLogin() {
     e.preventDefault();
     setErrors({});
 
-    // Validate
+   
     let newErrors = {};
     if (!email) newErrors.email = "Vui lòng nhập email";
     if (!password) newErrors.password = "Vui lòng nhập mật khẩu";
@@ -31,6 +31,7 @@ function ClientLogin() {
     setLoading(true);
     try {
       const res = await authService.login(email, password);
+
       if (res.code === 200) {
         toast.success("Đăng nhập thành công!");
         localStorage.setItem("token", res.token);
@@ -49,9 +50,7 @@ function ClientLogin() {
 
   return (
     <div className="client-auth">
-
       <div className="client-auth__container">
-        {/* Left - Branding */}
         <div className="client-auth__branding">
           <div className="client-auth__branding-content">
             <div className="client-auth__branding-logo">
@@ -78,7 +77,6 @@ function ClientLogin() {
           </div>
         </div>
 
-        {/* Right - Login Form */}
         <div className="client-auth__form-wrapper">
           <form
             className="client-auth__form"
@@ -91,8 +89,6 @@ function ClientLogin() {
                 Chào mừng bạn! Vui lòng đăng nhập để tiếp tục.
               </p>
             </div>
-
-            {/* Email */}
             <div
               className={`client-auth__field ${errors.email ? "client-auth__field--error" : ""
                 }`}
@@ -107,7 +103,7 @@ function ClientLogin() {
                   type="email"
                   name="email"
                   className="client-auth__input"
-                  placeholder="you@example.com"
+                  placeholder="nguyenvana@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
@@ -118,7 +114,6 @@ function ClientLogin() {
               )}
             </div>
 
-            {/* Password */}
             <div
               className={`client-auth__field ${errors.password ? "client-auth__field--error" : ""
                 }`}
@@ -153,18 +148,17 @@ function ClientLogin() {
             </div>
 
             <div className="client-auth__options">
-              <a
-                href="/auth/forgot-password"
+              <Link
+                to="/auth/forgot-password"
                 className="client-auth__forgot-link"
               >
                 Quên mật khẩu?
-              </a>
+              </Link>
             </div>
 
             <button
               type="submit"
-              className={`client-auth__submit ${loading ? "client-auth__submit--loading" : ""
-                }`}
+              className={`client-auth__submit ${loading ? "client-auth__submit--loading" : "" }`}
               disabled={loading}
             >
               {loading ? (

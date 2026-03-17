@@ -17,6 +17,7 @@ const CandidateDetail = () => {
 
   useEffect(() => {
     fetchDetail();
+    // Force refetch every time component mounts to get latest status
   }, [id]);
 
   const fetchDetail = async () => {
@@ -51,7 +52,7 @@ const CandidateDetail = () => {
         if (checkRes.success && checkRes.verification) {
           toast.info("Ứng viên đã được kiểm chứng.");
           setTimeout(() => {
-            navigate(`/applications/${candidateID}/certy`);
+            navigate(`/candidates/${candidateID}/verify`);
           }, 800);
           return;
         }
@@ -117,7 +118,7 @@ const CandidateDetail = () => {
 
         // Chuyển hướng đến trang chi tiết kiểm chứng
         setTimeout(() => {
-          navigate(`/applications/${id}/certy`);
+          navigate(`/candidates/${id}/verify`);
         }, 800);
       } else {
         toast.error(response.message || "Không thể lưu kết quả kiểm chứng!");
@@ -161,14 +162,14 @@ const CandidateDetail = () => {
   } = candidate;
 
   const statusLabels = {
-    unanalyzed: "Chưa phân tích",
-    analyzed: "Đã phân tích",
+    unverified: "Chưa kiểm chứng",
+    verified: "Đã kiểm chứng",
     scheduled: "Đã lên lịch",
     risky: "Rủi ro",
   };
   const statusClasses = {
-    unanalyzed: "status-unanalyzed",
-    analyzed: "status-verified",
+    unverified: "status-unanalyzed",
+    verified: "status-verified",
     scheduled: "status-scheduled",
     risky: "status-risk",
   };
@@ -179,7 +180,7 @@ const CandidateDetail = () => {
 
   return (
     <div className="cd-page">
-      <button className="cd-back" onClick={() => navigate("/applications")}>
+      <button className="cd-back" onClick={() => navigate("/candidates")}>
         ← Quay lại
       </button>
 
@@ -320,7 +321,7 @@ const CandidateDetail = () => {
       <div className="cd-actions">
         <button
           className="cd-btn cd-btn--cancel"
-          onClick={() => navigate("/applications")}
+          onClick={() => navigate("/candidates")}
         >
           Huỷ
         </button>
@@ -344,7 +345,7 @@ const CandidateDetail = () => {
         )}
         <button
           className="cd-btn cd-btn--schedule"
-          onClick={() => navigate(`/applications/${id}/lên lịch`)}
+          onClick={() => navigate(`/candidates/${id}/schedule`)}
         >
           Lên lịch phỏng vấn
         </button>
@@ -358,7 +359,7 @@ const CandidateDetail = () => {
         </button>
         <button
           className="cd-btn cd-btn--ai"
-          onClick={() => navigate(`/applications/${id}/ai-analysis`)}
+          onClick={() => navigate(`/candidates/${id}/ai-analysis`)}
         >
           🤖 Phân tích AI
         </button>

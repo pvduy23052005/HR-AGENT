@@ -63,7 +63,7 @@ const ScheduleInterviewPage = () => {
       if (res.success) {
         toast.success("Đặt lịch và gửi lời mời phỏng vấn thành công!");
         setTimeout(() => {
-          navigate(`/applications/${id}`);
+          navigate(`/candidates/${id}`);
         }, 1500);
       } else {
         toast.error(res.message || "Đặt lịch thất bại!");

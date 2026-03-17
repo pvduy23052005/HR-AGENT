@@ -103,7 +103,7 @@ function ClientForgotPassword() {
       );
       if (res.success) {
         toast.success("Đặt lại mật khẩu thành công!");
-        navigate("/auth/login");
+        navigate("/");
       }
     } catch (error) {
       const message =
@@ -119,7 +119,7 @@ function ClientForgotPassword() {
       setStep(step - 1);
       setErrors({});
     } else {
-      navigate("/auth/login");
+      navigate("/");
     }
   };
 
@@ -212,7 +212,7 @@ function ClientForgotPassword() {
               <button
                 type="button"
                 className="client-auth__back-link"
-                onClick={() => navigate("/auth/login")}
+                onClick={() => navigate("/")}
               >
                 ← Quay lại đăng nhập
               </button>
@@ -247,10 +247,10 @@ function ClientForgotPassword() {
                   type="text"
                   name="otp"
                   className="client-auth__input"
-                  placeholder="Nhập 8 chữ số"
+                  placeholder="Nhập 6 chữ số"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                  maxLength="8"
+                  maxLength="6"
                 />
                 {errors.otp && (
                   <span className="client-auth__error">{errors.otp}</span>

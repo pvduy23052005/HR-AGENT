@@ -16,11 +16,11 @@ import Dashbroad from "../pages/client/dashbroad/dashbroad";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
 
 import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
-import VerificationDetail from "../pages/client/VerificationDetail";
+import VerificationDetail from "../pages/client/Verification/VerificationDetail";
 import CandidateAIAnalysis from "../pages/client/CandidateManagement/CandidateAIAnalysis";
 import ScheduleInterviewPage from "../pages/client/CandidateManagement/ScheduleInterviewPage";
-import EmailTemplates from "../pages/client/EmailTemplates";
-import EmailDetail from "../pages/client/EmailDetail";
+import EmailTemplates from "../pages/client/Email/EmailTemplates";
+import EmailDetail from "../pages/client/Email/EmailDetail";
 
 import JobManagement from "../pages/client/JobManagement/JobManagement";
 import JobCreate from "../pages/client/JobManagement/JobCreate";
@@ -42,13 +42,13 @@ const routes = [
           { path: "dashboard", element: <Dashbroad /> },
 
           { path: "upload_cv", element: <UploadCV /> },
-          { path: "applications", element: <CandidateManagement /> },
-          { path: "applications/emails", element: <EmailTemplates /> },
-          { path: "applications/emails/:id/detail", element: <EmailDetail /> },
-          { path: "applications/:id", element: <CandidateDetail /> },
-          { path: "applications/:id/certy", element: <VerificationDetail /> },
-          { path: "applications/:id/lên lịch", element: <ScheduleInterviewPage /> },
-          { path: "applications/:id/ai-analysis", element: <CandidateAIAnalysis /> },
+          { path: "candidates", element: <CandidateManagement /> },
+          { path: "candidates/emails", element: <EmailTemplates /> },
+          { path: "candidates/emails/:id/detail", element: <EmailDetail /> },
+          { path: "candidates/:id", element: <CandidateDetail /> },
+          { path: "candidates/:id/verify", element: <VerificationDetail /> },
+          { path: "candidates/:id/schedule", element: <ScheduleInterviewPage /> },
+          { path: "candidates/:id/ai-analysis", element: <CandidateAIAnalysis /> },
 
           { path: "jobs", element: <JobManagement /> },
           { path: "jobs/create", element: <JobCreate /> },
@@ -58,7 +58,7 @@ const routes = [
             element: <UploadCV />,
           },
           {
-            path: "applications",
+            path: "candidates",
             element: <CandidateManagement />,
           },
 

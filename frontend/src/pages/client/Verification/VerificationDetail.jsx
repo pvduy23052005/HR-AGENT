@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import verificationService from "../../services/client/verificationService";
-import "../../styles/client/pages/verificationDetail.css";
+import verificationService from "../../../services/client/verificationService";
+import "../../../styles/client/pages/verificationDetail.css";
 
 const VerificationDetail = () => {
   const { id } = useParams();
@@ -25,12 +25,12 @@ const VerificationDetail = () => {
         setVerification(response.verification);
       } else {
         toast.error(response.message || "Không thể tải dữ liệu kiểm chứng!");
-        navigate(`/applications/${id}`);
+        navigate(`/candidates/${id}`);
       }
     } catch (error) {
       console.error("Error fetching verification:", error);
       toast.error("Không thể tải dữ liệu kiểm chứng!");
-      navigate(`/applications/${id}`);
+      navigate(`/candidates/${id}`);
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ const VerificationDetail = () => {
         }
 
         setTimeout(() => {
-          navigate(`/applications/${id}`);
+          navigate(`/candidates/${id}`);
         }, 1500);
       } else {
         toast.error(response.message || "Có lỗi xảy ra!");
@@ -110,7 +110,7 @@ const VerificationDetail = () => {
     <div className="vd-page">
       <button
         className="vd-back"
-        onClick={() => navigate(`/applications/${id}`)}
+        onClick={() => navigate(`/candidates/${id}`)}
       >
         ← Quay lại
       </button>
@@ -233,7 +233,7 @@ const VerificationDetail = () => {
       <div className="vd-actions">
         <button
           className="vd-btn vd-btn--cancel"
-          onClick={() => navigate(`/applications/${id}`)}
+          onClick={() => navigate(`/candidates/${id}`)}
           disabled={confirming}
         >
           Huỷ

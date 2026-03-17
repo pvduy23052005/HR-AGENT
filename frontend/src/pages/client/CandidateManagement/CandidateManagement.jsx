@@ -68,8 +68,8 @@ const CandidateManagement = () => {
 
   const getStatusLabel = (status) => {
     const labels = {
-      unanalyzed: "Chưa phân tích",
-      analyzed: "Đã phân tích",
+      unverified: "Chưa kiểm chứng",
+      verified: "Đã kiểm chứng",
       scheduled: "Đã lên lịch",
       risky: "Rủi ro",
     };
@@ -78,8 +78,8 @@ const CandidateManagement = () => {
 
   const getStatusClass = (status) => {
     const classes = {
-      unanalyzed: "status-unanalyzed",
-      analyzed: "status-verified",
+      unverified: "status-unanalyzed",
+      verified: "status-verified",
       scheduled: "status-scheduled",
       risky: "status-risk",
     };
@@ -134,8 +134,8 @@ const CandidateManagement = () => {
           onChange={(e) => setFilterStatus(e.target.value)}
         >
           <option value="all">Tất cả trạng thái</option>
-          <option value="unanalyzed">Chưa phân tích</option>
-          <option value="analyzed">Đã phân tích</option>
+          <option value="unverified">Chưa kiểm chứng</option>
+          <option value="verified">Đã kiểm chứng</option>
           <option value="scheduled">Đã lên lịch</option>
           <option value="risky">Rủi ro</option>
         </select>
@@ -178,7 +178,7 @@ const CandidateManagement = () => {
                       />
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       <div className="candidate-page__user-cell">
@@ -189,25 +189,25 @@ const CandidateManagement = () => {
                       </div>
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       {(c.topSkills || []).slice(0, 2).join(", ") || "—"}
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       {c.topSkills?.length || 0}
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       {formatDate(c.appliedAt)}
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       <span
@@ -250,7 +250,7 @@ const CandidateManagement = () => {
                 return;
               }
               // Truyền dữ liệu qua React Router state
-              navigate("/applications/emails", { 
+              navigate("/candidates/emails", { 
                 state: { selectedCandidateIds: selectedIds } 
               });
             }}

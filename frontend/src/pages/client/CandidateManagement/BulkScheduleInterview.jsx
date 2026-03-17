@@ -27,7 +27,7 @@ const BulkScheduleInterview = () => {
       const stored = sessionStorage.getItem("selectedCandidates");
       if (!stored) {
         toast.warning("Không có ứng viên được chọn!");
-        navigate("/applications");
+        navigate("/candidates");
         return;
       }
 
@@ -43,7 +43,7 @@ const BulkScheduleInterview = () => {
     } catch (error) {
       console.error(error);
       toast.error("Lỗi khi tải dữ liệu!");
-      navigate("/applications");
+      navigate("/candidates");
     } finally {
       setPageLoading(false);
     }
@@ -103,9 +103,9 @@ const BulkScheduleInterview = () => {
         // Clear sessionStorage
         sessionStorage.removeItem("selectedCandidates");
 
-        // Redirect về applications sau 1.5s
+        // Redirect về candidates sau 1.5s
         setTimeout(() => {
-          navigate("/applications");
+          navigate("/candidates");
         }, 1500);
       } else {
         toast.error(res.message || "Lên lịch thất bại!");

@@ -9,7 +9,7 @@ const routeClientAuth = {
       element: <ClientLogin />,
     },
     {
-      path: "/login/forgot",
+      path: "/auth/forgot-password",
       element: <ClientForgotPassword />,
     },
   ],
