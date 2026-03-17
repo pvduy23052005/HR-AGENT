@@ -13,6 +13,7 @@ const mapToVerificationEntity = (doc: any | null): VerificationEntity | null => 
     name: doc.name,
     age: doc.age,
     phone: doc.phone,
+    school: doc.school,
     githubStars: doc.githubStars,
     topLanguages: doc.topLanguages,
     probedProjects: doc.probedProjects,
@@ -24,14 +25,21 @@ const mapToVerificationEntity = (doc: any | null): VerificationEntity | null => 
 
 export class VerificationRepository implements IVerificationRepository {
   public async createVerification(candidateID: string, data: any): Promise<VerificationEntity | null> {
-    const newVerification = new Verification({ ...data, candidateId: candidateID });
-    const saved = await newVerification.save();
+    const objectId = new mongoose.Types.ObjectId(candidateID);
+
+    const saved = await Verification.findOneAndUpdate(
+      { candidateId: objectId },
+      { ...data, candidateId: objectId },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+
     return mapToVerificationEntity(saved);
   }
 
   public async updateIsverfiy(candidateID: string, isVerify: boolean): Promise<void> {
+    const objectId = new mongoose.Types.ObjectId(candidateID);
     await Candidate.updateOne({
-      _id: candidateID
+      _id: objectId
     }, {
       isVerify: isVerify
     });

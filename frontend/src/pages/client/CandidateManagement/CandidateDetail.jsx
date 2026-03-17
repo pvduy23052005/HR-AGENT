@@ -12,6 +12,9 @@ const CandidateDetail = () => {
   const [loading, setLoading] = useState(true);
   const [verifyingLoading, setVerifyingLoading] = useState(false);
 
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [tempVerificationData, setTempVerificationData] = useState(null);
+
   useEffect(() => {
     fetchDetail();
   }, [id]);
@@ -40,72 +43,88 @@ const CandidateDetail = () => {
       return;
     }
 
-    // Validate GitHub URL format
-    const githubRegex = /^https?:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+\/?$/;
-    if (!githubRegex.test(githubLink)) {
-      toast.error("❌ Link GitHub không hợp lệ! Format: https://github.com/username");
-      return;
-    }
-
-    setVerifyingLoading(true);
-    toast.info("🔍 Đang kiểm chứng GitHub profile...");
-
     try {
-      // Extract GitHub username từ URL
-      const username = githubLink
-        .replace(/^https?:\/\/(www\.)?github\.com\//, "")
-        .replace(/\/$/, "");
+      setVerifyingLoading(true);
 
-      // Gọi GitHub API để check user existence (optional, nhưng an toàn hơn)
-      const githubCheckResponse = await fetch(
-        `https://api.github.com/users/${username}`,
-        {
-          headers: {
-            Accept: "application/vnd.github.v3+json",
-          },
+      try {
+        const checkRes = await verificationService.getVerificationDetail(candidateID);
+        if (checkRes.success && checkRes.verification) {
+          toast.info("Ứng viên đã được kiểm chứng.");
+          setTimeout(() => {
+            navigate(`/applications/${candidateID}/certy`);
+          }, 800);
+          return;
         }
+      } catch (checkError) {
+        if (checkError.response?.status !== 404) {
+          throw checkError; 
+        }
+        console.log("Chưa có dữ liệu kiểm chứng, bắt đầu quét mới...");
+      }
+
+      const extensionId = "jjkplkmkajifbfgiafkfgogihdoellof";
+
+      if (!window.chrome?.runtime?.sendMessage) {
+        toast.error(
+          "Không tìm thấy Chrome Extension. Hãy đảm bảo extension đã được cài đặt!",
+        );
+        setVerifyingLoading(false);
+        return;
+      }
+
+      chrome.runtime.sendMessage(
+        extensionId,
+        {
+          action: "NANO_START_TASK",
+          url: githubLink,
+          candidateID: candidateID,
+        },
+        (response) => {
+          if (response && response.success) {
+            console.log("Đã nhận dữ liệu xịn từ Extension:", response.data);
+            const dataJson = JSON.parse(response.data);
+            setTempVerificationData(dataJson);
+            setShowSaveModal(true);
+            setVerifyingLoading(false);
+          } else {
+            toast.error(
+              "Lỗi xác thực: " +
+                (response?.error || "Không kết nối được Extension"),
+            );
+            setVerifyingLoading(false);
+          }
+        },
+      );
+    } catch (error) {
+      console.error("Lỗi khi chuẩn bị kiểm chứng:", error);
+      toast.error("Có lỗi xảy ra khi kiểm tra trạng thái xác minh!");
+      setVerifyingLoading(false);
+    }
+  };
+
+  const handleConfirmSave = async () => {
+    try {
+      toast.info("Đang lưu kết quả phân tích AI...");
+
+      const response = await verificationService.verifyCandidate(
+        id,
+        tempVerificationData,
       );
 
-      if (!githubCheckResponse.ok) {
-        toast.error("❌ GitHub user không tồn tại!");
-        setVerifyingLoading(false);
-        return;
-      }
-
-      const githubUser = await githubCheckResponse.json();
-
-      if (githubUser.message === "Not Found") {
-        toast.error("❌ GitHub user không tồn tại!");
-        setVerifyingLoading(false);
-        return;
-      }
-
-      // GitHub user hợp lệ -> gửi lên backend để lưu
-      const response = await verificationService.verifyCandidate(candidateID, {
-        githubLink,
-        githubUser: githubUser.login,
-      });
-
       if (response.success) {
-        toast.success(
-          "✅ Kiểm chứng thành công! Chuyển sang xác nhận..."
-        );
-        // Redirect sang trang xác nhận uy tín
+        toast.success("Đã lưu kết quả thành công!");
+        setShowSaveModal(false);
+
+        // Chuyển hướng đến trang chi tiết kiểm chứng
         setTimeout(() => {
-          navigate(`/applications/${candidateID}/certy`);
-        }, 1000);
+          navigate(`/applications/${id}/certy`);
+        }, 800);
       } else {
-        toast.error(response.message || "Kiểm chứng thất bại!");
+        toast.error(response.message || "Không thể lưu kết quả kiểm chứng!");
       }
     } catch (error) {
-      console.error("Verification error:", error);
-      if (error.message.includes("Failed to fetch")) {
-        toast.error("❌ Không thể kết nối GitHub API!");
-      } else {
-        toast.error(`❌ Lỗi: ${error.message}`);
-      }
-    } finally {
-      setVerifyingLoading(false);
+      console.error("Lỗi khi lưu kết quả kiểm chứng:", error);
+      toast.error("Có lỗi xảy ra khi gọi API lưu dữ liệu!");
     }
   };
 
@@ -344,6 +363,35 @@ const CandidateDetail = () => {
           🤖 Phân tích AI
         </button>
       </div>
+
+      {/* Confirmation Modal */}
+      {showSaveModal && (
+        <div className="cd-modal-overlay">
+          <div className="cd-modal">
+            <span className="cd-modal__icon">✨</span>
+            <h3>Hoàn tất phân tích AI</h3>
+            <p>
+              AI đã phân tích xong profile GitHub của{" "}
+              <b>{tempVerificationData?.name || "ứng viên"}</b>. Bạn có muốn lưu
+              kết quả và kiểm tra chi tiết không?
+            </p>
+            <div className="cd-modal__actions">
+              <button
+                className="cd-modal__btn cd-modal__btn--cancel"
+                onClick={() => setShowSaveModal(false)}
+              >
+                Huỷ bỏ
+              </button>
+              <button
+                className="cd-modal__btn cd-modal__btn--save"
+                onClick={handleConfirmSave}
+              >
+                Lưu & Kiểm tra
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

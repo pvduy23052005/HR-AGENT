@@ -15,6 +15,7 @@ const verificationSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
+    school: { type: String },
     githubStars: { type: Number, default: 0 },
     topLanguages: [{ type: String }],
     probedProjects: { type: mongoose.Schema.Types.Mixed },

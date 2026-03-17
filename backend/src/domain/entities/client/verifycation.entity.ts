@@ -10,6 +10,7 @@ export class VerificationEntity {
   private email?: string;
   private githubStars: number;
   private topLanguages: string[];
+  private school?: string;
   private probedProjects?: any;
   private aiReasoning?: string;
   private createdAt?: Date;
@@ -21,6 +22,7 @@ export class VerificationEntity {
     this.isVerified = data.isVerified ?? false;
     this.name = data.name;
     this.email = data.email;
+    this.school = data.school;
     this.age = data.age;
     this.phone = data.phone;
     this.githubStars = data.githubStars ?? 0;

@@ -7,6 +7,7 @@ import "../../styles/client/pages/verificationDetail.css";
 const VerificationDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [verification, setVerification] = useState(null);
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
@@ -38,12 +39,15 @@ const VerificationDetail = () => {
   const handleConfirm = async (status) => {
     setSelectedStatus(status);
     setConfirming(true);
-    toast.info(`Đang xử lý: ${status === "trusted" ? "Xác nhận uy tín" : "Gắn cờ rủi ro"}...`);
-
+    
     try {
-      // Gọi API để lưu verification status
+      toast.info(
+        `Đang xử lý: ${status === "trusted" ? "Xác nhận uy tín" : "Gắn cờ rủi ro"}...`,
+      );
+
+      // Gọi API để xác nhận status (trusted/risky)
       const response = await verificationService.confirmVerification(id, {
-        status: status, // "trusted" hoặc "risky"
+        status: status,
         verification: verification,
       });
 
@@ -53,7 +57,7 @@ const VerificationDetail = () => {
         } else {
           toast.warning("⚠️ Đã gắn cờ rủi ro cho ứng viên này!");
         }
-        // Quay lại trang chi tiết ứng viên
+
         setTimeout(() => {
           navigate(`/applications/${id}`);
         }, 1500);
@@ -62,7 +66,7 @@ const VerificationDetail = () => {
       }
     } catch (error) {
       console.error("Error confirming verification:", error);
-      toast.error("Có lỗi xảy ra khi xác nhận!");
+      toast.error(error.message || "Có lỗi xảy ra khi xác nhận!");
     } finally {
       setConfirming(false);
       setSelectedStatus(null);
@@ -104,7 +108,10 @@ const VerificationDetail = () => {
 
   return (
     <div className="vd-page">
-      <button className="vd-back" onClick={() => navigate(`/applications/${id}`)}>
+      <button
+        className="vd-back"
+        onClick={() => navigate(`/applications/${id}`)}
+      >
         ← Quay lại
       </button>
 
@@ -165,11 +172,16 @@ const VerificationDetail = () => {
         <div className="vd-field">
           <label className="vd-label">GitHub</label>
           <div className="vd-links">
-            <a href={`https://github.com/${verification.name}`} target="_blank" rel="noreferrer">
+            <a
+              href={`https://github.com/${verification.name}`}
+              target="_blank"
+              rel="noreferrer"
+            >
               github.com/{verification.name}
             </a>
             <span className="vd-stats">
-              ⭐ {verification.githubStars} stars | 📚 {verification.topLanguages?.length || 0} languages
+              ⭐ {verification.githubStars} stars | 📚{" "}
+              {verification.topLanguages?.length || 0} languages
             </span>
           </div>
         </div>
@@ -189,24 +201,29 @@ const VerificationDetail = () => {
         )}
 
         {/* Top Projects */}
-        {verification.probedProjects && verification.probedProjects.length > 0 && (
-          <div className="vd-field">
-            <label className="vd-label">Dự án nổi bật</label>
-            <div className="vd-projects">
-              {verification.probedProjects.slice(0, 5).map((project, i) => (
-                <div key={i} className="vd-project-item">
-                  <a href={project.url} target="_blank" rel="noreferrer">
-                    {project.name}
-                  </a>
-                  <span className="vd-project-meta">
-                    {project.language && <span className="vd-lang">{project.language}</span>}
-                    {project.stars > 0 && <span className="vd-stars">⭐ {project.stars}</span>}
-                  </span>
-                </div>
-              ))}
+        {verification.probedProjects &&
+          verification.probedProjects.length > 0 && (
+            <div className="vd-field">
+              <label className="vd-label">Dự án nổi bật</label>
+              <div className="vd-projects">
+                {verification.probedProjects.slice(0, 5).map((project, i) => (
+                  <div key={i} className="vd-project-item">
+                    <a href={project.url} target="_blank" rel="noreferrer">
+                      {project.name}
+                    </a>
+                    <span className="vd-project-meta">
+                      {project.language && (
+                        <span className="vd-lang">{project.language}</span>
+                      )}
+                      {project.stars > 0 && (
+                        <span className="vd-stars">⭐ {project.stars}</span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* LinkedIn */}
         {/* Placeholder nếu cần thêm LinkedIn sau */}
@@ -226,9 +243,7 @@ const VerificationDetail = () => {
           onClick={() => handleConfirm("risky")}
           disabled={confirming || selectedStatus === "risky"}
           style={
-            selectedStatus === "risky"
-              ? { opacity: 0.6, cursor: "wait" }
-              : {}
+            selectedStatus === "risky" ? { opacity: 0.6, cursor: "wait" } : {}
           }
         >
           {selectedStatus === "risky" ? "⏳ Đang xử lý..." : "🚩 Gắn cờ rủi ro"}
@@ -238,12 +253,12 @@ const VerificationDetail = () => {
           onClick={() => handleConfirm("trusted")}
           disabled={confirming || selectedStatus === "trusted"}
           style={
-            selectedStatus === "trusted"
-              ? { opacity: 0.6, cursor: "wait" }
-              : {}
+            selectedStatus === "trusted" ? { opacity: 0.6, cursor: "wait" } : {}
           }
         >
-          {selectedStatus === "trusted" ? "⏳ Đang xử lý..." : "✅ Xác nhận uy tín"}
+          {selectedStatus === "trusted"
+            ? "⏳ Đang xử lý..."
+            : "✅ Xác nhận uy tín"}
         </button>
       </div>
     </div>

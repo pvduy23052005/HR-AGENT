@@ -32,11 +32,12 @@ export const getVerificationDetail = async (req: Request, res: Response): Promis
       message: 'Thành công',
       verification,
     });
-  } catch (error: unknown) {
-    const e = error as { message?: string };
-    res.status(400).json({
+  } catch (error: any) {
+    console.error('Lỗi khi lấy thông tin kiểm chứng:', error);
+    const status = error.message === 'Not found!' ? 404 : 400;
+    res.status(status).json({
       success: false,
-      message: e.message ?? 'Đã xảy ra lỗi khi lấy thông tin kiểm chứng!',
+      message: error.message ?? 'Đã xảy ra lỗi khi lấy thông tin kiểm chứng!',
     });
   }
 };
@@ -46,9 +47,9 @@ export const verifyCandidate = async (req: Request, res: Response): Promise<void
   try {
     const { candidateID, data } = req.body;
 
-    const dataCandidate = data.details.replace(/```json/g, '').replace(/```/g, '').trim();
 
-    const candidateJson = JSON.parse(dataCandidate);
+    console.log(candidateID)
+    console.log(data);
 
     if (!candidateID) {
       res.status(400).json({ success: false, message: 'Thiếu candidateID!' });
@@ -62,7 +63,7 @@ export const verifyCandidate = async (req: Request, res: Response): Promise<void
 
     const candidateVerifyUseCase = new VerifyCandidateUseCase(verificationRepository);
 
-    const result = await candidateVerifyUseCase.execute(candidateID, candidateJson);
+    const result = await candidateVerifyUseCase.execute(candidateID, data);
 
     res.status(200).json({ success: true, message: 'Xác minh thành công!', verification: result });
   } catch (error) {

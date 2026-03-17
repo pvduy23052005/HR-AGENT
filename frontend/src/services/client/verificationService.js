@@ -17,19 +17,19 @@ const verificationService = {
   // Gửi kết quả kiểm chứng từ extension lên backend
   verifyCandidate: async (candidateID, verificationData) => {
     try {
+      const cleanData =
+        typeof verificationData === "string"
+          ? JSON.parse(verificationData)
+          : verificationData;
+
       // Chuẩn bị payload cho backend
       // Backend expects: { candidateID, data: { details: JSON_string } }
       const payload = {
         candidateID,
-        data: {
-          details: JSON.stringify(verificationData),
-        },
+        data: cleanData,
       };
 
-      const response = await API.post(
-        `${API_BASE}/candidate`,
-        payload,
-      );
+      const response = await API.post(`${API_BASE}/candidate`, payload);
       return response;
     } catch (error) {
       console.error("Error verifying candidate:", error);
@@ -57,7 +57,10 @@ const verificationService = {
           console.warn("Confirm endpoint not found, returning default success");
           return {
             success: true,
-            message: confirmData.status === "trusted" ? "Xác nhận uy tín thành công!" : "Đã gắn cờ rủi ro!",
+            message:
+              confirmData.status === "trusted"
+                ? "Xác nhận uy tín thành công!"
+                : "Đã gắn cờ rủi ro!",
           };
         }
         throw error;
