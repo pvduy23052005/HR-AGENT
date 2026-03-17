@@ -6,8 +6,8 @@ class GetCandidatesUseCase {
     constructor(candidateRepo) {
         this.candidateRepo = candidateRepo;
     }
-    async execute() {
-        return await this.candidateRepo.getCandidates();
+    async execute(userID) {
+        return await this.candidateRepo.getCandidates(userID);
     }
 }
 exports.GetCandidatesUseCase = GetCandidatesUseCase;

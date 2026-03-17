@@ -16,7 +16,7 @@ const createJob = async (req, res) => {
     try {
         const userID = res.locals.user.id;
         const { title, description, requirements, status } = req.body;
-        const newJob = await createJobUseCase.execute({ title, userID, description, requirements, status });
+        const newJob = await createJobUseCase.execute({ title, userID, description: description ?? '', requirements: requirements ?? [], status });
         res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
     }
     catch (error) {

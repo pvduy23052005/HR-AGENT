@@ -41,5 +41,7 @@ const express_1 = __importDefault(require("express"));
 const controller = __importStar(require("../../controllers/client/candidate.controller"));
 const router = express_1.default.Router();
 router.get('/', controller.getCandidates);
+router.get('/:candidateID', controller.getCandidateDetail);
+router.patch("/change-status/:id", controller.updateStatus);
 exports.candidateRoute = router;
 //# sourceMappingURL=candidate.route.js.map

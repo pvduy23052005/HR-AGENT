@@ -75,6 +75,7 @@ class ScheduleInterviewUseCase {
                 contentType: invite.contentType,
             },
         ]);
+        await this.candidateRepo.updateStatus(input.candidateID, { status: "scheduled" });
         return { schedule: created.getDetail(), emailSent };
     }
 }

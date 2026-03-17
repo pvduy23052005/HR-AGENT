@@ -10,13 +10,13 @@ class JobEntity {
     status;
     createdAt;
     updatedAt;
-    constructor({ id, _id, title = '', userID, description = '', requirements = '', status = false, createdAt, updatedAt, }) {
+    constructor({ id, _id, title = '', userID, description = '', requirements = [], status = false, createdAt, updatedAt, }) {
         const entityId = id ?? _id;
         this.id = entityId ? entityId.toString() : '';
         this.userID = userID ? userID.toString() : '';
         this.title = title ? title.trim() : '';
         this.description = description ? description.trim() : '';
-        this.requirements = requirements ? requirements.trim() : '';
+        this.requirements = Array.isArray(requirements) ? requirements : [];
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

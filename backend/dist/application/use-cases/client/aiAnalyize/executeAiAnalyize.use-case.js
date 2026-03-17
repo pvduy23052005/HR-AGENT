@@ -39,6 +39,7 @@ class ExecuteAiAnalyizeUseCase {
         });
         if (!savedAnalysis)
             throw new Error('Lỗi khi lưu kết quả phân tích.');
+        await this.candidateRepo.updateStatus(candidateID, { status: "analyzed" });
         return {
             message: 'Phân tích AI hoàn tất thành công.',
             data: savedAnalysis.getDetail(),

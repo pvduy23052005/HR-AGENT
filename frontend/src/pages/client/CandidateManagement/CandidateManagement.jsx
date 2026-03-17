@@ -226,7 +226,7 @@ const CandidateManagement = () => {
         )}
       </div>
 
-      {/* Footer: Pagination + Send Email */}
+      {/* Footer: Pagination + Send Email + Schedule Interview */}
       <div className="candidate-page__footer">
         <div className="candidate-page__pagination">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -241,20 +241,23 @@ const CandidateManagement = () => {
             </button>
           ))}
         </div>
-        <button 
-          className="candidate-page__btn-email"
-          onClick={() => {
-            if (selectedIds.length === 0) {
-              toast.warning("Vui lòng chọn ít nhất một ứng viên!");
-              return;
-            }
-            // Lưu selectedIds vào sessionStorage để dùng ở trang email
-            sessionStorage.setItem("selectedCandidates", JSON.stringify(selectedIds));
-            navigate("/applications/emails");
-          }}
-        >
-          ✉ Gửi email
-        </button>
+        <div className="candidate-page__actions">
+          <button 
+            className="candidate-page__btn-email"
+            onClick={() => {
+              if (selectedIds.length === 0) {
+                toast.warning("Vui lòng chọn ít nhất một ứng viên!");
+                return;
+              }
+              // Truyền dữ liệu qua React Router state
+              navigate("/applications/emails", { 
+                state: { selectedCandidateIds: selectedIds } 
+              });
+            }}
+          >
+            ✉ Gửi email
+          </button>
+        </div>
       </div>
     </div>
   );

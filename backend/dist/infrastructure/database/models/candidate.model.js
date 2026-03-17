@@ -36,9 +36,17 @@ const projectSchema = new mongoose_1.default.Schema({
 const candidateSchema = new mongoose_1.default.Schema({
     jobID: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Job' },
     addedBy: { type: mongoose_1.default.Schema.Types.ObjectId, ref: 'User' },
-    status: { type: Boolean, default: true },
+    status: {
+        type: String,
+        enum: ["unanalyzed", "scheduled", "analyzed", "risky"],
+        default: "unanalyzed"
+    },
     objective: { type: String, trim: true },
     fullTextContent: { type: String, trim: true },
+    isVerify: {
+        type: Boolean,
+        default: false,
+    },
     personal: personalSchema,
     educations: [educationSchema],
     experiences: [experienceSchema],

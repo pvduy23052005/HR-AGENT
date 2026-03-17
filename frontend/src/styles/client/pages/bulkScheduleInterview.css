@@ -1,0 +1,321 @@
+/* BulkScheduleInterview Page Styles */
+
+.bulk-schedule-interview-page {
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.bsi-back-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.bsi-back-btn:hover {
+  background: #f0f0f0;
+  border-color: #bbb;
+}
+
+.bsi-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .bsi-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cards */
+.bsi-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.bsi-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.bsi-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+/* Left Side - Candidates List */
+.bsi-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bsi-candidates-list {
+  flex: 1;
+}
+
+.bsi-candidates {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.bsi-candidates::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bsi-candidates::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.bsi-candidates::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.bsi-candidates::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.bsi-candidate-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #f9f9f9;
+  border-left: 3px solid #2ecc71;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.bsi-candidate-item:hover {
+  background: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bsi-candidate-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.bsi-candidate-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.bsi-candidate-email {
+  font-size: 12px;
+  color: #666;
+}
+
+.bsi-candidate-status {
+  font-size: 11px;
+  background: #e8f5e9;
+  color: #2ecc71;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.bsi-no-candidates {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+  font-size: 14px;
+}
+
+/* Tips */
+.bsi-tips {
+  background: #fffacd;
+  border-left: 4px solid #f39c12;
+}
+
+.bsi-tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bsi-tips-list li {
+  font-size: 13px;
+  color: #555;
+  padding-left: 20px;
+  position: relative;
+}
+
+.bsi-tips-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #f39c12;
+  font-weight: bold;
+}
+
+/* Form */
+.bsi-form-card {
+  grid-column: 2 / 3;
+}
+
+@media (max-width: 1024px) {
+  .bsi-form-card {
+    grid-column: auto;
+  }
+}
+
+.bsi-form-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  color: #333;
+}
+
+.bsi-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bsi-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bsi-form-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.bsi-required {
+  color: #e74c3c;
+}
+
+.bsi-form-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bsi-form-input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.bsi-form-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.bsi-form-textarea {
+  padding: 12px 12px 12px 36px !important;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.bsi-form-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.bsi-form-hint {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.bsi-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.bsi-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bsi-btn--cancel {
+  background: #ecf0f1;
+  color: #333;
+}
+
+.bsi-btn--cancel:hover:not(:disabled) {
+  background: #d5dbdb;
+}
+
+.bsi-btn--submit {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+}
+
+.bsi-btn--submit:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+  transform: translateY(-2px);
+}
+
+.bsi-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bsi-form-note {
+  background: #e8f5e9;
+  border-left: 3px solid #2ecc71;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+
+.bsi-form-note p {
+  margin: 0;
+  font-size: 13px;
+  color: #27ae60;
+}
+
+/* Loading */
+.bsi-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 16px;
+  color: #666;
+}

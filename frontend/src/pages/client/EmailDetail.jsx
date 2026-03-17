@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import emailService from "../../services/client/emailService";
 import "../../styles/client/pages/emailDetail.css";
@@ -7,6 +7,7 @@ import "../../styles/client/pages/emailDetail.css";
 const EmailDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [template, setTemplate] = useState(null);
   const [customTitle, setCustomTitle] = useState("");
   const [customContent, setCustomContent] = useState("");
@@ -14,12 +15,11 @@ const EmailDetail = () => {
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    // Lấy template từ sessionStorage
-    const storedTemplate = sessionStorage.getItem("selectedTemplate");
-    const storedCandidates = sessionStorage.getItem("selectedCandidates");
-
-    if (storedTemplate) {
-      const tmpl = JSON.parse(storedTemplate);
+    // Lấy template + selectedCandidateIds từ React Router state
+    const state = location.state;
+    
+    if (state?.selectedTemplate) {
+      const tmpl = state.selectedTemplate;
       setTemplate(tmpl);
       setCustomTitle(tmpl.title);
       setCustomContent(tmpl.content);
@@ -29,13 +29,13 @@ const EmailDetail = () => {
       return;
     }
 
-    if (storedCandidates) {
-      setSelectedCandidates(JSON.parse(storedCandidates));
+    if (state?.selectedCandidateIds && Array.isArray(state.selectedCandidateIds)) {
+      setSelectedCandidates(state.selectedCandidateIds);
     } else {
       toast.warning("Không có ứng viên nào được chọn!");
       navigate("/applications");
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
   const handleSend = async () => {
     if (!customTitle.trim()) {
@@ -65,9 +65,6 @@ const EmailDetail = () => {
         toast.success(
           `✅ Gửi email thành công tới ${selectedCandidates.length} ứng viên!`
         );
-        // Clear sessionStorage
-        sessionStorage.removeItem("selectedCandidates");
-        sessionStorage.removeItem("selectedTemplate");
         // Redirect về applications
         setTimeout(() => {
           navigate("/applications");

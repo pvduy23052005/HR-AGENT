@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../../styles/client/pages/emailTemplates.css";
 
@@ -74,23 +74,28 @@ Trân trọng,
 
 const EmailTemplates = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedCandidates, setSelectedCandidates] = useState([]);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("selectedCandidates");
-    if (stored) {
-      setSelectedCandidates(JSON.parse(stored));
+    // Lấy selectedCandidateIds từ React Router state
+    const state = location.state?.selectedCandidateIds;
+    if (state && Array.isArray(state)) {
+      setSelectedCandidates(state);
     } else {
       toast.warning("Không có ứng viên nào được chọn!");
       navigate("/applications");
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
   const handleSelectTemplate = (template) => {
-    // Lưu template + selectedCandidates vào sessionStorage
-    sessionStorage.setItem("selectedTemplate", JSON.stringify(template));
-    // Chuyển sang trang xem chi tiết email
-    navigate(`/applications/emails/${template.id}/detail`);
+    // Truyền template + selectedCandidates qua React Router state
+    navigate(`/applications/emails/${template.id}/detail`, {
+      state: { 
+        selectedTemplate: template,
+        selectedCandidateIds: selectedCandidates 
+      }
+    });
   };
 
   return (

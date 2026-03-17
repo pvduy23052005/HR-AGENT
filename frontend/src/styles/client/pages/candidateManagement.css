@@ -269,3 +269,31 @@
 .candidate-page__btn-email:hover {
   background: #006ed0;
 }
+
+/* Actions Container */
+.candidate-page__actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Schedule Interview Button */
+.candidate-page__btn-schedule {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.candidate-page__btn-schedule:hover {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+

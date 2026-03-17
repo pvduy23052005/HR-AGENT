@@ -48,7 +48,15 @@ const app = (0, express_1.default)();
 const PORT = parseInt(process.env.PORT ?? '3000', 10);
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173',
+    origin: (origin, callback) => {
+        const allowedOrigins = ['http://localhost:5173'];
+        if (!origin || allowedOrigins.includes(origin) || origin.startsWith('chrome-extension://')) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
 }));
 app.use(express_1.default.json());

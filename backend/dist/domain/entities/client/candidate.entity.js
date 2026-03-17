@@ -7,6 +7,7 @@ class CandidateEntity {
     addedBy;
     status;
     objective;
+    isVerify;
     fullTextContent;
     personal;
     educations;
@@ -14,13 +15,14 @@ class CandidateEntity {
     projects;
     createdAt;
     updatedAt;
-    constructor({ id, jobID, addedBy, status = true, objective = '', fullTextContent = '', personal = {}, educations = [], experiences = [], projects = [], createdAt, updatedAt, }) {
+    constructor({ id, jobID, addedBy, status = "unanalyzed", objective = '', isVerify, fullTextContent = '', personal = {}, educations = [], experiences = [], projects = [], createdAt, updatedAt, }) {
         this.id = id ? id.toString() : null;
         this.jobID = jobID ? jobID.toString() : null;
         this.addedBy = addedBy ? addedBy.toString() : null;
         this.status = status;
         this.objective = objective;
         this.fullTextContent = fullTextContent;
+        this.isVerify = isVerify;
         this.personal = {
             fullName: personal.fullName ?? '',
             email: personal.email ?? '',
@@ -53,9 +55,6 @@ class CandidateEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-    isActive() {
-        return this.status === true;
-    }
     getAllTechStacks() {
         const expTechs = this.experiences.flatMap((exp) => exp.techStack ?? []);
         const projTechs = this.projects.flatMap((proj) => proj.techStack ?? []);
@@ -72,6 +71,7 @@ class CandidateEntity {
             phone: this.personal.phone,
             cvLink: this.personal.cvLink,
             topSkills: this.getAllTechStacks().slice(0, 5),
+            isVerify: this.isVerify,
             status: this.status,
             appliedAt: this.createdAt,
         };
@@ -94,6 +94,9 @@ class CandidateEntity {
     }
     getFulltextContent() {
         return this.fullTextContent;
+    }
+    getID() {
+        return this.id || "";
     }
 }
 exports.CandidateEntity = CandidateEntity;
