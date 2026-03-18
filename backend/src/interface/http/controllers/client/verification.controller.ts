@@ -93,14 +93,11 @@ export const confirmVerification = async (req: Request, res: Response): Promise<
       return;
     }
 
-    // Cập nhật isVerified trong verification model
     await verificationRepository.updateVerificationStatus(candidateID, status === 'trusted');
 
-    // Nếu status là 'risky', cập nhật candidate status thành 'risky'
     if (status === 'risky') {
       await candidateRepository.updateStatus(candidateID, { status: CandidateStatus.RISKY });
     } else if (status === 'trusted') {
-      // Nếu status là 'trusted', cập nhật candidate status thành 'verified'
       await candidateRepository.updateStatus(candidateID, { status: CandidateStatus.VERIFIED });
     }
 

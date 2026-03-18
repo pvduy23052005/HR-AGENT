@@ -82,7 +82,7 @@ const CandidateDetail = () => {
         console.log("Chưa có dữ liệu kiểm chứng, bắt đầu quét mới...");
       }
 
-      const extensionId = "kjiciihgpmlgalioekoabmjdgjcmpefc";
+      const extensionId = "jjkplkmkajifbfgiafkfgogihdoellof";
 
       if (!window.chrome?.runtime?.sendMessage) {
         toast.error(

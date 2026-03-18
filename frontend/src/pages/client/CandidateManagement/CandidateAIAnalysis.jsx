@@ -49,7 +49,7 @@ const CandidateAIAnalysis = () => {
       setAnalyzing(true);
       const res = await aiService.analyzeCandidate({ jobID, candidateID });
       if (res.success) {
-        setAiResult(res.aiAnalyize);
+        setAiResult(res.aiAnalyze);
         toast.success(res.message);
       } else {
         toast.error(res.message);
