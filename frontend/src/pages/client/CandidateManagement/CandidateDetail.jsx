@@ -217,7 +217,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Email */}
+   
         <div className="cd-field">
           <div className="cd-field__label">Email</div>
           <div className="cd-field__row">
@@ -232,7 +232,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* SĐT */}
+     
         <div className="cd-field">
           <div className="cd-field__label">SĐT</div>
           <div className="cd-field__row">
@@ -241,7 +241,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* GitHub */}
         <div className="cd-field">
           <div className="cd-field__label">GitHub</div>
           <div className="cd-field__row">
@@ -258,7 +257,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Kỹ năng */}
+    
         <div className="cd-field">
           <div className="cd-field__label">Kỹ năng</div>
           <div className="cd-field__row">
@@ -269,7 +268,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Chức danh (Chọn JD) */}
+      
         <div className="cd-field">
           <div className="cd-field__label">Chức danh (Chọn JD)</div>
           <div className="cd-field__row">
@@ -280,7 +279,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Học vấn */}
         <div className="cd-field">
           <div className="cd-field__label">Học vấn</div>
           <div className="cd-field__row">
@@ -293,7 +291,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Kinh nghiệm */}
+
         <div className="cd-field">
           <div className="cd-field__label">Kinh nghiệm</div>
           <div className="cd-field__row">
@@ -306,7 +304,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Mục tiêu */}
         {objective && (
           <div className="cd-field">
             <div className="cd-field__label">Mục tiêu nghề nghiệp</div>
@@ -317,7 +314,7 @@ const CandidateDetail = () => {
           </div>
         )}
 
-        {/* Trạng thái */}
+  
         <div className="cd-field">
           <div className="cd-field__label">Trạng thái</div>
           <div className="cd-field__row">
@@ -328,7 +325,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Ngày lưu */}
+    
         <div className="cd-field">
           <div className="cd-field__label">Ngày lưu</div>
           <div className="cd-field__row">
@@ -338,7 +335,7 @@ const CandidateDetail = () => {
         </div>
       </div>
 
-      {/* Action buttons */}
+   
       <div className="cd-actions">
         <button
           className="cd-btn cd-btn--cancel"
@@ -386,7 +383,7 @@ const CandidateDetail = () => {
         </button>
       </div>
 
-      {/* Confirmation Modal */}
+     
       {showSaveModal && (
         <div className="cd-modal-overlay">
           <div className="cd-modal">

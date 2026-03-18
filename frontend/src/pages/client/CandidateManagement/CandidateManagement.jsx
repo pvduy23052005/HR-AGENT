@@ -46,49 +46,49 @@ const CandidateManagement = () => {
     }
   };
 
-  // Kiểm tra ứng viên có kỹ năng tìm kiếm không
+  
   const matchesSkill = (candidate, searchTerm) => {
-    if (!searchTerm) return true; // Nếu không nhập từ khóa thì match tất cả
+    if (!searchTerm) return true; 
     const skills = candidate.topSkills || [];
     return skills.some(skill => 
       skill.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
-  // Kiểm tra ứng viên có trạng thái lọc không
+
   const matchesStatus = (candidate, status) => {
-    if (status === "all") return true; // Nếu chọn tất cả thì match tất cả
+    if (status === "all") return true; 
     return candidate.status === status;
   };
 
-  // Filter logic
+
   const filtered = useMemo(() => {
     return candidates.filter((candidate) => {
       const hasSkill = matchesSkill(candidate, searchSkill);
       const hasStatus = matchesStatus(candidate, filterStatus);
-      return hasSkill && hasStatus; // Cả 2 điều kiện phải đúng
+      return hasSkill && hasStatus; 
     });
   }, [candidates, searchSkill, filterStatus]);
 
-  // Phân trang: lấy dữ liệu của trang hiện tại
+
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;  // vị trí bắt đầu
-  const endIndex = currentPage * ITEMS_PER_PAGE;          // vị trí kết thúc
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE; 
+  const endIndex = currentPage * ITEMS_PER_PAGE;         
   const paginatedData = filtered.slice(startIndex, endIndex);
   useEffect(() => {
     setCurrentPage(1);
   }, [searchSkill, searchExp, filterStatus]);
 
-  // Checkbox
+ 
   const toggleSelect = (id) => {
     setSelectedIds((prev) => {
-      // Kiểm tra id có trong danh sách đã chọn không
+     
       const isAlreadySelected = prev.includes(id);
       if (isAlreadySelected) {
-        // Nếu đã chọn rồi -> xóa khỏi danh sách
+       
         return prev.filter((selectedId) => selectedId !== id);
       } else {
-        // Nếu chưa chọn -> thêm vào danh sách
+    
         return [...prev, id];
       }
     });
@@ -140,7 +140,7 @@ const CandidateManagement = () => {
         <p className="candidate-page__subtitle">Quản lý ứng viên</p>
       </div>
 
-      {/* Search Filters */}
+   
       <div className="candidate-page__filters">
         <div className="candidate-page__filter-input">
           <MdSearch className="filter-icon" />
@@ -176,7 +176,7 @@ const CandidateManagement = () => {
         </button>
       </div>
 
-      {/* Table */}
+    
       <div className="candidate-page__table-wrapper">
         {loading ? (
           <div className="candidate-page__loading">Đang tải dữ liệu...</div>
@@ -259,7 +259,7 @@ const CandidateManagement = () => {
         )}
       </div>
 
-      {/* Footer: Pagination + Send Email + Schedule Interview */}
+    
       <div className="candidate-page__footer">
         <div className="candidate-page__pagination">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -282,7 +282,7 @@ const CandidateManagement = () => {
                 toast.warning("Vui lòng chọn ít nhất một ứng viên!");
                 return;
               }
-              // Truyền dữ liệu qua React Router state
+          
               navigate("/candidates/emails", { 
                 state: { selectedCandidateIds: selectedIds } 
               });

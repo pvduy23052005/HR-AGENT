@@ -75,7 +75,6 @@ const CandidateAIAnalysis = () => {
         ← Quay lại
       </button>
 
-      {/* === LOADING === */}
       {isLoading && (
         <div className="caa-loading">
           <div className="caa-loading-spinner" />
@@ -83,7 +82,7 @@ const CandidateAIAnalysis = () => {
         </div>
       )}
 
-      {/* === KẾT QUẢ === */}
+     
       {!isLoading && aiResult && candidate && (
         <div className="caa-container">
           <div className="caa-header">
@@ -92,7 +91,7 @@ const CandidateAIAnalysis = () => {
           </div>
 
           <div className="caa-form-card">
-            {/* Họ tên */}
+          
             <div className="caa-form-group">
               <label className="caa-form-label">Họ tên</label>
               <div className="caa-form-value">
@@ -100,7 +99,7 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
-            {/* Điểm phủ hợp */}
+         
             <div className="caa-form-group">
               <label className="caa-form-label">Điểm phủ hợp</label>
               <div className="caa-score-display">
@@ -115,7 +114,7 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
-            {/* Tóm tắt năng lực */}
+          
             <div className="caa-form-group">
               <label className="caa-form-label">Tóm tắt năng lực</label>
               <div className="caa-form-value caa-form-value--textarea">
@@ -123,7 +122,6 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
-            {/* Kỹ năng còn thiếu / Cảnh báo */}
             {aiResult.redFlags && aiResult.redFlags.length > 0 && (
               <div className="caa-form-group">
                 <label className="caa-form-label caa-form-label--danger">Kỹ năng còn thiếu</label>
@@ -137,7 +135,7 @@ const CandidateAIAnalysis = () => {
               </div>
             )}
 
-            {/* Câu hỏi phỏng vấn */}
+         
             {aiResult.suggestedQuestions && aiResult.suggestedQuestions.length > 0 && (
               <div className="caa-form-group">
                 <label className="caa-form-label">Câu hỏi phỏng vấn gợi ý</label>
@@ -151,7 +149,7 @@ const CandidateAIAnalysis = () => {
               </div>
             )}
 
-            {/* Actions */}
+          
             <div className="caa-actions">
               <button className="caa-btn caa-btn--secondary" onClick={() => navigate(`/candidates/${id}`)}>
                 Hủy
@@ -167,7 +165,7 @@ const CandidateAIAnalysis = () => {
         </div>
       )}
 
-      {/* Không có jobID */}
+   
       {!isLoading && !aiResult && candidate && !candidate.jobID && (
         <div className="caa-empty">
           <div className="caa-empty-text">
