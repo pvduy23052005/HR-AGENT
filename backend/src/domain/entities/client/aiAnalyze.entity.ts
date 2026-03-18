@@ -22,7 +22,7 @@ export interface IAiAnalyzeProps {
   updatedAt?: Date;
 }
 
-export class AiAnalyizeEntity {
+export class AiAnalyzeEntity {
   id: string;
   jobID: string;
   candidateID: string;

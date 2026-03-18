@@ -1,12 +1,12 @@
 import AiAnalysis from '../../models/AiAnalysis.model';
-import { AiAnalyizeEntity } from '../../../../domain/entities/client/aiAnalyize.entity';
+import { AiAnalyzeEntity } from '../../../../domain/entities/client/aiAnalyze.entity';
 import type { IAiAnalysisRepository } from '../../../../domain/interfaces/client/aiAnalysis.interface';
 
-const mapToEntity = (doc: any | null): AiAnalyizeEntity | null => {
+const mapToEntity = (doc: any | null): AiAnalyzeEntity | null => {
   if (!doc) return null;
   const d = doc as any;
 
-  return new AiAnalyizeEntity({
+  return new AiAnalyzeEntity({
     id: d._id.toString(),
     jobID: d.jobID?.toString(),
     candidateID: d.candidateID?.toString(),
@@ -29,13 +29,13 @@ export interface IAiAnalysisData {
 }
 
 export class AiAnalysisRepository implements IAiAnalysisRepository {
-  public async createAiAnalysis(data: IAiAnalysisData): Promise<AiAnalyizeEntity | null> {
+  public async createAiAnalysis(data: IAiAnalysisData): Promise<AiAnalyzeEntity | null> {
     const newAnalysis = new AiAnalysis(data);
     const savedAnalysis = await newAnalysis.save();
     return mapToEntity(savedAnalysis);
   }
 
-  public async getAnalysisByCandidateId(candidateID: string): Promise<AiAnalyizeEntity | null> {
+  public async getAnalysisByCandidateId(candidateID: string): Promise<AiAnalyzeEntity | null> {
     const analysis = await AiAnalysis.findOne({ candidateID }).lean();
     return mapToEntity(analysis);
   }

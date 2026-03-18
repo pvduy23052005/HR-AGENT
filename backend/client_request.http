@@ -57,7 +57,7 @@ Content-Type: application/json
 //
 
 ###
-POST {{base_url}}/ai/analyize
+POST {{base_url}}/ai/analyze
 Content-Type: application/json
 
 {

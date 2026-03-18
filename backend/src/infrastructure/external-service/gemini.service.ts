@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 import { candidatePrompt } from '../../prompts/candiate.prompt';
-import { aiAnalyzePrompt } from '../../prompts/aiAnalyize.prompt';
+import { aiAnalyzePrompt } from '../../prompts/aiAnalyze.prompt';
 import { interviewEmailPrompt } from '../../prompts/interviewEmail.prompt';
 import { IGeminiService } from '../../domain/interfaces/services/gemini.service';
 
