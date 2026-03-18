@@ -81,13 +81,16 @@
   align-items: center;
   gap: 10px;
   padding: 6px 12px 6px 6px;
+  margin-left: auto;
+  border-left: 1px solid var(--color-border);
   border-radius: 10px;
   cursor: pointer;
   transition: background 0.2s ease;
+  background: #fafbfc;
 }
 
 .client-header__user:hover {
-  background: var(--color-hover-bg);
+  background: #f5f6f8;
 }
 
 .client-header__avatar {

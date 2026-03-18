@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ScheduleInterviewUseCase } from '../../../../application/use-cases/client/interview/schedule-interview.use-case';
-import { AiAnalysisRepository } from '../../../../infrastructure/database/repositories/client/aiAnalyize.repository';
+import { AiAnalysisRepository } from '../../../../infrastructure/database/repositories/client/aiAnalyze.repository';
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
 import { InterviewScheduleRepository } from '../../../../infrastructure/database/repositories/client/interviewSchedule.repository';
 import { JobRepository } from '../../../../infrastructure/database/repositories/client/job.repository';

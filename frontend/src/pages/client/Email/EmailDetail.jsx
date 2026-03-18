@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import emailService from "../../services/client/emailService";
-import "../../styles/client/pages/emailDetail.css";
+import emailService from "../../../services/client/emailService";
+import "../../../styles/client/pages/emailDetail.css";
 
 const EmailDetail = () => {
   const { id } = useParams();
@@ -25,7 +25,7 @@ const EmailDetail = () => {
       setCustomContent(tmpl.content);
     } else {
       toast.warning("Không có mẫu email nào được chọn!");
-      navigate("/applications/emails");
+      navigate("/candidates/emails");
       return;
     }
 
@@ -33,7 +33,7 @@ const EmailDetail = () => {
       setSelectedCandidates(state.selectedCandidateIds);
     } else {
       toast.warning("Không có ứng viên nào được chọn!");
-      navigate("/applications");
+      navigate("/candidates");
     }
   }, [navigate, location]);
 
@@ -48,7 +48,7 @@ const EmailDetail = () => {
     }
 
     setSending(true);
-    toast.info(`🔄 Đang gửi email tới ${selectedCandidates.length} ứng viên...`);
+    toast.info(`Đang gửi email tới ${selectedCandidates.length} ứng viên`);
 
     try {
       const response = await emailService.sendBulkEmail({
@@ -67,7 +67,7 @@ const EmailDetail = () => {
         );
         // Redirect về applications
         setTimeout(() => {
-          navigate("/applications");
+          navigate("/candidates");
         }, 1500);
       } else {
         toast.error(response.message || "Gửi email thất bại!");
@@ -86,7 +86,7 @@ const EmailDetail = () => {
 
   return (
     <div className="email-detail-page">
-      <button className="ed-back" onClick={() => navigate("/applications/emails")}>
+      <button className="ed-back" onClick={() => navigate("/candidates/emails")}>
         ← Quay lại
       </button>
 

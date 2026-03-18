@@ -3,7 +3,7 @@ import { authRoute } from './auth.route';
 import { userRoute } from './user.route';
 import { uploadRoute } from './upload.route';
 import { jobRoute } from './job.route';
-import { aiRoute } from './aiAnalyize.route';
+import { aiRoute } from './aiAnalyze.route';
 import { candidateRoute } from "./candidate.route";
 import { interviewRoute } from './interview.route';
 import { emailRoute } from './email.route';

@@ -2,53 +2,48 @@
 
 .schedule-interview-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  background: #f5f5f5;
+  padding: 32px 40px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .sip-back-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
+  gap: 6px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #555;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.3s ease;
-  margin-bottom: 20px;
+  transition: color 0.2s ease;
+  margin-bottom: 24px;
 }
 
 .sip-back-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateX(-5px);
+  color: #0087f1;
+  transform: none;
 }
 
 .sip-container {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 20px;
+  display: block;
 }
 
 .sip-left,
 .sip-right {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: none;
 }
 
 .sip-card {
   background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: fadeInUp 0.5s ease;
+  border-radius: 14px;
+  padding: 32px 36px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  border: 1px solid #eee;
 }
 
 @keyframes fadeInUp {
@@ -73,7 +68,7 @@
 
 /* Candidate Info */
 .sip-candidate-info {
-  background: white;
+  display: none;
 }
 
 .sip-info-item {
@@ -104,13 +99,7 @@
 
 /* Tips */
 .sip-tips {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border: 1px solid #fcd34d;
-}
-
-.sip-tips .sip-card-title {
-  color: #92400e;
-  border-color: #fcd34d;
+  display: none;
 }
 
 .sip-tips-list {
@@ -138,43 +127,56 @@
 /* Form */
 .sip-form-card {
   background: white;
-  grid-column: span 1;
+}
+
+.sip-header {
+  margin-bottom: 24px;
+}
+
+.sip-header__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.sip-header__subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
 }
 
 .sip-form-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
   color: #1f2937;
-  margin: 0 0 24px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  margin: 0 0 32px 0;
+  display: block;
 }
 
 .sip-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .sip-form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .sip-form-label {
   font-weight: 600;
   color: #374151;
-  font-size: 14px;
+  font-size: 15px;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
 .sip-required {
-  color: #ef4444;
-  font-size: 16px;
+  display: none;
 }
 
 .sip-form-input-wrap {
@@ -185,41 +187,45 @@
 
 .sip-form-input {
   width: 100%;
-  padding: 12px 16px 12px 16px;
-  border: 1px solid #d1d5db;
+  padding: 14px 16px;
+  border: 1px solid #e8e8e8;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-family: inherit;
-  background: white;
-  transition: all 0.3s ease;
+  background: #f9f9f9;
+  transition: all 0.2s ease;
+  min-height: 48px;
 }
 
 .sip-form-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #0087f1;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 135, 241, 0.1);
 }
 
 .sip-form-textarea {
   resize: vertical;
   min-height: 100px;
   font-family: inherit;
+  display: none;
 }
 
 .sip-form-input-wrap--readonly {
-  background: #f9fafb;
+  background: transparent;
 }
 
 .sip-form-readonly {
-  padding: 12px 16px;
+  padding: 14px 0;
   color: #374151;
   word-break: break-all;
+  font-size: 15px;
 }
 
 .sip-form-icon {
   position: absolute;
   right: 12px;
-  font-size: 18px;
+  font-size: 20px;
   pointer-events: none;
   color: #6b7280;
 }
@@ -227,20 +233,20 @@
 .sip-form-actions {
   display: flex;
   gap: 12px;
-  margin-top: 12px;
-  padding-top: 20px;
-  border-top: 1px solid #f0f0f0;
+  margin-top: 28px;
+  padding-top: 0;
+  border-top: none;
+  justify-content: flex-end;
 }
 
 .sip-btn {
-  padding: 12px 24px;
+  padding: 14px 36px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  transition: all 0.3s ease;
-  flex: 1;
+  transition: all 0.2s ease;
   text-align: center;
   display: inline-flex;
   align-items: center;
@@ -256,6 +262,7 @@
 .sip-btn--cancel {
   background: #e5e7eb;
   color: #374151;
+  flex: 0;
 }
 
 .sip-btn--cancel:hover:not(:disabled) {
@@ -263,30 +270,18 @@
 }
 
 .sip-btn--submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0087f1;
   color: white;
+  flex: 0;
 }
 
 .sip-btn--submit:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  background: #0070cc;
+  box-shadow: 0 4px 12px rgba(0, 135, 241, 0.3);
 }
 
 .sip-form-note {
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-top: 12px;
-}
-
-.sip-form-note p {
-  margin: 0;
-  color: #047857;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: none;
 }
 
 .sip-loading,

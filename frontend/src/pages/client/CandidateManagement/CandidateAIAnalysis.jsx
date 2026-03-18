@@ -23,9 +23,11 @@ const CandidateAIAnalysis = () => {
     try {
       setLoading(true);
       const res = await candidateService.getById(id);
-      const cand = res.candidate || null;
+      console.log(res);
+      const cand = res.candidate;
+      console.log(cand);
       setCandidate(cand);
-
+      
       if (!cand) {
         toast.error("Không tìm thấy ứng viên!");
         return;
@@ -46,21 +48,15 @@ const CandidateAIAnalysis = () => {
   };
 
   const runAnalysis = async (jobID, candidateID) => {
-    try {
       setAnalyzing(true);
       const res = await aiService.analyzeCandidate({ jobID, candidateID });
       if (res.success) {
-        setAiResult(res.aiAnalyize);
-        toast.success(res.message || "Phân tích AI hoàn tất!");
+        setAiResult(res.aiAnalyze);
+        toast.success(res.message);
       } else {
-        toast.error(res.message || "Phân tích AI thất bại!");
+        toast.error(res.message);
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Lỗi khi gọi AI phân tích!");
-    } finally {
-      setAnalyzing(false);
-    }
+       setAnalyzing(false);
   };
 
   const handleReanalyze = async () => {
@@ -73,7 +69,7 @@ const CandidateAIAnalysis = () => {
 
   return (
     <div className="cd-page">
-      <button className="cd-back" onClick={() => navigate(`/applications/${id}`)}>
+      <button className="cd-back" onClick={() => navigate(`/candidates/${id}`)}>
         ← Quay lại chi tiết ứng viên
       </button>
 
@@ -161,7 +157,7 @@ const CandidateAIAnalysis = () => {
 
           {/* Actions */}
           <div className="cd-actions">
-            <button className="cd-btn cd-btn--cancel" onClick={() => navigate(`/applications/${id}`)}>
+            <button className="cd-btn cd-btn--cancel" onClick={() => navigate(`/candidates/${id}`)}>
               ← Quay lại
             </button>
             <button className="cd-btn cd-btn--schedule">Lên lịch phỏng vấn</button>

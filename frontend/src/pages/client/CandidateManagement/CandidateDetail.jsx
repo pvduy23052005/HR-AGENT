@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { MdSearch } from "react-icons/md";
 import { toast } from "react-toastify";
 import candidateService from "../../../services/client/candidateService";
+import jobService from "../../../services/client/jobService";
 import verificationService from "../../../services/client/verificationService";
 import "../../../styles/client/pages/candidateDetail.css";
 
@@ -11,12 +13,15 @@ const CandidateDetail = () => {
   const [candidate, setCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [verifyingLoading, setVerifyingLoading] = useState(false);
+  const [jobs, setJobs] = useState([]);
 
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [tempVerificationData, setTempVerificationData] = useState(null);
 
   useEffect(() => {
     fetchDetail();
+    fetchJobs();
+    // Force refetch every time component mounts to get latest status
   }, [id]);
 
   const fetchDetail = async () => {
@@ -32,9 +37,24 @@ const CandidateDetail = () => {
     }
   };
 
+  const fetchJobs = async () => {
+    try {
+      const res = await jobService.getAll();
+      setJobs(res.jobs || []);
+    } catch (error) {
+      console.error("Lỗi khi tải danh sách job:", error);
+    }
+  };
+
   const formatDate = (dateStr) => {
     if (!dateStr) return "—";
     return new Date(dateStr).toLocaleDateString("vi-VN");
+  };
+
+  const getJobTitle = (jobID) => {
+    if (!jobID) return "—";
+    const job = jobs.find((j) => j.id === jobID || j._id === jobID);
+    return job ? job.title : "—";
   };
 
   const handleVerify = async (githubLink, candidateID) => {
@@ -51,7 +71,7 @@ const CandidateDetail = () => {
         if (checkRes.success && checkRes.verification) {
           toast.info("Ứng viên đã được kiểm chứng.");
           setTimeout(() => {
-            navigate(`/applications/${candidateID}/certy`);
+            navigate(`/candidates/${candidateID}/verify`);
           }, 800);
           return;
         }
@@ -117,7 +137,7 @@ const CandidateDetail = () => {
 
         // Chuyển hướng đến trang chi tiết kiểm chứng
         setTimeout(() => {
-          navigate(`/applications/${id}/certy`);
+          navigate(`/candidates/${id}/verify`);
         }, 800);
       } else {
         toast.error(response.message || "Không thể lưu kết quả kiểm chứng!");
@@ -132,7 +152,6 @@ const CandidateDetail = () => {
     return (
       <div className="cd-page">
         <div className="cd-loading">
-          <span style={{ fontSize: 28 }}>⏳</span>
           <span>Đang tải thông tin ứng viên...</span>
         </div>
       </div>
@@ -161,14 +180,14 @@ const CandidateDetail = () => {
   } = candidate;
 
   const statusLabels = {
-    unanalyzed: "Chưa phân tích",
-    analyzed: "Đã phân tích",
+    unverified: "Chưa kiểm chứng",
+    verified: "Đã kiểm chứng",
     scheduled: "Đã lên lịch",
     risky: "Rủi ro",
   };
   const statusClasses = {
-    unanalyzed: "status-unanalyzed",
-    analyzed: "status-verified",
+    unverified: "status-unanalyzed",
+    verified: "status-verified",
     scheduled: "status-scheduled",
     risky: "status-risk",
   };
@@ -179,7 +198,7 @@ const CandidateDetail = () => {
 
   return (
     <div className="cd-page">
-      <button className="cd-back" onClick={() => navigate("/applications")}>
+      <button className="cd-back" onClick={() => navigate("/candidates")}>
         ← Quay lại
       </button>
 
@@ -193,7 +212,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">Họ tên</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className="cd-field__value">{personal.fullName || "—"}</span>
           </div>
         </div>
@@ -202,7 +221,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">Email</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className="cd-field__value">
               {personal.email ? (
                 <a href={`mailto:${personal.email}`}>{personal.email}</a>
@@ -217,7 +236,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">SĐT</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className="cd-field__value">{personal.phone || "—"}</span>
           </div>
         </div>
@@ -226,7 +245,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">GitHub</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className="cd-field__value">
               {personal.githubLink ? (
                 <a href={personal.githubLink} target="_blank" rel="noreferrer">
@@ -242,19 +261,22 @@ const CandidateDetail = () => {
         {/* Kỹ năng */}
         <div className="cd-field">
           <div className="cd-field__label">Kỹ năng</div>
-          <div className="cd-field__row cd-field__row--skills">
-            <span className="cd-field__icon">🔍</span>
-            {allSkills.length > 0 ? (
-              allSkills.map((s, i) => (
-                <span className="cd-skill-badge" key={i}>
-                  {s}
-                </span>
-              ))
-            ) : (
-              <span className="cd-field__value cd-field__value--empty">
-                Chưa có
-              </span>
-            )}
+          <div className="cd-field__row">
+            <MdSearch className="cd-field__icon" />
+            <span className="cd-field__value">
+              {(allSkills || []).join(", ") || "—"}
+            </span>
+          </div>
+        </div>
+
+        {/* Chức danh (Chọn JD) */}
+        <div className="cd-field">
+          <div className="cd-field__label">Chức danh (Chọn JD)</div>
+          <div className="cd-field__row">
+            <MdSearch className="cd-field__icon" />
+            <span className="cd-field__value">
+              {getJobTitle(candidate.jobID)}
+            </span>
           </div>
         </div>
 
@@ -262,7 +284,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">Học vấn</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className="cd-field__value">
               {firstEdu
                 ? `${firstEdu.school || ""}${firstEdu.major ? ` — ${firstEdu.major}` : ""}${firstEdu.gpa ? ` (GPA: ${firstEdu.gpa})` : ""}`
@@ -275,7 +297,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">Kinh nghiệm</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className="cd-field__value">
               {firstExp
                 ? `${firstExp.position || ""}${firstExp.company ? ` tại ${firstExp.company}` : ""}${firstExp.duration ? ` (${firstExp.duration})` : ""}`
@@ -289,7 +311,7 @@ const CandidateDetail = () => {
           <div className="cd-field">
             <div className="cd-field__label">Mục tiêu nghề nghiệp</div>
             <div className="cd-field__row">
-              <span className="cd-field__icon">🔍</span>
+              <MdSearch className="cd-field__icon" />
               <span className="cd-field__value">{objective}</span>
             </div>
           </div>
@@ -299,7 +321,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">Trạng thái</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className={`cd-field__value ${statusClass}`}>
               {statusLabel}
             </span>
@@ -310,7 +332,7 @@ const CandidateDetail = () => {
         <div className="cd-field">
           <div className="cd-field__label">Ngày lưu</div>
           <div className="cd-field__row">
-            <span className="cd-field__icon">🔍</span>
+            <MdSearch className="cd-field__icon" />
             <span className="cd-field__value">{formatDate(createdAt)}</span>
           </div>
         </div>
@@ -320,7 +342,7 @@ const CandidateDetail = () => {
       <div className="cd-actions">
         <button
           className="cd-btn cd-btn--cancel"
-          onClick={() => navigate("/applications")}
+          onClick={() => navigate("/candidates")}
         >
           Huỷ
         </button>
@@ -344,7 +366,7 @@ const CandidateDetail = () => {
         )}
         <button
           className="cd-btn cd-btn--schedule"
-          onClick={() => navigate(`/applications/${id}/lên lịch`)}
+          onClick={() => navigate(`/candidates/${id}/schedule`)}
         >
           Lên lịch phỏng vấn
         </button>
@@ -358,7 +380,7 @@ const CandidateDetail = () => {
         </button>
         <button
           className="cd-btn cd-btn--ai"
-          onClick={() => navigate(`/applications/${id}/ai-analysis`)}
+          onClick={() => navigate(`/candidates/${id}/ai-analysis`)}
         >
           🤖 Phân tích AI
         </button>

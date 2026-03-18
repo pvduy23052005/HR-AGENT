@@ -2,7 +2,7 @@ import type { ICandidateRepository } from '../../../../domain/interfaces/client/
 import type { IJobRepository } from '../../../../domain/interfaces/client/job.interface';
 import type { IAiAnalysisRepository } from '../../../../domain/interfaces/client/aiAnalysis.interface';
 import type { IGeminiService } from '../../../../domain/interfaces/services/gemini.service';
-import type { IAiAnalyzeDetail } from '../../../../domain/entities/client/aiAnalyize.entity';
+import type { IAiAnalyzeDetail } from '../../../../domain/entities/client/aiAnalyze.entity';
 import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
 
 export interface IAiAnalyzeResult {
@@ -10,17 +10,17 @@ export interface IAiAnalyzeResult {
   data: IAiAnalyzeDetail;
 }
 
-export class ExecuteAiAnalyizeUseCase {
+export class AiAnalyzeUseCase {
   constructor(
     private readonly candidateRepo: ICandidateRepository,
     private readonly jobRepo: IJobRepository,
-    private readonly aiAnalyizeRepo: IAiAnalysisRepository,
+    private readonly aiAnalyzeRepo: IAiAnalysisRepository,
     private readonly geminiService: IGeminiService,
   ) { }
 
   async execute(candidateID: string, jobID: string): Promise<IAiAnalyzeResult> {
 
-    const existingAnalysis = await this.aiAnalyizeRepo.getAnalysisByCandidateId(candidateID);
+    const existingAnalysis = await this.aiAnalyzeRepo.getAnalysisByCandidateId(candidateID);
     if (existingAnalysis) {
       return {
         message: 'Hồ sơ ứng viên này đã được phân tích.',
@@ -40,7 +40,7 @@ export class ExecuteAiAnalyizeUseCase {
     );
     if (!analysisResult) throw new Error('Lỗi khi gọi AI phân tích dữ liệu.');
 
-    const savedAnalysis = await this.aiAnalyizeRepo.createAiAnalysis({
+    const savedAnalysis = await this.aiAnalyzeRepo.createAiAnalysis({
       jobID,
       candidateID,
       summary: analysisResult['summary'] as string | undefined,

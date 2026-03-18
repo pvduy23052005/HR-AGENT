@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import "../../styles/client/pages/emailTemplates.css";
+import "../../../styles/client/pages/emailTemplates.css";
 
 const EMAIL_TEMPLATES = [
   {
@@ -84,13 +84,13 @@ const EmailTemplates = () => {
       setSelectedCandidates(state);
     } else {
       toast.warning("Không có ứng viên nào được chọn!");
-      navigate("/applications");
+      navigate("/candidates");
     }
   }, [navigate, location]);
 
   const handleSelectTemplate = (template) => {
     // Truyền template + selectedCandidates qua React Router state
-    navigate(`/applications/emails/${template.id}/detail`, {
+    navigate(`/candidates/emails/${template.id}/detail`, {
       state: { 
         selectedTemplate: template,
         selectedCandidateIds: selectedCandidates 
@@ -100,7 +100,7 @@ const EmailTemplates = () => {
 
   return (
     <div className="email-templates-page">
-      <button className="etp-back" onClick={() => navigate("/applications")}>
+      <button className="etp-back" onClick={() => navigate("/candidates")}>
         ← Quay lại
       </button>
 
@@ -131,7 +131,7 @@ const EmailTemplates = () => {
         {/* Side Info */}
         <div className="etp-side">
           <div className="etp-info-card">
-            <h3>📊 Thông tin</h3>
+            <h3>Thông tin</h3>
             <div className="etp-info-item">
               <span className="etp-label">Ứng viên được chọn:</span>
               <span className="etp-value">{selectedCandidates.length}</span>

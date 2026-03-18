@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 
-export const validateAnalyizeCandidate: RequestHandler = (req, res, next) => {
+export const validateAnalyzeCandidate: RequestHandler = (req, res, next) => {
   const { jobID, candidateID } = req.body as { jobID?: string; candidateID?: string };
 
   if (!jobID || !candidateID) {
