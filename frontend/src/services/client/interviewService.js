@@ -27,24 +27,7 @@ const interviewService = {
     return res;
   },
 
-  /**
-   * Cập nhật lịch phỏng vấn
-   * @param {string} id - ID lịch phỏng vấn
-   * @param {Object} data - { time?, address?, status?, notes? }
-   */
-  updateSchedule: async (id, data) => {
-    const res = await API.patch(`/interview/${id}`, data);
-    return res;
-  },
 
-  /**
-   * Xóa lịch phỏng vấn
-   * @param {string} id - ID lịch phỏng vấn
-   */
-  deleteSchedule: async (id) => {
-    const res = await API.delete(`/interview/${id}`);
-    return res;
-  },
 };
 
 

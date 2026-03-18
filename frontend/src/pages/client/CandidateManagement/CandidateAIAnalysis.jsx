@@ -23,7 +23,9 @@ const CandidateAIAnalysis = () => {
     try {
       setLoading(true);
       const res = await candidateService.getById(id);
-      const cand = res.candidate || null;
+      console.log(res);
+      const cand = res.candidate;
+      console.log(cand);
       setCandidate(cand);
       
       if (!cand) {
@@ -49,7 +51,7 @@ const CandidateAIAnalysis = () => {
       setAnalyzing(true);
       const res = await aiService.analyzeCandidate({ jobID, candidateID });
       if (res.success) {
-        setAiResult(res.aiAnalyize);
+        setAiResult(res.aiAnalyze);
         toast.success(res.message);
       } else {
         toast.error(res.message);

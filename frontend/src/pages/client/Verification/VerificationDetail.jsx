@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import verificationService from "../../../services/client/verificationService";
+import candidateService from "../../../services/client/candidateService";
 import "../../../styles/client/pages/verificationDetail.css";
 
 const VerificationDetail = () => {
@@ -9,13 +10,26 @@ const VerificationDetail = () => {
   const navigate = useNavigate();
 
   const [verification, setVerification] = useState(null);
+  const [candidateStatus, setCandidateStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [confirming, setConfirming] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null);
 
   useEffect(() => {
     fetchVerification();
+    fetchCandidate();
   }, [id]);
+
+  const fetchCandidate = async () => {
+    try {
+      const res = await candidateService.getById(id);
+      if (res.candidate) {
+        setCandidateStatus(res.candidate.status);
+      }
+    } catch (error) {
+      console.error("Error fetching candidate:", error);
+    }
+  };
 
   const fetchVerification = async () => {
     try {
@@ -37,6 +51,11 @@ const VerificationDetail = () => {
   };
 
   const handleConfirm = async (status) => {
+    if (candidateStatus === "scheduled") {
+      toast.warning("Ứng viên đã lên lịch, không cần kiểm chứng!");
+      return;
+    }
+
     setSelectedStatus(status);
     setConfirming(true);
     
