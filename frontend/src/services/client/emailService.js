@@ -12,17 +12,6 @@ const emailService = {
       throw error;
     }
   },
-
-  // Gửi email tới một ứng viên
-  sendEmail: async (candidateId, data) => {
-    try {
-      const res = await API.post(`/email/send/${candidateId}`, data);
-      return res;
-    } catch (error) {
-      console.error("Error sending email:", error);
-      throw error;
-    }
-  },
 };
 
 export default emailService;

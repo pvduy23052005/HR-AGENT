@@ -7,17 +7,6 @@ const authService = {
     return res;
   },
 
-  // Đăng kí
-  signup: async (fullName, email, password, confirmPassword) => {
-    const res = await API.post("/auth/signup", {
-      fullName,
-      email,
-      password,
-      confirmPassword,
-    });
-    return res;
-  },
-
   // Đăng xuất
   logout: async () => {
     const res = await API.post("/auth/logout");

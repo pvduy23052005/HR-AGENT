@@ -23,7 +23,9 @@ const CandidateAIAnalysis = () => {
     try {
       setLoading(true);
       const res = await candidateService.getById(id);
-      const cand = res.candidate || null;
+      console.log(res);
+      const cand = res.candidate;
+      console.log(cand);
       setCandidate(cand);
       
       if (!cand) {
