@@ -14,6 +14,7 @@ const CandidateDetail = () => {
   const [loading, setLoading] = useState(true);
   const [verifyingLoading, setVerifyingLoading] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [selectedJobId, setSelectedJobId] = useState("");
 
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [tempVerificationData, setTempVerificationData] = useState(null);
@@ -21,8 +22,13 @@ const CandidateDetail = () => {
   useEffect(() => {
     fetchDetail();
     fetchJobs();
-    
   }, [id]);
+
+  useEffect(() => {
+    if (candidate?.jobID) {
+      setSelectedJobId(candidate.jobID);
+    }
+  }, [candidate]);
 
   const fetchDetail = async () => {
     try {
@@ -55,6 +61,13 @@ const CandidateDetail = () => {
     if (!jobID) return "—";
     const job = jobs.find((j) => j.id === jobID || j._id === jobID);
     return job ? job.title : "—";
+  };
+
+  const handleJobChange = (e) => {
+    const jobId = e.target.value;
+    setSelectedJobId(jobId);
+    console.log("Job được chọn:", jobId, jobs.find((j) => (j.id === jobId || j._id === jobId)));
+    // TODO: Sẽ gửi API cùng với phân tích AI sau
   };
 
   const handleVerify = async (githubLink, candidateID) => {
@@ -268,17 +281,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-      
-        <div className="cd-field">
-          <div className="cd-field__label">Chức danh (Chọn JD)</div>
-          <div className="cd-field__row">
-            <MdSearch className="cd-field__icon" />
-            <span className="cd-field__value">
-              {getJobTitle(candidate.jobID)}
-            </span>
-          </div>
-        </div>
-
         <div className="cd-field">
           <div className="cd-field__label">Học vấn</div>
           <div className="cd-field__row">
@@ -325,12 +327,41 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-    
-        <div className="cd-field">
-          <div className="cd-field__label">Ngày lưu</div>
-          <div className="cd-field__row">
-            <MdSearch className="cd-field__icon" />
-            <span className="cd-field__value">{formatDate(createdAt)}</span>
+        {/* Side by side: Date saved and Job selection */}
+        <div className="cd-fields-row">
+          <div className="cd-field">
+            <div className="cd-field__label">Ngày lưu</div>
+            <div className="cd-field__row">
+              <MdSearch className="cd-field__icon" />
+              <span className="cd-field__value">{formatDate(createdAt)}</span>
+            </div>
+          </div>
+
+          <div className="cd-field">
+            <div className="cd-field__label">Chức danh (Chọn JD)</div>
+            <div className="cd-field__row">
+              <select
+                value={selectedJobId}
+                onChange={handleJobChange}
+                style={{
+                  padding: "8px 12px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                  fontFamily: "inherit",
+                  backgroundColor: "#fff",
+                  cursor: "pointer",
+                  width: "100%"
+                }}
+              >
+                <option value="">-- Chọn vị trí công việc --</option>
+                {jobs.map((job) => (
+                  <option key={job.id || job._id} value={job.id || job._id}>
+                    {job.title}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -377,7 +408,13 @@ const CandidateDetail = () => {
         </button>
         <button
           className="cd-btn cd-btn--ai"
-          onClick={() => navigate(`/candidates/${id}/ai-analysis`)}
+          onClick={() => {
+            if (!selectedJobId) {
+              toast.warning("Vui lòng chọn vị trí công việc trước khi phân tích!");
+              return;
+            }
+            navigate(`/candidates/${id}/ai-analysis?jobId=${selectedJobId}`);
+          }}
         >
           Phân tích AI
         </button>

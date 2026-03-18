@@ -132,6 +132,18 @@
 
 .cd-field__value--empty { color: #bbb; font-style: italic; }
 
+/* Fields Row - Side by side layout */
+.cd-fields-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.cd-fields-row .cd-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
 /* Section divider */
 .cd-divider {
   height: 1px;

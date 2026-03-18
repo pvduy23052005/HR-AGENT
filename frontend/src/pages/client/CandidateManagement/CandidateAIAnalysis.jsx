@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import aiService from "../../../services/client/aiService";
 import candidateService from "../../../services/client/candidateService";
+import jobService from "../../../services/client/jobService";
 import "../../../styles/client/pages/candidateDetail.css";
 import "../../../styles/client/pages/candidateAIAnalysis.css";
 
 const CandidateAIAnalysis = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const jobIdFromUrl = searchParams.get("jobId");
 
   const [candidate, setCandidate] = useState(null);
   const [aiResult, setAiResult] = useState(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
+  const [currentJob, setCurrentJob] = useState(null);
 
   useEffect(() => {
     fetchAndAnalyze();
@@ -31,12 +35,27 @@ const CandidateAIAnalysis = () => {
         return;
       }
 
-      if (!cand.jobID) {
+      // Ưu tiên sử dụng jobId từ URL params, nếu không có thì dùng candidate.jobID
+      const jobIdToUse = jobIdFromUrl || cand.jobID;
+
+      if (!jobIdToUse) {
         toast.error("Ứng viên này chưa gắn với vị trí công việc nào!");
         return;
       }
 
-      await runAnalysis(cand.jobID, id);
+      // Fetch job details
+      try {
+        const allJobsRes = await jobService.getAll();
+        const jobs = allJobsRes.jobs || [];
+        const job = jobs.find((j) => j.id === jobIdToUse || j._id === jobIdToUse);
+        if (job) {
+          setCurrentJob(job);
+        }
+      } catch (jobErr) {
+        console.error("Lỗi khi tải job:", jobErr);
+      }
+
+      await runAnalysis(jobIdToUse, id);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi tải thông tin ứng viên!");
@@ -96,6 +115,13 @@ const CandidateAIAnalysis = () => {
               <label className="caa-form-label">Họ tên</label>
               <div className="caa-form-value">
                 {candidate?.personal?.fullName || "—"}
+              </div>
+            </div>
+
+            <div className="caa-form-group">
+              <label className="caa-form-label">Vị trí công việc</label>
+              <div className="caa-form-value" style={{ fontWeight: "500", color: "#0066cc" }}>
+                {currentJob?.title || "—"}
               </div>
             </div>
 
