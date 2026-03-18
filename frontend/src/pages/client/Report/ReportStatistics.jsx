@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
@@ -36,23 +36,54 @@ const ReportStatistics = () => {
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportFormat, setExportFormat] = useState('pdf');
 
+  // Fetch statistics - wrapped in useCallback để tránh vấn đề closure
+  const fetchStatistics = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await reportService.getStatistics(filterCriteria, filterDate);
+      if (response && response.success) {
+        setStats(response.data);
+      }
+    } catch (error) {
+      console.error('Lỗi khi tải thống kê:', error);
+      toast.error('Lỗi khi tải dữ liệu thống kê!');
+    } finally {
+      setLoading(false);
+    }
+  }, [filterCriteria, filterDate]);
+
   React.useEffect(() => {
-    const fetchStatistics = async () => {
-      try {
-        setLoading(true);
-        const response = await reportService.getStatistics(filterCriteria, filterDate);
-        if (response && response.success) {
-          setStats(response.data);
+    fetchStatistics();
+  }, [fetchStatistics]);
+
+  // Auto-refresh khi status thay đổi từ localStorage (sync across tabs)
+  React.useEffect(() => {
+    const handleStorageChange = (e) => {
+      // Lắng nghe thay đổi từ localStorage
+      if (e.key === 'hr-agent-sync') {
+        try {
+          const syncData = JSON.parse(e.newValue);
+          if (syncData && syncData.type === 'candidate-status-changed') {
+            console.log('Detected status change from another tab, updating stats:', syncData);
+            // Delay một chút để backend cập nhật xong
+            setTimeout(() => {
+              fetchStatistics();
+            }, 1000);
+          }
+        } catch (err) {
+          console.error('Error parsing sync data:', err);
         }
-      } catch (error) {
-        console.error('Lỗi khi tải thống kê:', error);
-        toast.error('Lỗi khi tải dữ liệu thống kê!');
-      } finally {
-        setLoading(false);
       }
     };
-    fetchStatistics();
-  }, [filterCriteria, filterDate]);
+
+    // Listen để nhận thay đổi từ localStorage (từ tabs khác)
+    window.addEventListener('storage', handleStorageChange);
+    console.log('Storage listener registered for cross-tab sync');
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [fetchStatistics]);
   
   const handleBack = () => {
     navigate(-1);

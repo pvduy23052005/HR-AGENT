@@ -3,6 +3,10 @@ export enum CandidateStatus {
   SCHEDULED = "scheduled",
   VERIFIED = "verified",
   RISKY = "risky",
+  APPLIED = "applied",
+  SCREENING = "screening",
+  INTERVIEW = "interview",
+  OFFER = "offer",
 }
 
 export interface IPersonal {

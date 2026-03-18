@@ -61,13 +61,18 @@ export class CandidateRepository implements ICandidateRepository {
 
   public async updateStatus(candidateID: string, status: IStatus): Promise<void> {
     try {
-      await Candidate.updateOne({
+      const result = await Candidate.updateOne({
         _id: candidateID
       }, {
         status: status.status
-      })
+      });
+
+      if (result.modifiedCount === 0) {
+        throw new Error("Không thể cập nhật trạng thái ứng viên");
+      }
     } catch (error) {
-      console.log("Error update status", error);
+      console.error("Error update status", error);
+      throw error;
     }
   }
 }

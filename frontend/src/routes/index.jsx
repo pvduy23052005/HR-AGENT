@@ -25,6 +25,7 @@ import EmailDetail from "../pages/client/EmailDetail";
 import JobManagement from "../pages/client/JobManagement/JobManagement";
 import JobCreate from "../pages/client/JobManagement/JobCreate";
 import ReportStatistics from "../pages/client/Report/ReportStatistics";
+import RecruitmentBoard from "../pages/client/RecruitmentProcess";
 
 const routes = [
   {
@@ -53,6 +54,7 @@ const routes = [
           { path: "jobs", element: <JobManagement /> },
           { path: "jobs/create", element: <JobCreate /> },
           { path: "reports", element: <ReportStatistics /> },
+          { path: "recruitment", element: <RecruitmentBoard /> },
           {
             path: "upload_cv",
             element: <UploadCV />,

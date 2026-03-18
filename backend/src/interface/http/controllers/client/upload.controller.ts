@@ -14,16 +14,19 @@ const uploadCVUseCase = new UploadCVUseCase(candidateRepository, jobRepository, 
 export const uploadCV = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
-    const file = req.file as Express.Multer.File;
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const cvFile = files?.cv?.[0];
+    const avatarFile = files?.avatar?.[0];
     const { jobID } = req.body as { jobID: string };
 
-    const { cvLink, newCandidate, dataCV } = await uploadCVUseCase.execute(
+    const { cvLink, avatarLink, newCandidate, dataCV } = await uploadCVUseCase.execute(
       userID,
       jobID,
-      file,
+      cvFile,
+      avatarFile,
     );
 
-    res.status(200).json({ message: 'CV processed successfully', cvLink, newCandidate, dataCV });
+    res.status(200).json({ message: 'CV processed successfully', cvLink, avatarLink, newCandidate, dataCV });
   } catch (error: unknown) {
     const e = error as { message?: string };
     const statusCode = e.message?.includes('Vui lòng') ? 400 : 500;

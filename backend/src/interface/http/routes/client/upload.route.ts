@@ -5,6 +5,6 @@ import * as controller from '../../controllers/client/upload.controller';
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.post('/cv', upload.single('cv'), controller.uploadCV);
+router.post('/cv', upload.fields([{ name: 'cv', maxCount: 1 }, { name: 'avatar', maxCount: 1 }]), controller.uploadCV);
 
 export const uploadRoute: express.Router = router;

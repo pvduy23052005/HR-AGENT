@@ -8,10 +8,13 @@ import "../../../styles/client/pages/uploadCV.css";
 const UploadCV = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const imageInputRef = useRef(null);
   const userDropdownRef = useRef(null);
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [jobId, setJobId] = useState("");
@@ -82,12 +85,18 @@ const UploadCV = () => {
 
   const validateFile = (file) => {
     const allowedTypes = [
+      // Document formats
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      // Image formats
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
     ];
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Chỉ chấp nhận file PDF, DOC, DOCX!");
+      toast.error("Chỉ chấp nhận ảnh hoặc tài liệu (JPG, PNG, GIF, WEBP, PDF, DOC, DOCX)!");
       return false;
     }
     if (file.size > 10 * 1024 * 1024) {
@@ -97,9 +106,33 @@ const UploadCV = () => {
     return true;
   };
 
+  const validateImage = (file) => {
+    const allowedImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
+    if (!allowedImageTypes.includes(file.type)) {
+      toast.error("Chỉ chấp nhận ảnh JPG, PNG, GIF, WEBP!");
+      return false;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Ảnh không được vượt quá 5MB!");
+      return false;
+    }
+    return true;
+  };
+
   const handleFileSelect = (file) => {
     if (file && validateFile(file)) {
       setSelectedFile(file);
+    }
+  };
+
+  const handleImageSelect = (file) => {
+    if (file && validateImage(file)) {
+      setSelectedImage(file);
     }
   };
 
@@ -112,6 +145,26 @@ const UploadCV = () => {
     e.preventDefault();
     setIsDragging(false);
   }, []);
+
+  const handleImageDragOver = useCallback((e) => {
+    e.preventDefault();
+    setIsDraggingImage(true);
+  }, []);
+
+  const handleImageDragLeave = useCallback((e) => {
+    e.preventDefault();
+    setIsDraggingImage(false);
+  }, []);
+
+  const handleImageDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      setIsDraggingImage(false);
+      const file = e.dataTransfer.files[0];
+      handleImageSelect(file);
+    },
+    []
+  );
 
   const handleDrop = useCallback(
     (e) => {
@@ -129,10 +182,22 @@ const UploadCV = () => {
     handleFileSelect(file);
   };
 
+  const handleImageInputChange = (e) => {
+    const file = e.target.files[0];
+    handleImageSelect(file);
+  };
+
   const handleRemoveFile = () => {
     setSelectedFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
     }
   };
 
@@ -160,6 +225,9 @@ const UploadCV = () => {
 
       const formData = new FormData();
       formData.append("cv", selectedFile);
+      if (selectedImage) {
+        formData.append("avatar", selectedImage);
+      }
       formData.append("jobID", jobId.trim());
 
       const baseURL =
@@ -185,40 +253,13 @@ const UploadCV = () => {
       };
       setUploadedFiles((prev) => [newFile, ...prev]);
       setSelectedFile(null);
+      setSelectedImage(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
-      toast.success("Upload CV thành công!");
-
-      if (candidateID) {
-        setAnalyzing(true);
-        try {
-          const analyzeRes = await axios.post(
-            `${baseURL}/ai/analyize`,
-            { jobID: jobId.trim(), candidateID },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              withCredentials: true,
-            },
-          );
-
-          if (analyzeRes.data?.success) {
-            setAnalysisResult(analyzeRes.data.aiAnalyize);
-            toast.success("Phân tích CV bằng AI thành công!");
-          } else {
-            toast.error(analyzeRes.data?.message || "Phân tích AI thất bại.");
-          }
-        } catch (error) {
-          console.error(error);
-          toast.error("Lỗi khi gọi API phân tích AI.");
-        } finally {
-          setAnalyzing(false);
-        }
-      }
+      if (imageInputRef.current) imageInputRef.current.value = "";
+      toast.success("Upload CV" + (selectedImage ? " và ảnh" : "") + " thành công!");
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.message || "Upload CV thất bại!");
+      toast.error(error?.response?.data?.message || "Upload thất bại!");
     } finally {
       setUploading(false);
     }
@@ -227,6 +268,7 @@ const UploadCV = () => {
   const getFileIcon = (name) => {
     if (name.endsWith(".pdf")) return "📄";
     if (name.endsWith(".doc") || name.endsWith(".docx")) return "📝";
+    if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".webp")) return "🖼️";
     return "📎";
   };
 
@@ -242,90 +284,34 @@ const UploadCV = () => {
 
   return (
     <div className="upload-cv-page">
-      <button
-        onClick={() => {
-          handleVerify("https://github.com/pvduy23052005");
-        }}
-      >
-        {" "}
-
-      </button>
-
       {/* ── Header ── */}
       <header className="upload-cv-header">
-        <div className="logo">
-          <div className="logo-icon">N</div>
-          <span className="logo-text">Hr-agent</span>
-        </div>
-
-        {/* User dropdown trigger */}
-        <div
-          className={`ucv-user-trigger${showUserDropdown ? " ucv-user-trigger--open" : ""}`}
-          ref={userDropdownRef}
-          onClick={() => setShowUserDropdown((prev) => !prev)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === "Enter" && setShowUserDropdown((p) => !p)}
-        >
-          {/* Avatar circle */}
-          {/* <div className="ucv-avatar">{avatarLetter}</div> */}
-
-          {/* Name + role */}
-          {/* <div className="ucv-user-info">
-            <span className="ucv-user-name">{userName}</span>
-            <span className="ucv-user-role">Ứng viên</span>
-          </div> */}
-
-          {/* Chevron */}
-          <svg
-            className={`ucv-chevron${showUserDropdown ? " ucv-chevron--open" : ""}`}
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-
-          {/* Dropdown menu */}
-          {/* {showUserDropdown && (
-            <div className="ucv-dropdown" onClick={(e) => e.stopPropagation()}>
-              <div className="ucv-dropdown__header">
-                <span className="ucv-dropdown__name">{userName}</span>
-                <span className="ucv-dropdown__role">Ứng viên</span>
-              </div>
-              <div className="ucv-dropdown__divider" />
-              <button className="ucv-dropdown__item ucv-dropdown__item--danger" onClick={handleLogout}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <polyline points="16 17 21 12 16 7" />
-                  <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
-                Đăng xuất
-              </button>
-            </div>
-          )} */}
-        </div>
+       
+        <div className="header-spacer"></div>
       </header>
 
       {/* ── Main Content ── */}
       <main className="upload-cv-content">
-        <h1 className="upload-cv-title">Upload CV của bạn</h1>
-        <p className="upload-cv-subtitle">
-          Tải lên hồ sơ để ứng tuyển các vị trí phù hợp
-        </p>
+        {/* ── Hero Section ── */}
+        <div className="hero-section">
+          <div className="hero-icon">📋</div>
+          <h1 className="upload-cv-title">Upload CV của bạn</h1>
+          <p className="upload-cv-subtitle">
+            Chia sẻ hồ sơ để ứng tuyển và nhận được phân tích từ AI
+          </p>
+        </div>
 
-        {/* ── Job Dropdown ── */}
-        <div className="job-id-input-wrapper">
-          <label className="job-id-label">
-            Vị trí ứng tuyển
+        {/* ── Main Card ── */}
+        <div className="upload-card">
+          {/* ── Job Selection ── */}
+          <div className="job-section">
+            <label className="job-label">
+              <span className="label-icon">💼</span>
+              <span className="label-text">Chọn vị trí ứng tuyển</span>
+            </label>
             <div className="job-select-wrap">
               <select
-                className="job-id-select"
+                className="job-select"
                 value={jobId}
                 onChange={(e) => setJobId(e.target.value)}
               >
@@ -336,127 +322,221 @@ const UploadCV = () => {
                   </option>
                 ))}
               </select>
-              {/* Custom chevron overlay */}
               <svg
-                className="job-select-chevron"
-                width="16"
-                height="16"
+                className="select-chevron"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2.5"
+                strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
                 <polyline points="6 9 12 15 18 9" />
               </svg>
             </div>
-          </label>
-        </div>
-
-        {/* ── Drop Zone ── */}
-        <div
-          className={`upload-dropzone ${isDragging ? "dragging" : ""}`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <span className="upload-icon">☁️</span>
-          <p className="upload-text">Kéo thả file vào đây</p>
-          <p className="upload-hint">
-            hoặc <span>chọn file</span> từ máy tính
-          </p>
-          <div className="upload-formats">
-            <span className="format-badge">PDF</span>
-            <span className="format-badge">DOC</span>
-            <span className="format-badge">DOCX</span>
-            <span className="format-badge">≤ 10MB</span>
           </div>
-          <input
-            type="file"
-            ref={fileInputRef}
-            accept=".pdf,.doc,.docx"
-            onChange={handleInputChange}
-          />
-        </div>
 
-        {/* ── File Preview ── */}
-        {selectedFile && (
-          <div className="file-preview">
-            <div className="file-icon">{getFileIcon(selectedFile.name)}</div>
-            <div className="file-info">
-              <div className="file-name">{selectedFile.name}</div>
-              <div className="file-size">
-                {formatFileSize(selectedFile.size)}
+          {/* ── Divider ── */}
+          <div className="card-divider"></div>
+
+          {/* ── Drop Zone ── */}
+          <div
+            className={`upload-dropzone ${isDragging ? "dragging" : ""}`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <div className="dropzone-content">
+              <div className="upload-icon">�</div>
+              <p className="upload-text">Kéo thả CV hoặc ảnh CV vào đây</p>
+              <p className="upload-hint">
+                hay <button className="browse-btn" onClick={(e) => {
+                  e.stopPropagation();
+                  fileInputRef.current?.click();
+                }}>duyệt thư viện</button>
+              </p>
+              <div className="upload-formats">
+                <span className="format-badge">📄 PDF</span>
+                <span className="format-badge">📝 DOC</span>
+                <span className="format-badge">📝 DOCX</span>
+                <span className="format-badge">🖼️ JPG</span>
+                <span className="format-badge">🖼️ PNG</span>
+                <span className="format-badge">🖼️ GIF</span>
+                <span className="format-badge">🖼️ WEBP</span>
+                <span className="format-badge-size">Max 10MB</span>
               </div>
             </div>
-            <button className="file-remove" onClick={handleRemoveFile}>
-              ✕
-            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,image/*"
+              onChange={handleInputChange}
+            />
           </div>
-        )}
 
-        {/* ── Upload Button ── */}
-        <button
-          className={`btn-upload ${uploading ? "uploading" : ""}`}
-          disabled={!selectedFile || uploading}
-          onClick={handleUpload}
-        >
-          {uploading ? "Đang tải lên..." : "📤 Upload CV & Phân tích AI"}
-        </button>
-
-        {/* ── Uploaded Files List ── */}
-        {uploadedFiles.length > 0 && (
-          <div className="uploaded-list">
-            <h3>📁 CV đã tải lên</h3>
-            {uploadedFiles.map((file) => (
-              <div key={file.id} className="uploaded-item">
-                <span className="item-icon">{getFileIcon(file.name)}</span>
-                <div className="item-info">
-                  <div className="item-name">{file.name}</div>
-                  <div className="item-date">{file.date}</div>
-                </div>
-                <span className="item-status">Đã tải lên</span>
+          {/* ── Avatar Upload Section ── */}
+          {/* <div className="avatar-section">
+            <label className="avatar-label">
+              <span className="label-icon">📷</span>
+              <span className="label-text">Tải ảnh đại diện (tùy chọn)</span>
+            </label>
+            <div
+              className={`upload-avatar-zone ${isDraggingImage ? "dragging" : ""}`}
+              onDragOver={handleImageDragOver}
+              onDragLeave={handleImageDragLeave}
+              onDrop={handleImageDrop}
+              onClick={() => imageInputRef.current?.click()}
+            >
+              <div className="avatar-content">
+                {selectedImage ? (
+                  <>
+                    <div className="avatar-preview-icon">🖼️</div>
+                    <p className="avatar-preview-name">{selectedImage.name}</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="avatar-icon">📸</div>
+                    <p className="avatar-text">Kéo thả ảnh vào đây</p>
+                    <p className="avatar-hint">hoặc <button className="browse-btn" onClick={(e) => {
+                      e.stopPropagation();
+                      imageInputRef.current?.click();
+                    }}>chọn ảnh</button></p>
+                  </>
+                )}
               </div>
-            ))}
+              <input
+                type="file"
+                ref={imageInputRef}
+                accept=".jpg,.jpeg,.png,.gif,.webp"
+                onChange={handleImageInputChange}
+              />
+            </div>
+            {selectedImage && (
+              <button className="avatar-remove" onClick={handleRemoveImage} title="Xóa ảnh">
+                ✕ Xóa ảnh
+              </button>
+            )}
+          </div> */}
+
+          {/* ── File Preview ── */}
+          {selectedFile && (
+            <div className="file-preview">
+              <div className="preview-content">
+                <div className="preview-icon">{getFileIcon(selectedFile.name)}</div>
+                <div className="preview-info">
+                  <div className="preview-name" title={selectedFile.name}>{selectedFile.name}</div>
+                  <div className="preview-size">{formatFileSize(selectedFile.size)}</div>
+                </div>
+              </div>
+              <button className="preview-remove" onClick={handleRemoveFile} title="Xóa file">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          )}
+
+          {/* ── Upload Button ── */}
+          <button
+            className={`btn-upload ${uploading ? "loading" : ""}`}
+            disabled={!selectedFile || uploading || !jobId.trim()}
+            onClick={handleUpload}
+          >
+            <span className="btn-icon">📤</span>
+            <span className="btn-text">
+              {uploading ? "Đang tải lên..." : "Upload CV"}
+            </span>
+          </button>
+
+          {/* ── Form Help Text ── */}
+          <p className="form-helptext">
+            ✨ CV sẽ được lưu vào cột "Ứng tuyển" để bạn quản lý
+          </p>
+        </div>
+
+        {/* ── Uploaded Files Section ── */}
+        {uploadedFiles.length > 0 && (
+          <div className="uploaded-section">
+            <h2 className="section-title">📁 CV Của Bạn</h2>
+            <div className="uploaded-grid">
+              {uploadedFiles.map((file) => (
+                <div key={file.id} className="uploaded-card">
+                  <div className="uploaded-header">
+                    <span className="uploaded-icon">{getFileIcon(file.name)}</span>
+                    <span className="uploaded-badge">✓ Đã tải</span>
+                  </div>
+                  <div className="uploaded-body">
+                    <div className="uploaded-name" title={file.name}>{file.name}</div>
+                    <div className="uploaded-date">📅 {file.date}</div>
+                  </div>
+                  <div className="uploaded-footer">
+                    {file.cvLink && (
+                      <a href={file.cvLink} target="_blank" rel="noopener noreferrer" className="view-link">
+                        Xem file →
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
         {/* ── AI Analysis Result ── */}
         {analyzing && (
-          <div className="ai-analysis-card">
-            <h3>🧠 Đang phân tích CV bằng AI...</h3>
+          <div className="analysis-section">
+            <div className="analyzing-card">
+              <div className="analyzing-spinner"></div>
+              <h3>🧠 Đang phân tích CV bằng AI...</h3>
+              <p>Vui lòng chờ, AI sẽ phân tích hồ sơ của bạn trong giây lát</p>
+            </div>
           </div>
         )}
 
         {analysisResult && (
-          <div className="ai-analysis-card">
-            <h3>🧠 Kết quả phân tích AI</h3>
-            <p className="ai-summary">{analysisResult.summary}</p>
-            <p className="ai-score">
-              Điểm phù hợp: <strong>{analysisResult.matchingScore}</strong>/100
-            </p>
-            {analysisResult.redFlags?.length > 0 && (
-              <div className="ai-section">
-                <h4>Các điểm cần lưu ý:</h4>
-                <ul>
-                  {analysisResult.redFlags.map((flag, idx) => (
-                    <li key={idx}>{flag}</li>
-                  ))}
-                </ul>
+          <div className="analysis-section">
+            <div className="analysis-card">
+              <div className="analysis-header">
+                <span className="analysis-icon">🧠</span>
+                <h3>Kết quả Phân tích AI</h3>
               </div>
-            )}
-            {analysisResult.suggestedQuestions?.length > 0 && (
-              <div className="ai-section">
-                <h4>Câu hỏi gợi ý cho phỏng vấn:</h4>
-                <ul>
-                  {analysisResult.suggestedQuestions.map((q, idx) => (
-                    <li key={idx}>{q}</li>
-                  ))}
-                </ul>
+              
+              <div className="analysis-score">
+                <span className="score-label">Mức độ phù hợp</span>
+                <div className="score-bar">
+                  <div className="score-fill" style={{ width: `${analysisResult.matchingScore}%` }}></div>
+                </div>
+                <span className="score-value">{analysisResult.matchingScore}%</span>
               </div>
-            )}
+
+              <p className="analysis-summary">{analysisResult.summary}</p>
+
+              {analysisResult.redFlags?.length > 0 && (
+                <div className="analysis-item alerts">
+                  <h4>⚠️ Điểm cần lưu ý</h4>
+                  <ul>
+                    {analysisResult.redFlags.map((flag, idx) => (
+                      <li key={idx}>{flag}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {analysisResult.suggestedQuestions?.length > 0 && (
+                <div className="analysis-item questions">
+                  <h4>💬 Gợi ý câu hỏi phỏng vấn</h4>
+                  <ul>
+                    {analysisResult.suggestedQuestions.map((q, idx) => (
+                      <li key={idx}>{q}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </main>
