@@ -23,9 +23,7 @@ const CandidateAIAnalysis = () => {
     try {
       setLoading(true);
       const res = await candidateService.getById(id);
-      console.log(res);
       const cand = res.candidate;
-      console.log(cand);
       setCandidate(cand);
       
       if (!cand) {
@@ -65,116 +63,117 @@ const CandidateAIAnalysis = () => {
     await runAnalysis(candidate.jobID, id);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   const isLoading = loading || analyzing;
 
   return (
-    <div className="cd-page">
-      <button className="cd-back" onClick={() => navigate(`/candidates/${id}`)}>
-        ← Quay lại chi tiết ứng viên
+    <div className="caa-page">
+      <button className="caa-back" onClick={() => navigate(`/candidates/${id}`)}>
+        ← Quay lại
       </button>
-
-      <div className="cd-header">
-        <h1>Phân tích AI cho ứng viên</h1>
-        <p>Kết quả phân tích độ phù hợp giữa ứng viên và vị trí ứng tuyển</p>
-      </div>
 
       {/* === LOADING === */}
       {isLoading && (
-        <div className="ai-loading-panel">
-          <div className="ai-loading-icon">🤖</div>
-          <div className="ai-loading-text">
-            <span className="ai-loading-title">Đang phân tích hồ sơ ứng viên...</span>
-            <span className="ai-loading-sub">Gemini AI đang đánh giá độ phù hợp, vui lòng đợi</span>
-          </div>
-          <div className="ai-dots">
-            <span /><span /><span />
-          </div>
+        <div className="caa-loading">
+          <div className="caa-loading-spinner" />
+          <span>Đang phân tích hồ sơ ứng viên...</span>
         </div>
       )}
 
       {/* === KẾT QUẢ === */}
-      {!isLoading && aiResult && (
-        <div className="ai-result-wrap">
-
-          {/* Score card */}
-          <div className="ai-score-card">
-            <div className="ai-score-label">Điểm phù hợp</div>
-            <div className="ai-score-ring">
-              <svg viewBox="0 0 120 120" className="ai-ring-svg">
-                <circle cx="60" cy="60" r="50" className="ai-ring-bg" />
-                <circle
-                  cx="60" cy="60" r="50"
-                  className="ai-ring-fill"
-                  strokeDasharray={`${(aiResult.matchingScore / 100) * 314} 314`}
-                />
-              </svg>
-              <div className="ai-score-num">{aiResult.matchingScore}%</div>
-            </div>
-            <div className="ai-score-hint">
-              {aiResult.matchingScore >= 80
-                ? "✅ Rất phù hợp"
-                : aiResult.matchingScore >= 60
-                ? "🔶 Phù hợp trung bình"
-                : "❌ Chưa đủ yêu cầu"}
-            </div>
+      {!isLoading && aiResult && candidate && (
+        <div className="caa-container">
+          <div className="caa-header">
+            <h1>Phân tích AI cho ứng viên</h1>
+            <p>Thông tin chi tiết của ứng viên</p>
           </div>
 
-          {/* Tóm tắt */}
-          <div className="cd-card ai-section">
-            <div className="ai-section-title">📝 Tóm tắt năng lực</div>
-            <p className="ai-summary-text">{aiResult.summary || "—"}</p>
-          </div>
-
-          {/* Red flags */}
-          {aiResult.redFlags && aiResult.redFlags.length > 0 && (
-            <div className="cd-card ai-section">
-              <div className="ai-section-title ai-section-title--red">⚠️ Kỹ năng còn thiếu / Cảnh báo</div>
-              <ul className="ai-list ai-list--red">
-                {aiResult.redFlags.map((flag, i) => (
-                  <li key={i} className="ai-list-item">
-                    <span className="ai-list-dot ai-list-dot--red">●</span>
-                    <span>{flag}</span>
-                  </li>
-                ))}
-              </ul>
+          <div className="caa-form-card">
+            {/* Họ tên */}
+            <div className="caa-form-group">
+              <label className="caa-form-label">Họ tên</label>
+              <div className="caa-form-value">
+                {candidate?.personal?.fullName || "—"}
+              </div>
             </div>
-          )}
 
-          {/* Câu hỏi phỏng vấn */}
-          {aiResult.suggestedQuestions && aiResult.suggestedQuestions.length > 0 && (
-            <div className="cd-card ai-section">
-              <div className="ai-section-title">💬 Câu hỏi phỏng vấn gợi ý</div>
-              <ol className="ai-list ai-list--questions">
-                {aiResult.suggestedQuestions.map((q, i) => (
-                  <li key={i} className="ai-list-item ai-list-item--question">
-                    <span className="ai-q-num">{i + 1}.</span>
-                    <span>{q}</span>
-                  </li>
-                ))}
-              </ol>
+            {/* Điểm phủ hợp */}
+            <div className="caa-form-group">
+              <label className="caa-form-label">Điểm phủ hợp</label>
+              <div className="caa-score-display">
+                <div className="caa-score-badge">{aiResult.matchingScore}%</div>
+                <span className="caa-score-status">
+                  {aiResult.matchingScore >= 80
+                    ? "Rất phù hợp"
+                    : aiResult.matchingScore >= 60
+                    ? "Phù hợp trung bình"
+                    : "Chưa đủ yêu cầu"}
+                </span>
+              </div>
             </div>
-          )}
 
-          {/* Actions */}
-          <div className="cd-actions">
-            <button className="cd-btn cd-btn--cancel" onClick={() => navigate(`/candidates/${id}`)}>
-              ← Quay lại
-            </button>
-            <button className="cd-btn cd-btn--schedule">Lên lịch phỏng vấn</button>
-            <button className="cd-btn cd-btn--verify">Cập nhật trạng thái</button>
-            <button className="cd-btn cd-btn--ai" onClick={handleReanalyze} disabled={analyzing}>
-              🔄 Phân tích lại
-            </button>
+            {/* Tóm tắt năng lực */}
+            <div className="caa-form-group">
+              <label className="caa-form-label">Tóm tắt năng lực</label>
+              <div className="caa-form-value caa-form-value--textarea">
+                {aiResult.summary || "—"}
+              </div>
+            </div>
+
+            {/* Kỹ năng còn thiếu / Cảnh báo */}
+            {aiResult.redFlags && aiResult.redFlags.length > 0 && (
+              <div className="caa-form-group">
+                <label className="caa-form-label caa-form-label--danger">Kỹ năng còn thiếu</label>
+                <div className="caa-form-value caa-form-value--list">
+                  <ul className="caa-list">
+                    {aiResult.redFlags.map((flag, i) => (
+                      <li key={i}>{flag}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* Câu hỏi phỏng vấn */}
+            {aiResult.suggestedQuestions && aiResult.suggestedQuestions.length > 0 && (
+              <div className="caa-form-group">
+                <label className="caa-form-label">Câu hỏi phỏng vấn gợi ý</label>
+                <div className="caa-form-value caa-form-value--list">
+                  <ol className="caa-list">
+                    {aiResult.suggestedQuestions.map((q, i) => (
+                      <li key={i}>{q}</li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="caa-actions">
+              <button className="caa-btn caa-btn--secondary" onClick={() => navigate(`/candidates/${id}`)}>
+                Hủy
+              </button>
+              <button className="caa-btn caa-btn--secondary" onClick={handlePrint}>
+                In
+              </button>
+              <button className="caa-btn caa-btn--secondary" onClick={handleReanalyze} disabled={analyzing}>
+                {analyzing ? "Đang phân tích..." : "Phân tích lại"}
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {/* Không có jobID */}
       {!isLoading && !aiResult && candidate && !candidate.jobID && (
-        <div className="cd-card" style={{ textAlign: "center", padding: 40, color: "#888" }}>
-          <div style={{ fontSize: 36, marginBottom: 12 }}>📋</div>
-          <div style={{ fontWeight: 600, marginBottom: 8 }}>Chưa gắn vị trí công việc</div>
-          <div style={{ fontSize: 14 }}>Ứng viên này chưa được liên kết với job nào. Vui lòng upload CV qua đúng vị trí tuyển dụng.</div>
+        <div className="caa-empty">
+          <div className="caa-empty-text">
+            <h3>Chưa gắn vị trí công việc</h3>
+            <p>Ứng viên này chưa được liên kết với job nào. Vui lòng upload CV qua đúng vị trí tuyển dụng.</p>
+          </div>
         </div>
       )}
     </div>

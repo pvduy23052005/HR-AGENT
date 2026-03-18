@@ -376,13 +376,13 @@ const CandidateDetail = () => {
           disabled={verifyingLoading}
           style={verifyingLoading ? { opacity: 0.6, cursor: "wait" } : {}}
         >
-          {verifyingLoading ? "⏳ Đang kiểm chứng..." : "✅ Kiểm chứng GitHub"}
+          {verifyingLoading ? "Đang kiểm chứng..." : "Kiểm chứng GitHub"}
         </button>
         <button
           className="cd-btn cd-btn--ai"
           onClick={() => navigate(`/candidates/${id}/ai-analysis`)}
         >
-          🤖 Phân tích AI
+          Phân tích AI
         </button>
       </div>
 
@@ -390,7 +390,6 @@ const CandidateDetail = () => {
       {showSaveModal && (
         <div className="cd-modal-overlay">
           <div className="cd-modal">
-            <span className="cd-modal__icon">✨</span>
             <h3>Hoàn tất phân tích AI</h3>
             <p>
               AI đã phân tích xong profile GitHub của{" "}
