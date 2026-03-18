@@ -3,7 +3,6 @@ import LayoutDefault from "../layouts/admin/layoutDefault";
 import LayoutClientDefault from "../layouts/client/layoutClientDefault";
 import routeDashboard from "./admin/routeDashboard";
 import routeUser from "./admin/routeUser";
-import routeAiConfig from "./admin/routeAiConfig";
 import routeStatistics from "./admin/routeStatistics";
 import routeInterviewSchedule from "./admin/routeInterviewSchedule";
 import routeAuth from "./admin/routeAuth";
@@ -33,6 +32,7 @@ const routes = [
     children: [routeClientAuth],
   },
 
+
   {
     element: <ClientProtectedRoute />,
     children: [
@@ -48,8 +48,14 @@ const routes = [
           { path: "candidates/emails/:id/detail", element: <EmailDetail /> },
           { path: "candidates/:id", element: <CandidateDetail /> },
           { path: "candidates/:id/verify", element: <VerificationDetail /> },
-          { path: "candidates/:id/schedule", element: <ScheduleInterviewPage /> },
-          { path: "candidates/:id/ai-analysis", element: <CandidateAIAnalysis /> },
+          {
+            path: "candidates/:id/schedule",
+            element: <ScheduleInterviewPage />,
+          },
+          {
+            path: "candidates/:id/ai-analysis",
+            element: <CandidateAIAnalysis />,
+          },
 
           { path: "jobs", element: <JobManagement /> },
           { path: "jobs/create", element: <JobCreate /> },
@@ -63,16 +69,10 @@ const routes = [
             path: "candidates",
             element: <CandidateManagement />,
           },
-
         ],
       },
     ],
   },
-
-
-
-
-
 
   // Admin public route
   {
@@ -87,7 +87,12 @@ const routes = [
       {
         path: "/admin",
         element: <LayoutDefault />,
-        children: [routeDashboard, routeUser, routeAiConfig, routeStatistics, routeInterviewSchedule],
+        children: [
+          routeDashboard,
+          routeUser,
+          routeStatistics,
+          routeInterviewSchedule,
+        ],
       },
     ],
   },

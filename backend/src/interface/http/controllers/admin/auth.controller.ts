@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import { LoginUseCase } from '../../../../application/use-cases/admin/auth/login.use-case';
+import { LogoutUseCase } from '../../../../application/use-cases/admin/auth/logout.use-case';
 
 import { AuthRepository } from '../../../../infrastructure/database/repositories/admin/auth.repository';
 
@@ -40,6 +41,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 // [POST] /admin/auth/logout
 export const logout = (req: Request, res: Response): void => {
   try {
+    const userID: string = res.locals.user.id.toString() || "";
+
+    const logoutUsecase = new LogoutUseCase();
+    logoutUsecase.execute(userID);
+
     res.clearCookie('token');
     res.status(200).json({ success: true, message: 'Đăng xuất thành công!' });
   } catch (error: unknown) {
