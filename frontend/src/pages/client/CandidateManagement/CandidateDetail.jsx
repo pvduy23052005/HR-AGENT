@@ -82,7 +82,7 @@ const CandidateDetail = () => {
         console.log("Chưa có dữ liệu kiểm chứng, bắt đầu quét mới...");
       }
 
-      const extensionId = "jjkplkmkajifbfgiafkfgogihdoellof";
+      const extensionId = "bbebdnbhjphhndgmipcaljcpeoppmaik";
 
       if (!window.chrome?.runtime?.sendMessage) {
         toast.error(
@@ -101,8 +101,8 @@ const CandidateDetail = () => {
         },
         (response) => {
           if (response && response.success) {
-            console.log("Đã nhận dữ liệu xịn từ Extension:", response.data);
             const dataJson = JSON.parse(response.data);
+            console.log(dataJson);
             setTempVerificationData(dataJson);
             setShowSaveModal(true);
             setVerifyingLoading(false);

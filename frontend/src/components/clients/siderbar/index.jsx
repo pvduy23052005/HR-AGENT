@@ -7,6 +7,7 @@ import {
   MdBarChart,
   MdAccountTree,
   MdWork,
+  MdPersonSearch,
   MdLogout,
 } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -17,6 +18,7 @@ const menuItems = [
   { path: "/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
   { path: "/jobs", icon: <MdWork />, label: "Quản lý Công việc" },
   { path: "/upload_cv", icon: <MdCloudUpload />, label: "Nộp CV" },
+  { path: "/sourcing", icon: <MdPersonSearch />, label: "Sourcing Ứng viên" },
   { path: "/candidates", icon: <MdPeople />, label: "Quản lý ứng viên" },
   { path: "/reports", icon: <MdBarChart />, label: "Báo cáo & Thống kê" },
   { path: "/recruitment", icon: <MdAccountTree />, label: "Quy trình tuyển dụng" },

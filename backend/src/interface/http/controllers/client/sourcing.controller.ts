@@ -10,6 +10,7 @@ const sourcingLeadRepository = new SourcingLeadRepository();
 export const searchCandidates = async (req: Request, res: Response): Promise<void> => {
   try {
     const { keywords, sources, limit, jobID } = req.body;
+    console.log(req.body);
 
     if (!keywords || typeof keywords !== 'string' || !keywords.trim()) {
       res.status(400).json({ success: false, message: 'Thiếu từ khoá tìm kiếm!' });
