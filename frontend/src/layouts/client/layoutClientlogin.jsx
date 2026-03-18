@@ -24,10 +24,6 @@ function LayoutClientlogin() {
                 <span className="client-auth__branding-feature-dot"></span>
                 Quản lý hồ sơ ứng tuyển
               </div>
-              <div className="client-auth__branding-feature">
-                <span className="client-auth__branding-feature-dot"></span>
-                Nhận thông báo mới nhất
-              </div>
             </div>
           </div>
         </div>

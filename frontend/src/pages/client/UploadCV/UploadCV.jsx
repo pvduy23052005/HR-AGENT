@@ -47,7 +47,10 @@ const UploadCV = () => {
   // Close user dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(e.target)
+      ) {
         setShowUserDropdown(false);
       }
     };
@@ -96,7 +99,9 @@ const UploadCV = () => {
       "image/webp",
     ];
     if (!allowedTypes.includes(file.type)) {
-      toast.error("Chỉ chấp nhận ảnh hoặc tài liệu (JPG, PNG, GIF, WEBP, PDF, DOC, DOCX)!");
+      toast.error(
+        "Chỉ chấp nhận ảnh hoặc tài liệu (JPG, PNG, GIF, WEBP, PDF, DOC, DOCX)!",
+      );
       return false;
     }
     if (file.size > 10 * 1024 * 1024) {
@@ -156,15 +161,12 @@ const UploadCV = () => {
     setIsDraggingImage(false);
   }, []);
 
-  const handleImageDrop = useCallback(
-    (e) => {
-      e.preventDefault();
-      setIsDraggingImage(false);
-      const file = e.dataTransfer.files[0];
-      handleImageSelect(file);
-    },
-    []
-  );
+  const handleImageDrop = useCallback((e) => {
+    e.preventDefault();
+    setIsDraggingImage(false);
+    const file = e.dataTransfer.files[0];
+    handleImageSelect(file);
+  }, []);
 
   const handleDrop = useCallback(
     (e) => {
@@ -174,7 +176,7 @@ const UploadCV = () => {
       handleFileSelect(file);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   const handleInputChange = (e) => {
@@ -233,6 +235,7 @@ const UploadCV = () => {
       const baseURL =
         import.meta.env.VITE_API_BASE_URL || "http://localhost:5050";
 
+      // call api upload .
       const uploadRes = await axios.post(`${baseURL}/upload/cv`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -256,7 +259,9 @@ const UploadCV = () => {
       setSelectedImage(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
       if (imageInputRef.current) imageInputRef.current.value = "";
-      toast.success("Upload CV" + (selectedImage ? " và ảnh" : "") + " thành công!");
+      toast.success(
+        "Upload CV" + (selectedImage ? " và ảnh" : "") + " thành công!",
+      );
     } catch (error) {
       console.error(error);
       toast.error(error?.response?.data?.message || "Upload thất bại!");
@@ -266,9 +271,16 @@ const UploadCV = () => {
   };
 
   const getFileIcon = (name) => {
-    if (name.endsWith(".pdf")) return "📄";
-    if (name.endsWith(".doc") || name.endsWith(".docx")) return "📝";
-    if (name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".webp")) return "🖼️";
+    if (name.endsWith(".pdf")) return "";
+    if (name.endsWith(".doc") || name.endsWith(".docx")) return "";
+    if (
+      name.endsWith(".jpg") ||
+      name.endsWith(".jpeg") ||
+      name.endsWith(".png") ||
+      name.endsWith(".gif") ||
+      name.endsWith(".webp")
+    )
+      return "";
     return "📎";
   };
 
@@ -286,7 +298,6 @@ const UploadCV = () => {
     <div className="upload-cv-page">
       {/* ── Header ── */}
       <header className="upload-cv-header">
-       
         <div className="header-spacer"></div>
       </header>
 
@@ -294,7 +305,7 @@ const UploadCV = () => {
       <main className="upload-cv-content">
         {/* ── Hero Section ── */}
         <div className="hero-section">
-          <div className="hero-icon">📋</div>
+
           <h1 className="upload-cv-title">Upload CV của bạn</h1>
           <p className="upload-cv-subtitle">
             Chia sẻ hồ sơ để ứng tuyển và nhận được phân tích từ AI
@@ -306,7 +317,7 @@ const UploadCV = () => {
           {/* ── Job Selection ── */}
           <div className="job-section">
             <label className="job-label">
-              <span className="label-icon">💼</span>
+
               <span className="label-text">Chọn vị trí ứng tuyển</span>
             </label>
             <div className="job-select-wrap">
@@ -353,19 +364,25 @@ const UploadCV = () => {
               <div className="upload-icon">�</div>
               <p className="upload-text">Kéo thả CV hoặc ảnh CV vào đây</p>
               <p className="upload-hint">
-                hay <button className="browse-btn" onClick={(e) => {
-                  e.stopPropagation();
-                  fileInputRef.current?.click();
-                }}>duyệt thư viện</button>
+                hay{" "}
+                <button
+                  className="browse-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
+                >
+                  duyệt thư viện
+                </button>
               </p>
               <div className="upload-formats">
-                <span className="format-badge">📄 PDF</span>
-                <span className="format-badge">📝 DOC</span>
-                <span className="format-badge">📝 DOCX</span>
-                <span className="format-badge">🖼️ JPG</span>
-                <span className="format-badge">🖼️ PNG</span>
-                <span className="format-badge">🖼️ GIF</span>
-                <span className="format-badge">🖼️ WEBP</span>
+                <span className="format-badge">PDF</span>
+                <span className="format-badge">DOC</span>
+                <span className="format-badge">DOCX</span>
+                <span className="format-badge">JPG</span>
+                <span className="format-badge">PNG</span>
+                <span className="format-badge">GIF</span>
+                <span className="format-badge">WEBP</span>
                 <span className="format-badge-size">Max 10MB</span>
               </div>
             </div>
@@ -380,7 +397,7 @@ const UploadCV = () => {
           {/* ── Avatar Upload Section ── */}
           {/* <div className="avatar-section">
             <label className="avatar-label">
-              <span className="label-icon">📷</span>
+              <span className="label-icon"></span>
               <span className="label-text">Tải ảnh đại diện (tùy chọn)</span>
             </label>
             <div
@@ -425,14 +442,31 @@ const UploadCV = () => {
           {selectedFile && (
             <div className="file-preview">
               <div className="preview-content">
-                <div className="preview-icon">{getFileIcon(selectedFile.name)}</div>
+                <div className="preview-icon">
+                  {getFileIcon(selectedFile.name)}
+                </div>
                 <div className="preview-info">
-                  <div className="preview-name" title={selectedFile.name}>{selectedFile.name}</div>
-                  <div className="preview-size">{formatFileSize(selectedFile.size)}</div>
+                  <div className="preview-name" title={selectedFile.name}>
+                    {selectedFile.name}
+                  </div>
+                  <div className="preview-size">
+                    {formatFileSize(selectedFile.size)}
+                  </div>
                 </div>
               </div>
-              <button className="preview-remove" onClick={handleRemoveFile} title="Xóa file">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <button
+                className="preview-remove"
+                onClick={handleRemoveFile}
+                title="Xóa file"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
@@ -446,7 +480,7 @@ const UploadCV = () => {
             disabled={!selectedFile || uploading || !jobId.trim()}
             onClick={handleUpload}
           >
-            <span className="btn-icon">📤</span>
+
             <span className="btn-text">
               {uploading ? "Đang tải lên..." : "Upload CV"}
             </span>
@@ -454,28 +488,37 @@ const UploadCV = () => {
 
           {/* ── Form Help Text ── */}
           <p className="form-helptext">
-            ✨ CV sẽ được lưu vào cột "Ứng tuyển" để bạn quản lý
+            CV sẽ được lưu vào cột "Ứng tuyển" để bạn quản lý
           </p>
         </div>
 
         {/* ── Uploaded Files Section ── */}
         {uploadedFiles.length > 0 && (
           <div className="uploaded-section">
-            <h2 className="section-title">📁 CV Của Bạn</h2>
+            <h2 className="section-title">CV Của Bạn</h2>
             <div className="uploaded-grid">
               {uploadedFiles.map((file) => (
                 <div key={file.id} className="uploaded-card">
                   <div className="uploaded-header">
-                    <span className="uploaded-icon">{getFileIcon(file.name)}</span>
+                    <span className="uploaded-icon">
+                      {getFileIcon(file.name)}
+                    </span>
                     <span className="uploaded-badge">✓ Đã tải</span>
                   </div>
                   <div className="uploaded-body">
-                    <div className="uploaded-name" title={file.name}>{file.name}</div>
-                    <div className="uploaded-date">📅 {file.date}</div>
+                    <div className="uploaded-name" title={file.name}>
+                      {file.name}
+                    </div>
+                    <div className="uploaded-date">{file.date}</div>
                   </div>
                   <div className="uploaded-footer">
                     {file.cvLink && (
-                      <a href={file.cvLink} target="_blank" rel="noopener noreferrer" className="view-link">
+                      <a
+                        href={file.cvLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="view-link"
+                      >
                         Xem file →
                       </a>
                     )}
@@ -491,7 +534,7 @@ const UploadCV = () => {
           <div className="analysis-section">
             <div className="analyzing-card">
               <div className="analyzing-spinner"></div>
-              <h3>🧠 Đang phân tích CV bằng AI...</h3>
+              <h3>Đang phân tích CV bằng AI...</h3>
               <p>Vui lòng chờ, AI sẽ phân tích hồ sơ của bạn trong giây lát</p>
             </div>
           </div>
@@ -501,23 +544,28 @@ const UploadCV = () => {
           <div className="analysis-section">
             <div className="analysis-card">
               <div className="analysis-header">
-                <span className="analysis-icon">🧠</span>
+                <span className="analysis-icon"></span>
                 <h3>Kết quả Phân tích AI</h3>
               </div>
-              
+
               <div className="analysis-score">
                 <span className="score-label">Mức độ phù hợp</span>
                 <div className="score-bar">
-                  <div className="score-fill" style={{ width: `${analysisResult.matchingScore}%` }}></div>
+                  <div
+                    className="score-fill"
+                    style={{ width: `${analysisResult.matchingScore}%` }}
+                  ></div>
                 </div>
-                <span className="score-value">{analysisResult.matchingScore}%</span>
+                <span className="score-value">
+                  {analysisResult.matchingScore}%
+                </span>
               </div>
 
               <p className="analysis-summary">{analysisResult.summary}</p>
 
               {analysisResult.redFlags?.length > 0 && (
                 <div className="analysis-item alerts">
-                  <h4>⚠️ Điểm cần lưu ý</h4>
+                  <h4>Điểm cần lưu ý</h4>
                   <ul>
                     {analysisResult.redFlags.map((flag, idx) => (
                       <li key={idx}>{flag}</li>
@@ -528,7 +576,7 @@ const UploadCV = () => {
 
               {analysisResult.suggestedQuestions?.length > 0 && (
                 <div className="analysis-item questions">
-                  <h4>💬 Gợi ý câu hỏi phỏng vấn</h4>
+                  <h4>Gợi ý câu hỏi phỏng vấn</h4>
                   <ul>
                     {analysisResult.suggestedQuestions.map((q, idx) => (
                       <li key={idx}>{q}</li>
