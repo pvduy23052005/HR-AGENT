@@ -21,7 +21,7 @@ const CandidateDetail = () => {
   useEffect(() => {
     fetchDetail();
     fetchJobs();
-    // Force refetch every time component mounts to get latest status
+    
   }, [id]);
 
   const fetchDetail = async () => {
@@ -135,7 +135,7 @@ const CandidateDetail = () => {
         toast.success("Đã lưu kết quả thành công!");
         setShowSaveModal(false);
 
-        // Chuyển hướng đến trang chi tiết kiểm chứng
+     
         setTimeout(() => {
           navigate(`/candidates/${id}/verify`);
         }, 800);
@@ -208,7 +208,7 @@ const CandidateDetail = () => {
       </div>
 
       <div className="cd-card">
-        {/* Họ tên */}
+       
         <div className="cd-field">
           <div className="cd-field__label">Họ tên</div>
           <div className="cd-field__row">

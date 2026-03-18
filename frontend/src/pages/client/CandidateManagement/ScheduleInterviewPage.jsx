@@ -11,8 +11,6 @@ const ScheduleInterviewPage = () => {
   const [candidate, setCandidate] = useState(null);
   const [time, setTime] = useState("");
   const [address, setAddress] = useState("");
-  const [durationMinutes, setDurationMinutes] = useState(60);
-  const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -56,8 +54,6 @@ const ScheduleInterviewPage = () => {
         jobID: candidate.jobID || candidate.job?._id || "",
         time: new Date(time).toISOString(),
         address,
-        durationMinutes: Number(durationMinutes),
-        notes,
       });
 
       if (res.success) {

@@ -44,7 +44,7 @@ const UploadCV = () => {
     fetchJobs();
   }, []);
 
-  // Close user dropdown when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
@@ -66,7 +66,7 @@ const UploadCV = () => {
     }
   })();
 
-  // Get first letter of name for avatar
+ 
   const avatarLetter = userName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
@@ -85,11 +85,11 @@ const UploadCV = () => {
 
   const validateFile = (file) => {
     const allowedTypes = [
-      // Document formats
+
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      // Image formats
+      
       "image/jpeg",
       "image/png",
       "image/gif",

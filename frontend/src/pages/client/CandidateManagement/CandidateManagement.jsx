@@ -46,46 +46,62 @@ const CandidateManagement = () => {
     }
   };
 
+  // Kiểm tra ứng viên có kỹ năng tìm kiếm không
+  const matchesSkill = (candidate, searchTerm) => {
+    if (!searchTerm) return true; // Nếu không nhập từ khóa thì match tất cả
+    const skills = candidate.topSkills || [];
+    return skills.some(skill => 
+      skill.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
+  // Kiểm tra ứng viên có trạng thái lọc không
+  const matchesStatus = (candidate, status) => {
+    if (status === "all") return true; // Nếu chọn tất cả thì match tất cả
+    return candidate.status === status;
+  };
+
   // Filter logic
   const filtered = useMemo(() => {
-    return candidates.filter((c) => {
-      const skillMatch =
-        !searchSkill ||
-        (c.topSkills || []).some((s) =>
-          s.toLowerCase().includes(searchSkill.toLowerCase())
-        );
-      const statusMatch =
-        filterStatus === "all" ||
-        c.status === filterStatus;
-      return skillMatch && statusMatch;
+    return candidates.filter((candidate) => {
+      const hasSkill = matchesSkill(candidate, searchSkill);
+      const hasStatus = matchesStatus(candidate, filterStatus);
+      return hasSkill && hasStatus; // Cả 2 điều kiện phải đúng
     });
-  }, [candidates, searchSkill, searchExp, filterStatus]);
+  }, [candidates, searchSkill, filterStatus]);
 
-  // Pagination
+  // Phân trang: lấy dữ liệu của trang hiện tại
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  const paginatedData = filtered.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;  // vị trí bắt đầu
+  const endIndex = currentPage * ITEMS_PER_PAGE;          // vị trí kết thúc
+  const paginatedData = filtered.slice(startIndex, endIndex);
   useEffect(() => {
     setCurrentPage(1);
   }, [searchSkill, searchExp, filterStatus]);
 
   // Checkbox
   const toggleSelect = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
+    setSelectedIds((prev) => {
+      // Kiểm tra id có trong danh sách đã chọn không
+      const isAlreadySelected = prev.includes(id);
+      if (isAlreadySelected) {
+        // Nếu đã chọn rồi -> xóa khỏi danh sách
+        return prev.filter((selectedId) => selectedId !== id);
+      } else {
+        // Nếu chưa chọn -> thêm vào danh sách
+        return [...prev, id];
+      }
+    });
   };
 
   const getStatusLabel = (status) => {
     const labels = {
       unverified: "Chưa kiểm chứng",
       verified: "Đã kiểm chứng",
-      scheduled: "Đã lên lịch",
+      scheduled: "Phỏng vấn",
       risky: "Rủi ro",
     };
+
     return labels[status] || status || "—";
   };
 
@@ -105,10 +121,7 @@ const CandidateManagement = () => {
     return d.toLocaleDateString("vi-VN");
   };
 
-  const getInitial = (name) => {
-    if (!name) return "?";
-    return name.charAt(0).toUpperCase();
-  };
+
 
   const getJobTitle = (jobID) => {
     if (!jobID) return "—";
@@ -196,13 +209,14 @@ const CandidateManagement = () => {
                         onChange={() => toggleSelect(c.id)}
                       />
                     </td>
+                    
                     <td
                       onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       <div className="candidate-page__user-cell">
                         <div className="candidate-page__avatar">
-                          {getInitial(c.fullName)}
+                          
                         </div>
                         <span>{c.fullName}</span>
                       </div>
