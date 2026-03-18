@@ -6,6 +6,7 @@ import { jobRoute } from './job.route';
 import { aiRoute } from './aiAnalyze.route';
 import { candidateRoute } from "./candidate.route";
 import { interviewRoute } from './interview.route';
+import { emailRoute } from './email.route';
 
 import { reportRoute } from './report.route';
 
@@ -28,6 +29,8 @@ const indexClientRoute = (app: Express): void => {
   app.use("/candidates", authMiddleware, candidateRoute);
 
   app.use('/interview', authMiddleware, interviewRoute);
+
+  app.use('/email', authMiddleware, emailRoute);
 
   app.use('/report', authMiddleware, reportRoute);
 

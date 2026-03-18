@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { MdSearch } from "react-icons/md";
 import candidateService from "../../../services/client/candidateService";
+import jobService from "../../../services/client/jobService";
 import { toast } from "react-toastify";
 import "../../../styles/client/pages/candidateManagement.css";
 
@@ -9,6 +11,7 @@ const ITEMS_PER_PAGE = 5;
 const CandidateManagement = () => {
   const navigate = useNavigate();
   const [candidates, setCandidates] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchSkill, setSearchSkill] = useState("");
   const [searchExp, setSearchExp] = useState("");
@@ -18,6 +21,7 @@ const CandidateManagement = () => {
 
   useEffect(() => {
     fetchCandidates();
+    fetchJobs();
   }, []);
 
   const fetchCandidates = async () => {
@@ -30,6 +34,15 @@ const CandidateManagement = () => {
       toast.error("Không thể tải danh sách ứng viên!");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchJobs = async () => {
+    try {
+      const res = await jobService.getAll();
+      setJobs(res.jobs || []);
+    } catch (error) {
+      console.error("Lỗi khi tải danh sách job:", error);
     }
   };
 
@@ -68,8 +81,8 @@ const CandidateManagement = () => {
 
   const getStatusLabel = (status) => {
     const labels = {
-      unanalyzed: "Chưa phân tích",
-      analyzed: "Đã phân tích",
+      unverified: "Chưa kiểm chứng",
+      verified: "Đã kiểm chứng",
       scheduled: "Đã lên lịch",
       risky: "Rủi ro",
     };
@@ -78,8 +91,8 @@ const CandidateManagement = () => {
 
   const getStatusClass = (status) => {
     const classes = {
-      unanalyzed: "status-unanalyzed",
-      analyzed: "status-verified",
+      unverified: "status-unanalyzed",
+      verified: "status-verified",
       scheduled: "status-scheduled",
       risky: "status-risk",
     };
@@ -97,6 +110,12 @@ const CandidateManagement = () => {
     return name.charAt(0).toUpperCase();
   };
 
+  const getJobTitle = (jobID) => {
+    if (!jobID) return "—";
+    const job = jobs.find((j) => j.id === jobID || j._id === jobID);
+    return job ? job.title : "—";
+  };
+
   const handleSearch = () => {
     setCurrentPage(1);
   };
@@ -111,7 +130,7 @@ const CandidateManagement = () => {
       {/* Search Filters */}
       <div className="candidate-page__filters">
         <div className="candidate-page__filter-input">
-          <span className="filter-icon">🔍</span>
+          <MdSearch className="filter-icon" />
           <input
             type="text"
             placeholder="Kĩ năng"
@@ -120,7 +139,7 @@ const CandidateManagement = () => {
           />
         </div>
         <div className="candidate-page__filter-input">
-          <span className="filter-icon">🔍</span>
+          <MdSearch className="filter-icon" />
           <input
             type="text"
             placeholder="Năm kinh nghiệm"
@@ -134,8 +153,8 @@ const CandidateManagement = () => {
           onChange={(e) => setFilterStatus(e.target.value)}
         >
           <option value="all">Tất cả trạng thái</option>
-          <option value="unanalyzed">Chưa phân tích</option>
-          <option value="analyzed">Đã phân tích</option>
+          <option value="unverified">Chưa kiểm chứng</option>
+          <option value="verified">Đã kiểm chứng</option>
           <option value="scheduled">Đã lên lịch</option>
           <option value="risky">Rủi ro</option>
         </select>
@@ -154,8 +173,8 @@ const CandidateManagement = () => {
               <tr>
                 <th style={{ width: 40 }}></th>
                 <th>Ứng viên</th>
-                <th>Kỹ năng nổi bật</th>
-                <th>Số kỹ năng</th>
+                <th>Chức danh</th>
+                <th>Năm kinh nghiệm</th>
                 <th>Ngày Lưu</th>
                 <th>Trạng thái</th>
               </tr>
@@ -178,7 +197,7 @@ const CandidateManagement = () => {
                       />
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       <div className="candidate-page__user-cell">
@@ -189,25 +208,25 @@ const CandidateManagement = () => {
                       </div>
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
-                      {(c.topSkills || []).slice(0, 2).join(", ") || "—"}
+                      {getJobTitle(c.jobID)}
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
-                      {c.topSkills?.length || 0}
+                      {c.yearsOfExperience || c.experiences?.length || 0}
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       {formatDate(c.appliedAt)}
                     </td>
                     <td
-                      onClick={() => navigate(`/applications/${c.id}`)}
+                      onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
                       <span
@@ -226,7 +245,7 @@ const CandidateManagement = () => {
         )}
       </div>
 
-      {/* Footer: Pagination + Send Email */}
+      {/* Footer: Pagination + Send Email + Schedule Interview */}
       <div className="candidate-page__footer">
         <div className="candidate-page__pagination">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -241,20 +260,23 @@ const CandidateManagement = () => {
             </button>
           ))}
         </div>
-        <button 
-          className="candidate-page__btn-email"
-          onClick={() => {
-            if (selectedIds.length === 0) {
-              toast.warning("Vui lòng chọn ít nhất một ứng viên!");
-              return;
-            }
-            // Lưu selectedIds vào sessionStorage để dùng ở trang email
-            sessionStorage.setItem("selectedCandidates", JSON.stringify(selectedIds));
-            navigate("/applications/emails");
-          }}
-        >
-          ✉ Gửi email
-        </button>
+        <div className="candidate-page__actions">
+          <button 
+            className="candidate-page__btn-email"
+            onClick={() => {
+              if (selectedIds.length === 0) {
+                toast.warning("Vui lòng chọn ít nhất một ứng viên!");
+                return;
+              }
+              // Truyền dữ liệu qua React Router state
+              navigate("/candidates/emails", { 
+                state: { selectedCandidateIds: selectedIds } 
+              });
+            }}
+          >
+           Gửi email
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -12,7 +12,8 @@
       "dependsOn": ["ready"],
       "outputs": ["dist/**", "build/**", "i18n/locales/**"],
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "inputs": ["src/**/*.{ts,tsx,js,jsx}"]
     },
     "build": {
       "dependsOn": ["^build"],

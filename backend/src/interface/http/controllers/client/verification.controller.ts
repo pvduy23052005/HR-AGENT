@@ -3,8 +3,11 @@ import { GetVerificationUseCase } from '../../../../application/use-cases/client
 import { VerifyCandidateUseCase } from '../../../../application/use-cases/client/verfication/candidate-verify.use-case';
 
 import { VerificationRepository } from '../../../../infrastructure/database/repositories/client/verification.repository';
+import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
+import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
 
 const verificationRepository = new VerificationRepository();
+const candidateRepository = new CandidateRepository();
 
 // [GET] /verification/:candidateID
 export const getVerificationDetail = async (req: Request, res: Response): Promise<void> => {
@@ -71,6 +74,45 @@ export const verifyCandidate = async (req: Request, res: Response): Promise<void
     res.status(400).json({
       success: false,
       message: 'Lỗi phân tích ứng viên',
+    });
+  }
+};
+
+// [POST] /verification/confirm
+export const confirmVerification = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { candidateID, status } = req.body;
+
+    if (!candidateID) {
+      res.status(400).json({ success: false, message: 'Thiếu candidateID!' });
+      return;
+    }
+
+    if (!status || !['trusted', 'risky'].includes(status)) {
+      res.status(400).json({ success: false, message: 'Status không hợp lệ. Chỉ cho phép: trusted hoặc risky' });
+      return;
+    }
+
+    // Cập nhật isVerified trong verification model
+    await verificationRepository.updateVerificationStatus(candidateID, status === 'trusted');
+
+    // Nếu status là 'risky', cập nhật candidate status thành 'risky'
+    if (status === 'risky') {
+      await candidateRepository.updateStatus(candidateID, { status: CandidateStatus.RISKY });
+    } else if (status === 'trusted') {
+      // Nếu status là 'trusted', cập nhật candidate status thành 'verified'
+      await candidateRepository.updateStatus(candidateID, { status: CandidateStatus.VERIFIED });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: status === 'trusted' ? 'Xác nhận uy tín thành công!' : 'Đã gắn cờ rủi ro!',
+    });
+  } catch (error: any) {
+    console.error('Lỗi khi xác nhận verification:', error);
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Lỗi khi xác nhận verification',
     });
   }
 };
