@@ -164,7 +164,7 @@ const CandidateAIAnalysis = () => {
          
             {aiResult.suggestedQuestions && aiResult.suggestedQuestions.length > 0 && (
               <div className="caa-form-group">
-                <label className="caa-form-label">Câu hỏi phỏng vấn gợi ý</label>
+                <label className="caa-form-label">Câu hỏi phỏng vấn gợi !</label>
                 <div className="caa-form-value caa-form-value--list">
                   <ol className="caa-list">
                     {aiResult.suggestedQuestions.map((q, i) => (
