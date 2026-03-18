@@ -18,7 +18,7 @@ function ClientForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  // Bước 1: Gửi email yêu cầu OTP
+  
   const handleRequestForgotPassword = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -44,7 +44,7 @@ function ClientForgotPassword() {
     }
   };
 
-  // Bước 2: Xác nhận OTP
+  
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -70,7 +70,7 @@ function ClientForgotPassword() {
     }
   };
 
-  // Bước 3: Reset mật khẩu
+  
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -126,7 +126,7 @@ function ClientForgotPassword() {
 
   return (
     <>
-          {/* Step 1: Enter Email */}
+         
           {step === 1 && (
             <form
               className="client-auth__form"
@@ -140,7 +140,7 @@ function ClientForgotPassword() {
                 </p>
               </div>
 
-              {/* Email Field */}
+       
               <div
                 className={`client-auth__field ${errors.email ? "client-auth__field--error" : ""
                   }`}
@@ -189,7 +189,7 @@ function ClientForgotPassword() {
             </form>
           )}
 
-          {/* Step 2: Verify OTP */}
+       
           {step === 2 && (
             <form
               className="client-auth__form"
@@ -203,7 +203,7 @@ function ClientForgotPassword() {
                 </p>
               </div>
 
-              {/* OTP Field */}
+        
               <div
                 className={`client-auth__field ${errors.otp ? "client-auth__field--error" : ""
                   }`}
@@ -250,7 +250,7 @@ function ClientForgotPassword() {
             </form>
           )}
 
-          {/* Step 3: Reset Password */}
+         
           {step === 3 && (
             <form
               className="client-auth__form"
@@ -264,7 +264,7 @@ function ClientForgotPassword() {
                 </p>
               </div>
 
-              {/* Password Field */}
+         
               <div
                 className={`client-auth__field ${errors.password ? "client-auth__field--error" : ""
                   }`}
@@ -299,7 +299,7 @@ function ClientForgotPassword() {
                 )}
               </div>
 
-              {/* Confirm Password Field */}
+             
               <div
                 className={`client-auth__field ${errors.confirmPassword ? "client-auth__field--error" : ""
                   }`}

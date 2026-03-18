@@ -11,8 +11,6 @@ const ScheduleInterviewPage = () => {
   const [candidate, setCandidate] = useState(null);
   const [time, setTime] = useState("");
   const [address, setAddress] = useState("");
-  const [durationMinutes, setDurationMinutes] = useState(60);
-  const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -56,8 +54,6 @@ const ScheduleInterviewPage = () => {
         jobID: candidate.jobID || candidate.job?._id || "",
         time: new Date(time).toISOString(),
         address,
-        durationMinutes: Number(durationMinutes),
-        notes,
       });
 
       if (res.success) {
@@ -101,7 +97,7 @@ const ScheduleInterviewPage = () => {
           </h1>
 
           <form onSubmit={handleSubmit} className="sip-form">
-            {/* Thời gian */}
+           
             <div className="sip-form-group">
               <label htmlFor="time" className="sip-form-label">
                 Thời gian đề xuất:
@@ -118,7 +114,7 @@ const ScheduleInterviewPage = () => {
               </div>
             </div>
 
-            {/* Người tham gia */}
+           
             <div className="sip-form-group">
               <label className="sip-form-label">Người tham gia:</label>
               <div className="sip-form-input-wrap sip-form-input-wrap--readonly">
@@ -128,7 +124,7 @@ const ScheduleInterviewPage = () => {
               </div>
             </div>
 
-            {/* Địa điểm / Link */}
+        
             <div className="sip-form-group">
               <label htmlFor="address" className="sip-form-label">
                 Địa điểm/ Link:
@@ -146,7 +142,7 @@ const ScheduleInterviewPage = () => {
               </div>
             </div>
 
-            {/* Buttons */}
+         
             <div className="sip-form-actions">
               <button
                 type="button"

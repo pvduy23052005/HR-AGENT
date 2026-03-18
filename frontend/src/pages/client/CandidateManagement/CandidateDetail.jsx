@@ -14,6 +14,7 @@ const CandidateDetail = () => {
   const [loading, setLoading] = useState(true);
   const [verifyingLoading, setVerifyingLoading] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [selectedJobId, setSelectedJobId] = useState("");
 
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [tempVerificationData, setTempVerificationData] = useState(null);
@@ -21,8 +22,13 @@ const CandidateDetail = () => {
   useEffect(() => {
     fetchDetail();
     fetchJobs();
-    // Force refetch every time component mounts to get latest status
   }, [id]);
+
+  useEffect(() => {
+    if (candidate?.jobID) {
+      setSelectedJobId(candidate.jobID);
+    }
+  }, [candidate]);
 
   const fetchDetail = async () => {
     try {
@@ -55,6 +61,13 @@ const CandidateDetail = () => {
     if (!jobID) return "—";
     const job = jobs.find((j) => j.id === jobID || j._id === jobID);
     return job ? job.title : "—";
+  };
+
+  const handleJobChange = (e) => {
+    const jobId = e.target.value;
+    setSelectedJobId(jobId);
+    console.log("Job được chọn:", jobId, jobs.find((j) => (j.id === jobId || j._id === jobId)));
+    // TODO: Sẽ gửi API cùng với phân tích AI sau
   };
 
   const handleVerify = async (githubLink, candidateID) => {
@@ -135,7 +148,7 @@ const CandidateDetail = () => {
         toast.success("Đã lưu kết quả thành công!");
         setShowSaveModal(false);
 
-        // Chuyển hướng đến trang chi tiết kiểm chứng
+     
         setTimeout(() => {
           navigate(`/candidates/${id}/verify`);
         }, 800);
@@ -208,7 +221,7 @@ const CandidateDetail = () => {
       </div>
 
       <div className="cd-card">
-        {/* Họ tên */}
+       
         <div className="cd-field">
           <div className="cd-field__label">Họ tên</div>
           <div className="cd-field__row">
@@ -217,7 +230,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Email */}
+   
         <div className="cd-field">
           <div className="cd-field__label">Email</div>
           <div className="cd-field__row">
@@ -232,7 +245,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* SĐT */}
+     
         <div className="cd-field">
           <div className="cd-field__label">SĐT</div>
           <div className="cd-field__row">
@@ -241,7 +254,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* GitHub */}
         <div className="cd-field">
           <div className="cd-field__label">GitHub</div>
           <div className="cd-field__row">
@@ -258,7 +270,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Kỹ năng */}
+    
         <div className="cd-field">
           <div className="cd-field__label">Kỹ năng</div>
           <div className="cd-field__row">
@@ -269,18 +281,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Chức danh (Chọn JD) */}
-        <div className="cd-field">
-          <div className="cd-field__label">Chức danh (Chọn JD)</div>
-          <div className="cd-field__row">
-            <MdSearch className="cd-field__icon" />
-            <span className="cd-field__value">
-              {getJobTitle(candidate.jobID)}
-            </span>
-          </div>
-        </div>
-
-        {/* Học vấn */}
         <div className="cd-field">
           <div className="cd-field__label">Học vấn</div>
           <div className="cd-field__row">
@@ -293,7 +293,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Kinh nghiệm */}
+
         <div className="cd-field">
           <div className="cd-field__label">Kinh nghiệm</div>
           <div className="cd-field__row">
@@ -306,7 +306,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Mục tiêu */}
         {objective && (
           <div className="cd-field">
             <div className="cd-field__label">Mục tiêu nghề nghiệp</div>
@@ -317,7 +316,7 @@ const CandidateDetail = () => {
           </div>
         )}
 
-        {/* Trạng thái */}
+  
         <div className="cd-field">
           <div className="cd-field__label">Trạng thái</div>
           <div className="cd-field__row">
@@ -328,17 +327,46 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Ngày lưu */}
-        <div className="cd-field">
-          <div className="cd-field__label">Ngày lưu</div>
-          <div className="cd-field__row">
-            <MdSearch className="cd-field__icon" />
-            <span className="cd-field__value">{formatDate(createdAt)}</span>
+        {/* Side by side: Date saved and Job selection */}
+        <div className="cd-fields-row">
+          <div className="cd-field">
+            <div className="cd-field__label">Ngày lưu</div>
+            <div className="cd-field__row">
+              <MdSearch className="cd-field__icon" />
+              <span className="cd-field__value">{formatDate(createdAt)}</span>
+            </div>
+          </div>
+
+          <div className="cd-field">
+            <div className="cd-field__label">Chức danh (Chọn JD)</div>
+            <div className="cd-field__row">
+              <select
+                value={selectedJobId}
+                onChange={handleJobChange}
+                style={{
+                  padding: "8px 12px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                  fontFamily: "inherit",
+                  backgroundColor: "#fff",
+                  cursor: "pointer",
+                  width: "100%"
+                }}
+              >
+                <option value="">-- Chọn vị trí công việc --</option>
+                {jobs.map((job) => (
+                  <option key={job.id || job._id} value={job.id || job._id}>
+                    {job.title}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Action buttons */}
+   
       <div className="cd-actions">
         <button
           className="cd-btn cd-btn--cancel"
@@ -380,13 +408,19 @@ const CandidateDetail = () => {
         </button>
         <button
           className="cd-btn cd-btn--ai"
-          onClick={() => navigate(`/candidates/${id}/ai-analysis`)}
+          onClick={() => {
+            if (!selectedJobId) {
+              toast.warning("Vui lòng chọn vị trí công việc trước khi phân tích!");
+              return;
+            }
+            navigate(`/candidates/${id}/ai-analysis?jobId=${selectedJobId}`);
+          }}
         >
           Phân tích AI
         </button>
       </div>
 
-      {/* Confirmation Modal */}
+     
       {showSaveModal && (
         <div className="cd-modal-overlay">
           <div className="cd-modal">

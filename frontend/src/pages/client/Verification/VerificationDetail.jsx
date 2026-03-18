@@ -60,18 +60,18 @@ const VerificationDetail = () => {
     setConfirming(true);
     
     try {
-      const message = status === "trusted" ? "Xác nhận uy tín..." : "Gắn cờ rủi ro...";
+      const message = status === "verified" ? "Kiểm chứng ứng viên..." : "Gắn cờ rủi ro...";
       toast.info(message);
 
-      // Gọi API để xác nhận status (trusted/risky)
+     
       const response = await verificationService.confirmVerification(id, {
         status: status,
         verification: verification,
       });
 
       if (response.success) {
-        if (status === "trusted") {
-          toast.success("Xác nhận uy tín thành công!");
+        if (status === "verified") {
+          toast.success("Kiểm chứng thành công!");
         } else {
           toast.warning("Đã gắn cờ rủi ro cho ứng viên này!");
         }
@@ -84,7 +84,7 @@ const VerificationDetail = () => {
       }
     } catch (error) {
       console.error("Error confirming verification:", error);
-      toast.error(error.message || "Có lỗi xảy ra khi xác nhận!");
+      toast.error(error.message || "Có lỗi xảy ra khi kiểm chứng!");
     } finally {
       setConfirming(false);
       setSelectedStatus(null);
@@ -111,7 +111,6 @@ const VerificationDetail = () => {
     );
   }
 
-  // Tính độ tin cây dựa trên GitHub stars
   const calculateTrustScore = (stars) => {
     if (stars > 100) return 90;
     if (stars > 50) return 75;
@@ -137,19 +136,18 @@ const VerificationDetail = () => {
       </div>
 
       <div className="vd-card">
-        {/* Họ tên */}
+     
         <div className="vd-field">
           <label className="vd-label">Họ tên</label>
           <div className="vd-value">{verification.name || "—"}</div>
         </div>
 
-        {/* Email */}
         <div className="vd-field">
           <label className="vd-label">Email</label>
           <div className="vd-value">{verification.email || "—"}</div>
         </div>
 
-        {/* Độ tin cậy */}
+       
         <div className="vd-field">
           <label className="vd-label">Độ tin cậy</label>
           <div className="vd-value">
@@ -164,13 +162,13 @@ const VerificationDetail = () => {
           </div>
         </div>
 
-        {/* Chi tiết phân tích */}
+    
         <div className="vd-field">
           <label className="vd-label">Chi tiết phân tích</label>
           <div className="vd-value">{verification.aiReasoning || "—"}</div>
         </div>
 
-        {/* GitHub */}
+    
         <div className="vd-field">
           <label className="vd-label">GitHub</label>
           <div className="vd-links">
@@ -187,7 +185,6 @@ const VerificationDetail = () => {
           </div>
         </div>
 
-        {/* Ngôn ngữ chính */}
         {verification.topLanguages && verification.topLanguages.length > 0 && (
           <div className="vd-field">
             <label className="vd-label">Ngôn ngữ chính</label>
@@ -201,7 +198,6 @@ const VerificationDetail = () => {
           </div>
         )}
 
-        {/* Dự án nổi bật */}
         {verification.probedProjects &&
           verification.probedProjects.length > 0 && (
             <div className="vd-field">
@@ -226,11 +222,8 @@ const VerificationDetail = () => {
             </div>
           )}
 
-        {/* LinkedIn */}
-        {/* Placeholder nếu cần thêm LinkedIn sau */}
       </div>
 
-      {/* Action buttons */}
       <div className="vd-actions">
         <button
           className="vd-btn vd-btn--cancel"
@@ -251,15 +244,15 @@ const VerificationDetail = () => {
         </button>
         <button
           className="vd-btn vd-btn--trusted"
-          onClick={() => handleConfirm("trusted")}
-          disabled={confirming || selectedStatus === "trusted"}
+          onClick={() => handleConfirm("verified")}
+          disabled={confirming || selectedStatus === "verified"}
           style={
-            selectedStatus === "trusted" ? { opacity: 0.6, cursor: "wait" } : {}
+            selectedStatus === "verified" ? { opacity: 0.6, cursor: "wait" } : {}
           }
         >
-          {selectedStatus === "trusted"
+          {selectedStatus === "verified"
             ? "Đang xử lý..."
-            : "Xác nhận uy tín"}
+            : "Đã kiểm chứng"}
         </button>
       </div>
     </div>

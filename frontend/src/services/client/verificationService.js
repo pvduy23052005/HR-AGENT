@@ -3,7 +3,7 @@ import API from "./index";
 const API_BASE = "/verification";
 
 const verificationService = {
-  // Lấy chi tiết kiểm chứng của ứng viên
+  
   getVerificationDetail: async (candidateID) => {
     try {
       const response = await API.get(`${API_BASE}/${candidateID}`);
@@ -14,7 +14,7 @@ const verificationService = {
     }
   },
 
-  // Gửi kết quả kiểm chứng từ extension lên backend
+  
   verifyCandidate: async (candidateID, verificationData) => {
     try {
       const cleanData =
@@ -22,8 +22,7 @@ const verificationService = {
           ? JSON.parse(verificationData)
           : verificationData;
 
-      // Chuẩn bị payload cho backend
-      // Backend expects: { candidateID, data: { details: JSON_string } }
+     
       const payload = {
         candidateID,
         data: cleanData,
@@ -37,22 +36,21 @@ const verificationService = {
     }
   },
 
-  // Xác nhận verification status (trusted hoặc risky)
+
   confirmVerification: async (candidateID, confirmData) => {
     try {
       const payload = {
         candidateID,
-        status: confirmData.status, // "trusted" hoặc "risky"
+        status: confirmData.status, 
         verification: confirmData.verification,
       };
 
-      // Nếu backend có endpoint này, gọi nó
-      // Nếu không, tạm thời return success
+  
       try {
         const response = await API.post(`${API_BASE}/confirm`, payload);
         return response;
       } catch (error) {
-        // Nếu endpoint không tồn tại, return success (tạm thời)
+
         if (error.response?.status === 404) {
           console.warn("Confirm endpoint not found, returning default success");
           return {

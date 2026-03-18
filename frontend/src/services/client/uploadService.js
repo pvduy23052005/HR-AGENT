@@ -1,7 +1,7 @@
 import API from "./index";
 
 const uploadService = {
-  // Upload CV (file PDF/DOC/DOCX)
+
   uploadCV: async (file, jobID) => {
     const formData = new FormData();
     formData.append("cv", file);

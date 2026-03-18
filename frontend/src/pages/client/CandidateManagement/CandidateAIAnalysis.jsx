@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import aiService from "../../../services/client/aiService";
 import candidateService from "../../../services/client/candidateService";
+import jobService from "../../../services/client/jobService";
 import "../../../styles/client/pages/candidateDetail.css";
 import "../../../styles/client/pages/candidateAIAnalysis.css";
 
 const CandidateAIAnalysis = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const jobIdFromUrl = searchParams.get("jobId");
 
   const [candidate, setCandidate] = useState(null);
   const [aiResult, setAiResult] = useState(null);
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
+  const [currentJob, setCurrentJob] = useState(null);
 
   useEffect(() => {
     fetchAndAnalyze();
@@ -31,12 +35,27 @@ const CandidateAIAnalysis = () => {
         return;
       }
 
-      if (!cand.jobID) {
+      // Ưu tiên sử dụng jobId từ URL params, nếu không có thì dùng candidate.jobID
+      const jobIdToUse = jobIdFromUrl || cand.jobID;
+
+      if (!jobIdToUse) {
         toast.error("Ứng viên này chưa gắn với vị trí công việc nào!");
         return;
       }
 
-      await runAnalysis(cand.jobID, id);
+      // Fetch job details
+      try {
+        const allJobsRes = await jobService.getAll();
+        const jobs = allJobsRes.jobs || [];
+        const job = jobs.find((j) => j.id === jobIdToUse || j._id === jobIdToUse);
+        if (job) {
+          setCurrentJob(job);
+        }
+      } catch (jobErr) {
+        console.error("Lỗi khi tải job:", jobErr);
+      }
+
+      await runAnalysis(jobIdToUse, id);
     } catch (err) {
       console.error(err);
       toast.error("Lỗi khi tải thông tin ứng viên!");
@@ -75,7 +94,6 @@ const CandidateAIAnalysis = () => {
         ← Quay lại
       </button>
 
-      {/* === LOADING === */}
       {isLoading && (
         <div className="caa-loading">
           <div className="caa-loading-spinner" />
@@ -83,7 +101,7 @@ const CandidateAIAnalysis = () => {
         </div>
       )}
 
-      {/* === KẾT QUẢ === */}
+     
       {!isLoading && aiResult && candidate && (
         <div className="caa-container">
           <div className="caa-header">
@@ -92,7 +110,7 @@ const CandidateAIAnalysis = () => {
           </div>
 
           <div className="caa-form-card">
-            {/* Họ tên */}
+          
             <div className="caa-form-group">
               <label className="caa-form-label">Họ tên</label>
               <div className="caa-form-value">
@@ -100,7 +118,14 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
-            {/* Điểm phủ hợp */}
+            <div className="caa-form-group">
+              <label className="caa-form-label">Vị trí công việc</label>
+              <div className="caa-form-value" style={{ fontWeight: "500", color: "#0066cc" }}>
+                {currentJob?.title || "—"}
+              </div>
+            </div>
+
+         
             <div className="caa-form-group">
               <label className="caa-form-label">Điểm phủ hợp</label>
               <div className="caa-score-display">
@@ -115,7 +140,7 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
-            {/* Tóm tắt năng lực */}
+          
             <div className="caa-form-group">
               <label className="caa-form-label">Tóm tắt năng lực</label>
               <div className="caa-form-value caa-form-value--textarea">
@@ -123,7 +148,6 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
-            {/* Kỹ năng còn thiếu / Cảnh báo */}
             {aiResult.redFlags && aiResult.redFlags.length > 0 && (
               <div className="caa-form-group">
                 <label className="caa-form-label caa-form-label--danger">Kỹ năng còn thiếu</label>
@@ -137,10 +161,10 @@ const CandidateAIAnalysis = () => {
               </div>
             )}
 
-            {/* Câu hỏi phỏng vấn */}
+         
             {aiResult.suggestedQuestions && aiResult.suggestedQuestions.length > 0 && (
               <div className="caa-form-group">
-                <label className="caa-form-label">Câu hỏi phỏng vấn gợi ý</label>
+                <label className="caa-form-label">Câu hỏi phỏng vấn gợi !</label>
                 <div className="caa-form-value caa-form-value--list">
                   <ol className="caa-list">
                     {aiResult.suggestedQuestions.map((q, i) => (
@@ -151,7 +175,7 @@ const CandidateAIAnalysis = () => {
               </div>
             )}
 
-            {/* Actions */}
+          
             <div className="caa-actions">
               <button className="caa-btn caa-btn--secondary" onClick={() => navigate(`/candidates/${id}`)}>
                 Hủy
@@ -167,7 +191,7 @@ const CandidateAIAnalysis = () => {
         </div>
       )}
 
-      {/* Không có jobID */}
+   
       {!isLoading && !aiResult && candidate && !candidate.jobID && (
         <div className="caa-empty">
           <div className="caa-empty-text">
