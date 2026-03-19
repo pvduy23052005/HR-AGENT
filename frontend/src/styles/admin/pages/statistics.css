@@ -1,0 +1,443 @@
+/* ===== ADMIN STATISTICS PAGE ===== */
+
+.admin-statistics-container {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Header */
+.admin-statistics-header {
+  margin-bottom: 2rem;
+}
+
+.admin-statistics-title {
+  font-weight: 700;
+  color: #212529;
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.admin-statistics-subtitle {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Main Content Wrapper */
+.admin-statistics-content {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+/* ===== LEFT COLUMN (40%) ===== */
+.admin-stats-left {
+  flex: 0 0 40%;
+  max-width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* FILTERS CARD */
+.admin-filters-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.admin-filters-title {
+  font-weight: 600;
+  color: #343a40;
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.admin-filter-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-filter-row:last-child {
+  margin-bottom: 0;
+}
+
+.admin-filter-label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.admin-filter-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #212529;
+  background-color: white;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  outline: none;
+}
+
+.admin-filter-input:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* ===== KPI CARDS GRID ===== */
+.admin-kpi-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-kpi-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.25rem;
+  border-left: 4px solid #0d6efd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+}
+
+.admin-kpi-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.admin-kpi-card__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: #e7f3ff;
+}
+
+.admin-kpi-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-kpi-card__title {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+  margin: 0;
+}
+
+.admin-kpi-card__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.admin-kpi-card__unit {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.admin-kpi-card__trend {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0;
+  margin-top: 0.25rem;
+}
+
+.admin-kpi-card__trend.positive {
+  color: #198754;
+}
+
+.admin-kpi-card__trend.negative {
+  color: #dc3545;
+}
+
+/* ===== RIGHT COLUMN (60%) ===== */
+.admin-stats-right {
+  flex: 0 0 calc(60% - 1.5rem);
+  max-width: calc(60% - 1.5rem);
+}
+
+/* CHART CARD */
+.admin-chart-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-chart-title {
+  font-weight: 600;
+  color: #343a40;
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.admin-chart-container {
+  flex: 1;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-weight: 500;
+  height: 100%;
+}
+
+/* ===== FOOTER - EXPORT BUTTON ===== */
+.admin-statistics-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.admin-btn-export {
+  background-color: #0d6efd;
+  color: white;
+  font-weight: 600;
+  padding: 0.65rem 1.75rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
+}
+
+.admin-btn-export:hover:not(:disabled) {
+  background-color: #0b5ed7;
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.4);
+  transform: translateY(-1px);
+}
+
+.admin-btn-export:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== EXPORT MODAL ===== */
+.admin-export-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.admin-export-modal {
+  background: white;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Header */
+.admin-export-modal-header {
+  background-color: #e0f2fe;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #bae6fd;
+}
+
+.admin-export-modal-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+/* Modal Close Button */
+.admin-export-modal-close {
+  background-color: #fee2e2;
+  color: #ef4444;
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-export-modal-close:hover {
+  background-color: #fecaca;
+  color: #dc2626;
+}
+
+/* Modal Body */
+.admin-export-modal-body {
+  padding: 1.5rem 1.25rem;
+  background-color: #f8f9fa;
+}
+
+.admin-export-modal-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-export-modal-label {
+  font-weight: 600;
+  color: #495057;
+  margin: 0;
+  min-width: 130px;
+}
+
+.admin-export-modal-select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #212529;
+  outline: none;
+  background-color: white;
+}
+
+.admin-export-modal-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Modal Footer */
+.admin-export-modal-footer {
+  padding: 1rem 1.25rem;
+  background-color: white;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.admin-export-modal-btn {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+/* Cancel Button */
+.admin-export-modal-btn--cancel {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.admin-export-modal-btn--cancel:hover {
+  background-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* Download Button */
+.admin-export-modal-btn--download {
+  background-color: #0d6efd;
+  color: white;
+  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+}
+
+.admin-export-modal-btn--download:hover {
+  background-color: #0b5ed7;
+  box-shadow: 0 4px 6px rgba(13, 110, 253, 0.3);
+  transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .admin-stats-left {
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+
+  .admin-stats-right {
+    flex: 0 0 calc(55% - 1.5rem);
+    max-width: calc(55% - 1.5rem);
+  }
+}
+
+@media (max-width: 991px) {
+  .admin-stats-left {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .admin-stats-right {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .admin-statistics-content {
+    flex-direction: column;
+  }
+}
