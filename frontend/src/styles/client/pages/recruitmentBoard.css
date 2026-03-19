@@ -92,12 +92,19 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.3s ease-out, box-shadow 0.2s;
+  user-select: none;
+  touch-action: none;
 }
 
-.candidate-card:hover {
+.candidate-card:not(.candidate-card--dragging):hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.candidate-card--dragging {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 10;
 }
 
 .candidate-card__header {
@@ -114,21 +121,15 @@
   margin-top: 4px;
 }
 
-.candidate-card__status-select {
-  font-size: 13px;
+.candidate-card__status-badge {
+  font-size: 11px;
   padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid #ced4da;
-  background-color: #f8f9fa;
-  cursor: pointer;
-  outline: none;
-  font-weight: 500;
+  border-radius: 12px;
+  background-color: #e9ecef;
   color: #495057;
-}
-
-.candidate-card__status-select:focus {
-  border-color: #86b7fe;
-  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .candidate-card__name {
@@ -144,13 +145,88 @@
   margin: 0 0 16px 0;
 }
 
+/* Swipe hint text */
+.candidate-card__swipe-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 20;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Swipe direction indicators */
+.candidate-card__swipe-indicators {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.candidate-card__indicator {
+  font-size: 24px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  color: #0d6efd;
+}
+
+.candidate-card__indicator--left {
+  opacity: 0;
+}
+
+.candidate-card__indicator--right {
+  opacity: 0;
+}
+
+.candidate-card__indicator.active {
+  opacity: 1;
+  animation: pulse 0.3s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .candidate-card__footer {
   margin-top: auto;
 }
 
 .candidate-card__btn-detail {
   width: 100%;
-  background-color: #198754; 
+  background-color: #198754;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -159,10 +235,15 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
+  user-select: none;
 }
 
 .candidate-card__btn-detail:hover {
   background-color: #157347;
+}
+
+.candidate-card__btn-detail:active {
+  transform: scale(0.98);
 }
 
 /* Scrollbar styling for Kanban */
