@@ -80,7 +80,7 @@ const RecruitmentBoard = () => {
         fetchCandidates();
       }, 500);
       
-      // Lưu vào localStorage để báo cáo biết cập nhật
+      // Lưu vào localStorage để báo cáo biết cập nhật (cross-tab sync)
       const syncData = {
         timestamp: Date.now(),
         candidateId,
@@ -89,6 +89,12 @@ const RecruitmentBoard = () => {
       };
       localStorage.setItem('hr-agent-sync', JSON.stringify(syncData));
       console.log('Saved sync data to localStorage:', syncData);
+      
+      // Dispatch custom event để Report page có thể lắng nghe (same-tab sync)
+      window.dispatchEvent(new CustomEvent('candidate-status-changed', {
+        detail: { candidateId, newStatus, timestamp: Date.now() }
+      }));
+      console.log('Dispatched candidate-status-changed event');
       
     } catch (error) {
       console.error('Lỗi khi cập nhật trạng thái', error);

@@ -6,7 +6,6 @@ import {
   MdPeople,
   MdBarChart,
   MdAccountTree,
-  MdWork,
   MdPersonSearch,
   MdLogout,
 } from "react-icons/md";
@@ -16,7 +15,6 @@ import "../../../styles/client/ui/siderbar.css";
 
 const menuItems = [
   { path: "/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
-  { path: "/jobs", icon: <MdWork />, label: "Quản lý Công việc" },
   { path: "/upload_cv", icon: <MdCloudUpload />, label: "Upload CV" },
   { path: "/sourcing", icon: <MdPersonSearch />, label: "Tìm kiếm Ứng viên" },
   { path: "/candidates", icon: <MdPeople />, label: "Quản lý ứng viên" },

@@ -84,6 +84,25 @@ const ReportStatistics = () => {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, [fetchStatistics]);
+
+  // Auto-refresh khi status thay đổi từ custom event (same-tab sync)
+  React.useEffect(() => {
+    const handleCustomEvent = (e) => {
+      console.log('Detected status change from custom event, updating stats:', e.detail);
+      // Delay một chút để backend cập nhật xong
+      setTimeout(() => {
+        fetchStatistics();
+      }, 1000);
+    };
+
+    // Listen để nhận thay đổi từ custom event (từ cùng tab)
+    window.addEventListener('candidate-status-changed', handleCustomEvent);
+    console.log('Custom event listener registered for same-tab sync');
+
+    return () => {
+      window.removeEventListener('candidate-status-changed', handleCustomEvent);
+    };
+  }, [fetchStatistics]);
   
   const handleBack = () => {
     navigate(-1);

@@ -21,13 +21,13 @@ export class GetStatisticsUseCase {
     // ── 2. Interviews linked to this user (all time) ──────────────────────────
     const totalInterviews = await InterviewSchedule.countDocuments({ userId: userObjectId });
 
-    // ── 3. Completed interviews ───────────────────────────────────────────────
-    const totalCompleted = await InterviewSchedule.countDocuments({
-      userId: userObjectId,
-      status: 'completed',
+    // ── 3. Completed (Candidates with "offer" status) ───────────────────────────
+    const totalCompleted = await Candidate.countDocuments({
+      addedBy: userObjectId,
+      status: 'offer',
     });
 
-    // Response rate = completed / totalCVs
+    // Response rate = candidates in offer status / totalCVs
     const responseRate = totalCVs > 0
       ? `${Math.round((totalCompleted / totalCVs) * 100)}%`
       : '0%';
@@ -66,9 +66,18 @@ export class GetStatisticsUseCase {
     for (const iv of interviewsThisMonth) {
       const w = getWeek(new Date((iv as any).time));
       interviewsByWeek[w] = (interviewsByWeek[w] ?? 0) + 1;
-      if ((iv as any).status === 'completed') {
-        completedByWeek[w] = (completedByWeek[w] ?? 0) + 1;
-      }
+    }
+
+    // Candidates with "offer" status in this month (for "Hoàn thành" column)
+    const completedCandidates = await Candidate.find({
+      addedBy: userObjectId,
+      status: 'offer',
+      updatedAt: { $gte: startOfMonth, $lt: endOfMonth },
+    }).select('updatedAt').lean();
+
+    for (const candidate of completedCandidates) {
+      const w = getWeek(new Date((candidate as any).updatedAt));
+      completedByWeek[w] = (completedByWeek[w] ?? 0) + 1;
     }
 
     const chartData = [1, 2, 3, 4].map((w) => ({

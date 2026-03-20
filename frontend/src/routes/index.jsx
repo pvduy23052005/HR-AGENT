@@ -22,8 +22,6 @@ import ScheduleInterviewPage from "../pages/client/CandidateManagement/ScheduleI
 import EmailTemplates from "../pages/client/Email/EmailTemplates";
 import EmailDetail from "../pages/client/Email/EmailDetail";
 
-import JobManagement from "../pages/client/JobManagement/JobManagement";
-import JobCreate from "../pages/client/JobManagement/JobCreate";
 import ReportStatistics from "../pages/client/Report/ReportStatistics";
 import RecruitmentBoard from "../pages/client/RecruitmentProcess";
 
@@ -59,8 +57,6 @@ const routes = [
             element: <CandidateAIAnalysis />,
           },
 
-          { path: "jobs", element: <JobManagement /> },
-          { path: "jobs/create", element: <JobCreate /> },
           { path: "reports", element: <ReportStatistics /> },
           { path: "recruitment", element: <RecruitmentBoard /> },
           {
