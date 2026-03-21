@@ -95,7 +95,7 @@ const CandidateDetail = () => {
         console.log("Chưa có dữ liệu kiểm chứng, bắt đầu quét mới...");
       }
 
-      const extensionId = "bbebdnbhjphhndgmipcaljcpeoppmaik";
+      const extensionId = "jcfilgneldaknlpakhlgoijnjpihnbki";
 
       if (!window.chrome?.runtime?.sendMessage) {
         toast.error(
@@ -137,21 +137,40 @@ const CandidateDetail = () => {
 
   const handleConfirmSave = async () => {
     try {
-      toast.info("Đang lưu kết quả phân tích AI...");
+      toast.info("Đang lưu kết quả kiểm chứng GitHub...");
 
+      // Bước 1: Lưu dữ liệu xác minh từ GitHub
       const response = await verificationService.verifyCandidate(
         id,
         tempVerificationData,
       );
 
       if (response.success) {
-        toast.success("Đã lưu kết quả thành công!");
+        toast.success("Đã lưu kết quả kiểm chứng!");
         setShowSaveModal(false);
 
-     
-        setTimeout(() => {
-          navigate(`/candidates/${id}/verify`);
-        }, 800);
+        // Bước 2: Xác nhận và chuyển trường từ Ứng tuyển → Sàng lọc
+        try {
+          const confirmRes = await verificationService.confirmVerification(id, {
+            status: 'trusted', // Kiểm chứng thành công → uy tín
+          });
+          
+          if (confirmRes.success) {
+            toast.success("Ứng viên đã chuyển sang Sàng lọc!");
+            // Reload dữ liệu candidate để cập nhật status
+            await fetchDetail();
+            setTimeout(() => {
+              navigate(`/candidates/${id}/verify`);
+            }, 800);
+          }
+        } catch (confirmError) {
+          console.error("Lỗi khi xác nhận verification:", confirmError);
+          toast.warning("Đã lưu kiểm chứng nhưng chưa cập nhật trường. Vui lòng tải lại!");
+          await fetchDetail();
+          setTimeout(() => {
+            navigate(`/candidates/${id}/verify`);
+          }, 1000);
+        }
       } else {
         toast.error(response.message || "Không thể lưu kết quả kiểm chứng!");
       }

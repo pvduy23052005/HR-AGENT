@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const STATUSES = ['applied', 'screening', 'interview', 'offer'];
 const STATUS_LABELS = {
@@ -9,6 +10,7 @@ const STATUS_LABELS = {
 };
 
 const CandidateCard = ({ candidate, onStatusChange }) => {
+  const navigate = useNavigate();
   const { id, candidateCode, name, position, status } = candidate;
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
@@ -158,7 +160,7 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
       <div className="candidate-card__footer">
         <button
           className="candidate-card__btn-detail"
-          onClick={() => console.log('View details for', id)}
+          onClick={() => navigate(`/candidates/${id}`)}
         >
           Chi tiết ứng viên
         </button>
