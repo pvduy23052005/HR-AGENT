@@ -1,9 +1,9 @@
-import type { IAiAnalysisReadRepo } from '../../../../domain/interfaces/client/aiAnalysis.interface';
+import type { IAnalysisReadRepo } from '../../../../domain/interfaces/client/analysis.interface';
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain/interfaces/client/candidate.interface';
 import type { IInterviewScheduleRepository } from '../../../../domain/interfaces/client/interviewSchedule.interface';
 import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
 import type { IInterviewScheduleDetail } from '../../../../domain/entities/client/interviewSchedule.entity';
-import type { IGeminiService } from '../../../../domain/interfaces/services/gemini.service';
+import type { IAIService } from '../../../../domain/interfaces/services/ai.service';
 import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
 import { buildInterviewCalendarInvite } from '../../../../infrastructure/external-service/calendarInvite.service';
 import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
@@ -27,9 +27,9 @@ export class ScheduleInterviewUseCase {
   constructor(
     private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo,
     private readonly jobRepo: IJobReadRepo,
-    private readonly aiAnalysisRepo: IAiAnalysisReadRepo,
+    private readonly aiAnalysisRepo: IAnalysisReadRepo,
     private readonly interviewScheduleRepo: IInterviewScheduleRepository,
-    private readonly geminiSvc: IGeminiService,
+    private readonly geminiSvc: IAIService,
     private readonly mailSvc: IMailService,
   ) { }
 

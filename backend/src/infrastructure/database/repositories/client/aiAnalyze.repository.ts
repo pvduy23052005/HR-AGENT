@@ -1,7 +1,7 @@
 import AiAnalysis from '../../models/AiAnalysis.model';
 import { AiAnalyzeEntity } from '../../../../domain/entities/client/aiAnalyze.entity';
-import type { IAiAnalysisReadRepo, IAiAnalysisWriteRepo } from '../../../../domain/interfaces/client/aiAnalysis.interface';
-import type { IAiAnalysisData } from '../../../../domain/interfaces/client/aiAnalysis.interface';
+import type { IAiAnalysisReadRepo, IAiAnalysisWriteRepo } from '../../../../domain/interfaces/client/analysis.interface';
+import type { IAiAnalysisData } from '../../../../domain/interfaces/client/analysis.interface';
 
 const mapToEntity = (doc: any | null): AiAnalyzeEntity | null => {
   if (!doc) return null;

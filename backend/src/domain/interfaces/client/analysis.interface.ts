@@ -1,6 +1,6 @@
 import type { AiAnalyzeEntity } from '../../entities/client/aiAnalyze.entity';
 
-export interface IAiAnalysisData {
+export interface IAnalysisData {
   jobID: string;
   candidateID: string;
   summary?: string;
@@ -9,10 +9,10 @@ export interface IAiAnalysisData {
   suggestedQuestions?: string[];
 }
 
-export interface IAiAnalysisReadRepo {
+export interface IAnalysisReadRepo {
   getAnalysisByCandidateId(candidateID: string): Promise<AiAnalyzeEntity | null>;
 }
 
-export interface IAiAnalysisWriteRepo {
-  createAiAnalysis(data: IAiAnalysisData): Promise<AiAnalyzeEntity | null>;
+export interface IAnalysisWriteRepo {
+  createAiAnalysis(data: IAnalysisData): Promise<AiAnalyzeEntity | null>;
 }

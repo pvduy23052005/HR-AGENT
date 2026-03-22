@@ -3,13 +3,11 @@ import { authRoute } from './auth.route';
 import { userRoute } from './user.route';
 import { uploadRoute } from './upload.route';
 import { jobRoute } from './job.route';
-import { aiRoute } from './aiAnalyze.route';
+import { aiRoute } from './analyze.route';
 import { candidateRoute } from "./candidate.route";
 import { interviewRoute } from './interview.route';
 import { emailRoute } from './email.route';
-
 import { reportRoute } from './report.route';
-
 import { sourcingRoute } from './sourcing.route';
 import { verificationRoute } from './verfication.route';
 
