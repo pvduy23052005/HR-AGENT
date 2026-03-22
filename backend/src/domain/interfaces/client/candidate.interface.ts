@@ -1,4 +1,4 @@
-import type { CandidateEntity, CandidateStatus } from '../../entities/client/candidate.entity';
+import type { CandidateEntity, CandidateStatus } from '../../entities/client/candidate';
 
 export interface ICandidateData {
   jobID?: string;

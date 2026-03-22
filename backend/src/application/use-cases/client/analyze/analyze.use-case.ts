@@ -2,8 +2,8 @@ import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain
 import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
 import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../../domain/interfaces/client/analysis.interface';
 import type { IAIService } from '../../../../domain/interfaces/services/ai.service';
-import type { IAnalysisDetail } from '../../../../domain/entities/client/analysis.entity';
-import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
+import type { IAnalysisDetail } from '../../../../domain/entities/client/analysis';
+import { CandidateStatus } from '../../../../domain/entities/client/candidate';
 
 export interface IAnalysisResult {
   message: string;

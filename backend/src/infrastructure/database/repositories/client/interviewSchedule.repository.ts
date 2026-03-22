@@ -1,5 +1,5 @@
 import InterviewSchedule from '../../models/interviewSchedule.model';
-import { InterviewScheduleEntity } from '../../../../domain/entities/client/interviewSchedule.entity';
+import { InterviewScheduleEntity } from '../../../../domain/entities/client/interviewSchedule';
 import type {
   IInterviewScheduleData,
   IInterviewScheduleRepository,

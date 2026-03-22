@@ -1,4 +1,4 @@
-import type { AnalysisEntity } from '../../entities/client/analysis.entity';
+import type { AnalysisEntity } from '../../entities/client/analysis';
 
 export interface IAnalysisData {
   jobID: string;

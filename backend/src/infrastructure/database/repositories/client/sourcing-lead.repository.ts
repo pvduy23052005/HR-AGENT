@@ -1,5 +1,5 @@
 import SourcingLead from '../../models/sourcing-lead.model';
-import { SourcingLeadEntity, SourcingSource, SourcingStatus } from '../../../../domain/entities/client/sourcing-lead.entity';
+import { SourcingLeadEntity, SourcingSource, SourcingStatus } from '../../../../domain/entities/client/sourcing-lead';
 import type { ISourcingLeadReadRepo, ISourcingLeadWriteRepo } from '../../../../domain/interfaces/client/sourcing-lead.interface';
 
 const mapToEntity = (doc: any): SourcingLeadEntity | null => {

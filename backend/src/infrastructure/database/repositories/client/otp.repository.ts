@@ -1,5 +1,5 @@
 import OTP from '../../models/otp.model';
-import { OTPEntity } from '../../../../domain/entities/client/otp.entity';
+import { OTPEntity } from '../../../../domain/entities/client/otp';
 import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/interfaces/client/otp.interface';
 
 const mapToEntity = (doc: any | null): OTPEntity | null => {

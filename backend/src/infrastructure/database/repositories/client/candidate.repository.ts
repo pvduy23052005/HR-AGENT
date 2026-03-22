@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Candidate from '../../models/candidate.model';
-import { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
+import { CandidateEntity } from '../../../../domain/entities/client/candidate';
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain/interfaces/client/candidate.interface';
 import type { IStatus } from '../../../../domain/interfaces/client/candidate.interface';
 import type { ICandidateData } from '../../../../domain/interfaces/client/candidate.interface';

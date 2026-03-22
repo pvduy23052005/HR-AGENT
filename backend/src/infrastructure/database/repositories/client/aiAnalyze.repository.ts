@@ -1,5 +1,5 @@
 import AiAnalysis from '../../models/AiAnalysis.model';
-import { AnalysisEntity } from '../../../../domain/entities/client/analysis.entity';
+import { AnalysisEntity } from '../../../../domain/entities/client/analysis';
 import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../../domain/interfaces/client/analysis.interface';
 import type { IAnalysisData } from '../../../../domain/interfaces/client/analysis.interface';
 

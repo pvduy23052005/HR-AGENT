@@ -4,7 +4,7 @@ import { VerifyCandidateUseCase } from '../../../../application/use-cases/client
 
 import { VerificationRepository } from '../../../../infrastructure/database/repositories/client/verification.repository';
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
-import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
+import { CandidateStatus } from '../../../../domain/entities/client/candidate';
 
 const verificationRepository = new VerificationRepository();
 const candidateRepository = new CandidateRepository();

@@ -1,5 +1,5 @@
 import User from '../../models/user.model';
-import { UserEntity } from '../../../../domain/entities/client/user.entity';
+import { UserEntity } from '../../../../domain/entities/client/user';
 import type { IUserReadRepo, IUserWriteRepo } from '../../../../domain/interfaces/client/user.interface';
 
 const mapToEntity = (doc: any | null): UserEntity | null => {

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { VerificationEntity } from '../../../../domain/entities/client/verifycation.entity';
+import { VerificationEntity } from '../../../../domain/entities/client/verifycation';
 import type { IVerificationRepository } from '../../../../domain/interfaces/client/verification.interface';
 import Verification from '../../models/verification.model';
 import Candidate from '../../models/candidate.model';

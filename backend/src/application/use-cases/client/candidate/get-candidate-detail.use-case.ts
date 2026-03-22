@@ -1,4 +1,4 @@
-import type { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
+import type { CandidateEntity } from '../../../../domain/entities/client/candidate';
 import type { ICandidateReadRepo } from '../../../../domain/interfaces/client/candidate.interface';
 
 export class GetCandidateDetailUseCase {

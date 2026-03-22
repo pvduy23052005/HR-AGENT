@@ -2,7 +2,7 @@ import type { ICandidateWriteRepo, ICandidateData } from '../../../../domain/int
 import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
 import type { IUploadService } from '../../../../domain/interfaces/services/upload.service';
 import type { IAIService } from '../../../../domain/interfaces/services/ai.service';
-import type { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
+import type { CandidateEntity } from '../../../../domain/entities/client/candidate';
 
 export interface IUploadCVResult {
   cvLink: unknown;

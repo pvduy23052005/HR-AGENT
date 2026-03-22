@@ -1,5 +1,5 @@
 import Job from '../../models/job.model';
-import { JobEntity } from '../../../../domain/entities/client/job.entity';
+import { JobEntity } from '../../../../domain/entities/client/job';
 import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/interfaces/client/job.interface';
 
 const mapToEntity = (doc: any | null): JobEntity | null => {
