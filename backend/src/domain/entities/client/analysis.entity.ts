@@ -1,4 +1,4 @@
-export interface IAiAnalyzeDetail {
+export interface IAnalysisDetail {
   id: string;
   jobID: string;
   candidateID: string;
@@ -10,7 +10,7 @@ export interface IAiAnalyzeDetail {
   updatedAt: Date | undefined;
 }
 
-export interface IAiAnalyzeProps {
+export interface IAnalysisProps {
   id?: string | { toString(): string };
   jobID?: string | { toString(): string };
   candidateID?: string | { toString(): string };
@@ -22,7 +22,7 @@ export interface IAiAnalyzeProps {
   updatedAt?: Date;
 }
 
-export class AiAnalyzeEntity {
+export class AnalysisEntity {
   id: string;
   jobID: string;
   candidateID: string;
@@ -43,7 +43,7 @@ export class AiAnalyzeEntity {
     suggestedQuestions = [],
     createdAt,
     updatedAt,
-  }: IAiAnalyzeProps) {
+  }: IAnalysisProps) {
     this.id = id ? id.toString() : '';
     this.jobID = jobID ? jobID.toString() : '';
     this.candidateID = candidateID ? candidateID.toString() : '';
@@ -55,7 +55,7 @@ export class AiAnalyzeEntity {
     this.updatedAt = updatedAt;
   }
 
-  getDetail(): IAiAnalyzeDetail {
+  getDetail(): IAnalysisDetail {
     return {
       id: this.id,
       jobID: this.jobID,

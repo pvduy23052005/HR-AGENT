@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AnalyzeUseCase } from '../../../../application/use-cases/client/analyze/analyze.use-case';
+import { AnalysisUseCase } from '../../../../application/use-cases/client/analyze/analyze.use-case';
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
 import { JobRepository } from '../../../../infrastructure/database/repositories/client/job.repository';
 import { AiAnalysisRepository } from '../../../../infrastructure/database/repositories/client/aiAnalyze.repository';
@@ -15,7 +15,7 @@ export const analyzeCandidate = async (req: Request, res: Response): Promise<voi
   try {
     const { jobID, candidateID } = req.body as { jobID: string; candidateID: string };
 
-    const analyzeUseCase = new AnalyzeUseCase(
+    const analyzeUseCase = new AnalysisUseCase(
       candidateRepository,
       jobRepository,
       aiAnalyzeRepository,

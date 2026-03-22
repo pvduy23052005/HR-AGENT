@@ -2,15 +2,15 @@ import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain
 import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
 import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../../domain/interfaces/client/analysis.interface';
 import type { IAIService } from '../../../../domain/interfaces/services/ai.service';
-import type { IAiAnalyzeDetail } from '../../../../domain/entities/client/aiAnalyze.entity';
+import type { IAnalysisDetail } from '../../../../domain/entities/client/analysis.entity';
 import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
 
-export interface IAiAnalyzeResult {
+export interface IAnalysisResult {
   message: string;
-  data: IAiAnalyzeDetail;
+  data: IAnalysisDetail;
 }
 
-export class AnalyzeUseCase {
+export class AnalysisUseCase {
   constructor(
     private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo,
     private readonly jobRepo: IJobReadRepo,
@@ -18,7 +18,7 @@ export class AnalyzeUseCase {
     private readonly geminiService: IAIService,
   ) { }
 
-  async execute(candidateID: string, jobID: string): Promise<IAiAnalyzeResult> {
+  async execute(candidateID: string, jobID: string): Promise<IAnalysisResult> {
 
     const existingAnalysis = await this.aiAnalyzeRepo.getAnalysisByCandidateId(candidateID);
     if (existingAnalysis) {
