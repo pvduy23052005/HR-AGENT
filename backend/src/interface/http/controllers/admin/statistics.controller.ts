@@ -104,11 +104,48 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
     }
 
     // 5. Generate chart data (by week or month)
-    let groupFormat: any;
+    let groupPipeline: any;
+    let nameFormatter: (id: any) => string;
+
     if (filterCriteria === 'Theo tháng') {
-      groupFormat = { $dateToString: { format: '%Y-W%V', date: '$createdAt' } };
+      // Group by week within month: Week 1 (1-7), Week 2 (8-14), Week 3 (15-21), Week 4 (22-31)
+      groupPipeline = {
+        $group: {
+          _id: {
+            $min: [
+              {
+                $add: [
+                  {
+                    $floor: {
+                      $divide: [
+                        { $subtract: [{ $dayOfMonth: '$createdAt' }, 1] },
+                        7
+                      ]
+                    }
+                  },
+                  1
+                ]
+              },
+              4
+            ]
+          },
+          cvReceived: { $sum: 1 }
+        }
+      };
+      nameFormatter = (weekNum) => `Tuần ${weekNum}`;
     } else {
-      groupFormat = { $dateToString: { format: '%Y-%m', date: '$createdAt' } };
+      // Group by month for quarterly/yearly
+      groupPipeline = {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+          cvReceived: { $sum: 1 }
+        }
+      };
+      nameFormatter = (id) => {
+        const [year, month] = (id as string).split('-');
+        const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${monthMap[parseInt(month) - 1]} ${year}`;
+      };
     }
 
     const chartDataResult = await Candidate.aggregate([
@@ -118,12 +155,7 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
           ...(userFilter ? { addedBy: userFilter } : {})
         }
       },
-      {
-        $group: {
-          _id: groupFormat,
-          cvReceived: { $sum: 1 }
-        }
-      },
+      groupPipeline,
       { $sort: { _id: 1 } }
     ]);
 
@@ -135,12 +167,36 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
           ...(userFilter ? { userId: userFilter } : {})
         }
       },
-      {
-        $group: {
-          _id: groupFormat,
-          interviewScheduled: { $sum: 1 }
-        }
-      },
+      filterCriteria === 'Theo tháng'
+        ? {
+            $group: {
+              _id: {
+                $min: [
+                  {
+                    $add: [
+                      {
+                        $floor: {
+                          $divide: [
+                            { $subtract: [{ $dayOfMonth: '$createdAt' }, 1] },
+                            7
+                          ]
+                        }
+                      },
+                      1
+                    ]
+                  },
+                  4
+                ]
+              },
+              interviewScheduled: { $sum: 1 }
+            }
+          }
+        : {
+            $group: {
+              _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+              interviewScheduled: { $sum: 1 }
+            }
+          },
       { $sort: { _id: 1 } }
     ]);
 
@@ -153,12 +209,36 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
           ...(userFilter ? { userId: userFilter } : {})
         }
       },
-      {
-        $group: {
-          _id: groupFormat,
-          completed: { $sum: 1 }
-        }
-      },
+      filterCriteria === 'Theo tháng'
+        ? {
+            $group: {
+              _id: {
+                $min: [
+                  {
+                    $add: [
+                      {
+                        $floor: {
+                          $divide: [
+                            { $subtract: [{ $dayOfMonth: '$createdAt' }, 1] },
+                            7
+                          ]
+                        }
+                      },
+                      1
+                    ]
+                  },
+                  4
+                ]
+              },
+              completed: { $sum: 1 }
+            }
+          }
+        : {
+            $group: {
+              _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+              completed: { $sum: 1 }
+            }
+          },
       { $sort: { _id: 1 } }
     ]);
 
@@ -173,10 +253,10 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       ) || { completed: 0 };
 
       return {
-        name: item._id || 'Unknown',
-        cvReceived: item.cvReceived || 0,
-        interviewScheduled: interviews.interviewScheduled || 0,
-        completed: completed.completed || 0
+        name: nameFormatter(item._id),
+        blueValue: item.cvReceived || 0,          // CV tiếp nhận
+        orangeValue: interviews.interviewScheduled || 0, // Lịch phỏng vấn
+        grayValue: completed.completed || 0       // Hoàn thành
       };
     });
 

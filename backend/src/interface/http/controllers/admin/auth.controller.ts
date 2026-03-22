@@ -41,7 +41,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 // [POST] /admin/auth/logout
 export const logout = (req: Request, res: Response): void => {
   try {
-    const userID: string = res.locals.user.id.toString() || "";
+    const userID: string = res.locals.admin.id.toString() || "";
 
     const logoutUsecase = new LogoutUseCase();
     logoutUsecase.execute(userID);

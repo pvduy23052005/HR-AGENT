@@ -123,9 +123,9 @@ const AdminStatistics = () => {
 
     const chartDataFormatted = stats.chartData.map(item => ({
       'Thời gian': item.name,
-      'CV tiếp nhận': item.cvReceived,
-      'Lịch phỏng vấn': item.interviewScheduled,
-      'Hoàn thành': item.completed
+      'CV tiếp nhận': item.blueValue,
+      'Lịch phỏng vấn': item.orangeValue,
+      'Hoàn thành': item.grayValue
     }));
 
     const finalData = [...summaryData, ...chartDataFormatted];
@@ -290,14 +290,14 @@ const AdminStatistics = () => {
                     <YAxis tick={{ fill: '#6c757d', fontSize: 12 }} axisLine={false} tickLine={false} />
                     <Tooltip cursor={{ fill: '#f8f9fa' }} />
                     <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
-                    <Bar dataKey="cvReceived" name="CV tiếp nhận" fill="#0d6efd" radius={[4, 4, 0, 0]} maxBarSize={50}>
-                      <LabelList dataKey="cvReceived" position="top" fill="#6c757d" fontSize={11} fontWeight={600} />
+                    <Bar dataKey="blueValue" name="CV tiếp nhận" fill="#0d6efd" radius={[4, 4, 0, 0]} maxBarSize={50}>
+                      <LabelList dataKey="blueValue" position="top" fill="#6c757d" fontSize={11} fontWeight={600} />
                     </Bar>
-                    <Bar dataKey="interviewScheduled" name="Lịch phỏng vấn" fill="#fd7e14" radius={[4, 4, 0, 0]} maxBarSize={50}>
-                      <LabelList dataKey="interviewScheduled" position="top" fill="#6c757d" fontSize={11} fontWeight={600} />
+                    <Bar dataKey="orangeValue" name="Lịch phỏng vấn" fill="#fd7e14" radius={[4, 4, 0, 0]} maxBarSize={50}>
+                      <LabelList dataKey="orangeValue" position="top" fill="#6c757d" fontSize={11} fontWeight={600} />
                     </Bar>
-                    <Bar dataKey="completed" name="Hoàn thành" fill="#6c757d" radius={[4, 4, 0, 0]} maxBarSize={50}>
-                      <LabelList dataKey="completed" position="top" fill="#6c757d" fontSize={11} fontWeight={600} />
+                    <Bar dataKey="grayValue" name="Hoàn thành" fill="#6c757d" radius={[4, 4, 0, 0]} maxBarSize={50}>
+                      <LabelList dataKey="grayValue" position="top" fill="#6c757d" fontSize={11} fontWeight={600} />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
