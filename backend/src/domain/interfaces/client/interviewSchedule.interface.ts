@@ -1,8 +1,5 @@
 import type { InterviewScheduleEntity } from '../../entities/client/interviewSchedule.entity';
 
-export interface IInterviewScheduleRepository {
-  createSchedule(data: IInterviewScheduleData): Promise<InterviewScheduleEntity | null>;
-}
 
 export interface IInterviewScheduleData {
   time: Date;
@@ -12,3 +9,6 @@ export interface IInterviewScheduleData {
   status?: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled';
 }
 
+export interface IInterviewScheduleRepository {
+  createSchedule(data: IInterviewScheduleData): Promise<InterviewScheduleEntity | null>;
+}

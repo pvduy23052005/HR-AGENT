@@ -1,6 +1,6 @@
-import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IJobRepository } from '../../../../domain/interfaces/client/job.interface';
-import type { IAiAnalysisRepository } from '../../../../domain/interfaces/client/aiAnalysis.interface';
+import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain/interfaces/client/candidate.interface';
+import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
+import type { IAiAnalysisReadRepo, IAiAnalysisWriteRepo } from '../../../../domain/interfaces/client/aiAnalysis.interface';
 import type { IGeminiService } from '../../../../domain/interfaces/services/gemini.service';
 import type { IAiAnalyzeDetail } from '../../../../domain/entities/client/aiAnalyze.entity';
 import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
@@ -12,9 +12,9 @@ export interface IAiAnalyzeResult {
 
 export class AiAnalyzeUseCase {
   constructor(
-    private readonly candidateRepo: ICandidateRepository,
-    private readonly jobRepo: IJobRepository,
-    private readonly aiAnalyzeRepo: IAiAnalysisRepository,
+    private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo,
+    private readonly jobRepo: IJobReadRepo,
+    private readonly aiAnalyzeRepo: IAiAnalysisReadRepo & IAiAnalysisWriteRepo,
     private readonly geminiService: IGeminiService,
   ) { }
 
@@ -51,7 +51,7 @@ export class AiAnalyzeUseCase {
 
     if (!savedAnalysis) throw new Error('Lỗi khi lưu kết quả phân tích.');
 
-    await this.candidateRepo.updateStatus(candidateID, { status: CandidateStatus.VERIFIED });
+    await this.candidateRepo.updateStatus(candidateID, { status: CandidateStatus.SCREENING });
     return {
       message: 'Phân tích AI hoàn tất thành công.',
       data: savedAnalysis.getDetail(),

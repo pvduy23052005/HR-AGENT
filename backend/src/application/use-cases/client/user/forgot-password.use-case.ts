@@ -1,13 +1,13 @@
 import { randomNumber } from '../../../../shared/utils/randomNumber.util';
 import { htmlEmailOtp } from '../../../../templates/email/otp';
-import type { IUserRepository } from '../../../../domain/interfaces/client/user.interface';
-import type { IOtpRepository } from '../../../../domain/interfaces/client/otp.interface';
+import type { IUserReadRepo } from '../../../../domain/interfaces/client/user.interface';
+import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/interfaces/client/otp.interface';
 import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
 
 export class ForgotPasswordUseCase {
   constructor(
-    private readonly userRepo: IUserRepository,
-    private readonly otpRepo: IOtpRepository,
+    private readonly userRepo: IUserReadRepo,
+    private readonly otpRepo: IOTPReadRepo & IOTPWriteRepo,
     private readonly mailService: IMailService,
   ) { }
 

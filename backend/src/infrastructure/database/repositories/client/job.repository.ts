@@ -1,6 +1,6 @@
 import Job from '../../models/job.model';
 import { JobEntity } from '../../../../domain/entities/client/job.entity';
-import type { IJobRepository } from '../../../../domain/interfaces/client/job.interface';
+import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/interfaces/client/job.interface';
 
 const mapToEntity = (doc: any | null): JobEntity | null => {
   if (!doc) return null;
@@ -25,7 +25,7 @@ export interface IJobData {
   status?: boolean;
 }
 
-export class JobRepository implements IJobRepository {
+export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   public async createJob(data: IJobData): Promise<JobEntity | null> {
     const newJob = new Job(data);
     const savedJob = await newJob.save();

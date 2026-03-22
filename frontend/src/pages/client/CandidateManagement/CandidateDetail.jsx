@@ -95,7 +95,7 @@ const CandidateDetail = () => {
         console.log("Chưa có dữ liệu kiểm chứng, bắt đầu quét mới...");
       }
 
-      const extensionId = "bbebdnbhjphhndgmipcaljcpeoppmaik";
+      const extensionId = "jjkplkmkajifbfgiafkfgogihdoellof";
 
       if (!window.chrome?.runtime?.sendMessage) {
         toast.error(
@@ -404,7 +404,7 @@ const CandidateDetail = () => {
           disabled={verifyingLoading}
           style={verifyingLoading ? { opacity: 0.6, cursor: "wait" } : {}}
         >
-          {verifyingLoading ? "Đang kiểm chứng..." : "Kiểm chứng GitHub"}
+          {verifyingLoading ? "Đang kiểm chứng..." : "Kiểm chứng "}
         </button>
         <button
           className="cd-btn cd-btn--ai"
@@ -426,7 +426,7 @@ const CandidateDetail = () => {
           <div className="cd-modal">
             <h3>Hoàn tất phân tích AI</h3>
             <p>
-              AI đã phân tích xong profile GitHub của{" "}
+              AI đã phân tích xong profile của{" "}
               <b>{tempVerificationData?.name || "ứng viên"}</b>. Bạn có muốn lưu
               kết quả và kiểm tra chi tiết không?
             </p>

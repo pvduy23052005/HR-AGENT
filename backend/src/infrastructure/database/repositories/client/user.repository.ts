@@ -1,6 +1,6 @@
 import User from '../../models/user.model';
 import { UserEntity } from '../../../../domain/entities/client/user.entity';
-import type { IUserRepository } from '../../../../domain/interfaces/client/user.interface';
+import type { IUserReadRepo, IUserWriteRepo } from '../../../../domain/interfaces/client/user.interface';
 
 const mapToEntity = (doc: any | null): UserEntity | null => {
   if (!doc) return null;
@@ -18,7 +18,7 @@ const mapToEntity = (doc: any | null): UserEntity | null => {
   });
 };
 
-export class UserRepository implements IUserRepository {
+export class UserRepository implements IUserReadRepo, IUserWriteRepo {
   public async findUserByEmail(email: string): Promise<UserEntity | null> {
     const doc = await User.findOne({ email, deleted: false }).lean();
     return mapToEntity(doc as any | null);

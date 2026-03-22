@@ -1,6 +1,6 @@
 import SourcingLead from '../../models/sourcing-lead.model';
 import { SourcingLeadEntity, SourcingSource, SourcingStatus } from '../../../../domain/entities/client/sourcing-lead.entity';
-import type { ISourcingLeadRepository, ISourcingLeadData } from '../../../../domain/interfaces/client/sourcing-lead.interface';
+import type { ISourcingLeadReadRepo, ISourcingLeadWriteRepo } from '../../../../domain/interfaces/client/sourcing-lead.interface';
 
 const mapToEntity = (doc: any): SourcingLeadEntity | null => {
   if (!doc) return null;
@@ -26,7 +26,25 @@ const mapToEntity = (doc: any): SourcingLeadEntity | null => {
   });
 };
 
-export class SourcingLeadRepository implements ISourcingLeadRepository {
+export interface ISourcingLeadData {
+  source: SourcingSource;
+  name: string;
+  profileUrl: string;
+  avatarUrl?: string;
+  bio?: string;
+  location?: string;
+  topSkills?: string[];
+  jobTitle?: string;
+  company?: string;
+  email?: string;
+  githubRepos?: number;
+  githubStars?: number;
+  searchKeywords: string;
+  jobID?: string;
+  status?: SourcingStatus;
+}
+
+export class SourcingLeadRepository implements ISourcingLeadReadRepo, ISourcingLeadWriteRepo {
   public async create(data: ISourcingLeadData): Promise<SourcingLeadEntity | null> {
     const existing = await SourcingLead.findOne({ profileUrl: data.profileUrl }).lean();
     if (existing) return mapToEntity(existing);

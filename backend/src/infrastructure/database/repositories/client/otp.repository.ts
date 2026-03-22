@@ -1,6 +1,6 @@
 import OTP from '../../models/otp.model';
 import { OTPEntity } from '../../../../domain/entities/client/otp.entity';
-import type { IOtpRepository } from '../../../../domain/interfaces/client/otp.interface';
+import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/interfaces/client/otp.interface';
 
 const mapToEntity = (doc: any | null): OTPEntity | null => {
   if (!doc) return null;
@@ -14,7 +14,7 @@ const mapToEntity = (doc: any | null): OTPEntity | null => {
   });
 };
 
-export class OtpRepository implements IOtpRepository {
+export class OtpRepository implements IOTPReadRepo, IOTPWriteRepo {
   public async findRecentOTP(email: string): Promise<OTPEntity | null> {
     const doc = await OTP.findOne({ email }).sort({ createdAt: -1 }).lean();
     return mapToEntity(doc);

@@ -1,5 +1,5 @@
-import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IJobRepository } from '../../../../domain/interfaces/client/job.interface';
+import type { ICandidateReadRepo } from '../../../../domain/interfaces/client/candidate.interface';
+import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
 import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
 
 export interface SendBulkEmailInput {
@@ -25,8 +25,8 @@ export interface SendBulkEmailResult {
 
 export class SendBulkEmailUseCase {
   constructor(
-    private readonly candidateRepo: ICandidateRepository,
-    private readonly jobRepo: IJobRepository,
+    private readonly candidateRepo: ICandidateReadRepo,
+    private readonly jobRepo: IJobReadRepo,
     private readonly mailSvc: IMailService,
   ) {}
 

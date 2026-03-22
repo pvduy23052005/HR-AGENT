@@ -1,10 +1,10 @@
-import type { IUserRepository } from '../../../../domain/interfaces/client/user.interface';
-import type { IOtpRepository } from '../../../../domain/interfaces/client/otp.interface';
+import type { IUserReadRepo } from '../../../../domain/interfaces/client/user.interface';
+import type { IOTPReadRepo } from '../../../../domain/interfaces/client/otp.interface';
 
 export class VerifyOtpUseCase {
   constructor(
-    private readonly userRepo: IUserRepository,
-    private readonly otpRepo: IOtpRepository,
+    private readonly userRepo: IUserReadRepo,
+    private readonly otpRepo: IOTPReadRepo,
   ) { }
 
   async execute(email: string, otp: string): Promise<void> {

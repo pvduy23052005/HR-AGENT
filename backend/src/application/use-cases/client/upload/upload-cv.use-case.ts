@@ -1,8 +1,7 @@
-import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IJobRepository } from '../../../../domain/interfaces/client/job.interface';
+import type { ICandidateWriteRepo, ICandidateData } from '../../../../domain/interfaces/client/candidate.interface';
+import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
 import type { IUploadService } from '../../../../domain/interfaces/services/upload.service';
 import type { IGeminiService } from '../../../../domain/interfaces/services/gemini.service';
-import type { ICandidateData } from '../../../../infrastructure/database/repositories/client/candidate.repository';
 import type { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
 
 export interface IUploadCVResult {
@@ -14,8 +13,8 @@ export interface IUploadCVResult {
 
 export class UploadCVUseCase {
   constructor(
-    private readonly candidateRepo: ICandidateRepository,
-    private readonly jobRepo: IJobRepository,
+    private readonly candidateRepo: ICandidateWriteRepo,
+    private readonly jobRepo: IJobReadRepo,
     private readonly uploadSvc: IUploadService,
     private readonly geminiSvc: IGeminiService,
   ) { }

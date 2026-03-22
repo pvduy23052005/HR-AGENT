@@ -1,11 +1,11 @@
-import type { IUserRepository } from '../../../../domain/interfaces/client/user.interface';
-import type { IOtpRepository } from '../../../../domain/interfaces/client/otp.interface';
+import type { IUserReadRepo, IUserWriteRepo } from '../../../../domain/interfaces/client/user.interface';
+import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/interfaces/client/otp.interface';
 import type { IPasswordService } from '../../../../domain/interfaces/services/password.service';
 
 export class ResetPasswordUseCase {
   constructor(
-    private readonly userRepo: IUserRepository,
-    private readonly otpRepo: IOtpRepository,
+    private readonly userRepo: IUserReadRepo & IUserWriteRepo,
+    private readonly otpRepo: IOTPReadRepo & IOTPWriteRepo,
     private readonly passSvc: IPasswordService,
   ) { }
 

@@ -1,6 +1,6 @@
 import { GithubService } from '../../../../infrastructure/external-service/github.service';
 import { LinkedInService } from '../../../../infrastructure/external-service/linkedin.service';
-import type { ISourcingLeadRepository } from '../../../../domain/interfaces/client/sourcing-lead.interface';
+import type { ISourcingLeadWriteRepo } from '../../../../domain/interfaces/client/sourcing-lead.interface';
 import type { SourcingLeadEntity, SourcingSource } from '../../../../domain/entities/client/sourcing-lead.entity';
 
 export interface ISourceCandidatesInput {
@@ -14,7 +14,7 @@ export class SourceCandidatesUseCase {
   private githubService: GithubService;
   private linkedInService: LinkedInService;
 
-  constructor(private readonly sourcingLeadRepo: ISourcingLeadRepository) {
+  constructor(private readonly sourcingLeadRepo: ISourcingLeadWriteRepo) {
     this.githubService = new GithubService();
     this.linkedInService = new LinkedInService();
   }

@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import Candidate from '../../models/candidate.model';
-import { CandidateEntity, CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
-import type { ICandidateRepository } from '../../../../domain/interfaces/client/candidate.interface';
+import { CandidateEntity } from '../../../../domain/entities/client/candidate.entity';
+import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain/interfaces/client/candidate.interface';
 import type { IStatus } from '../../../../domain/interfaces/client/candidate.interface';
+import type { ICandidateData } from '../../../../domain/interfaces/client/candidate.interface';
 
 const mapToEntity = (doc: any | null): CandidateEntity | null => {
   if (!doc) return null;
@@ -22,19 +23,7 @@ const mapToEntity = (doc: any | null): CandidateEntity | null => {
   });
 };
 
-export interface ICandidateData {
-  jobID?: string;
-  addedBy?: string;
-  status?: CandidateStatus;
-  objective?: string;
-  fullTextContent?: string;
-  personal?: Record<string, unknown>;
-  educations?: unknown[];
-  experiences?: unknown[];
-  projects?: unknown[];
-}
-
-export class CandidateRepository implements ICandidateRepository {
+export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteRepo {
   public async createCandidate(data: ICandidateData): Promise<CandidateEntity | null> {
     const newCandidate = new Candidate(data);
     const savedCandidate = await newCandidate.save();

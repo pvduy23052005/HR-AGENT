@@ -1,4 +1,4 @@
-import type { ISourcingLeadRepository } from '../../../../domain/interfaces/client/sourcing-lead.interface';
+import type { ISourcingLeadReadRepo } from '../../../../domain/interfaces/client/sourcing-lead.interface';
 import type { SourcingLeadEntity, SourcingSource } from '../../../../domain/entities/client/sourcing-lead.entity';
 
 export interface IGetSourcingLeadsFilter {
@@ -7,7 +7,7 @@ export interface IGetSourcingLeadsFilter {
 }
 
 export class GetSourcingLeadsUseCase {
-  constructor(private readonly sourcingLeadRepo: ISourcingLeadRepository) {}
+  constructor(private readonly sourcingLeadRepo: ISourcingLeadReadRepo) {}
 
   async execute(filters: IGetSourcingLeadsFilter = {}): Promise<SourcingLeadEntity[]> {
     return await this.sourcingLeadRepo.findAll(filters);

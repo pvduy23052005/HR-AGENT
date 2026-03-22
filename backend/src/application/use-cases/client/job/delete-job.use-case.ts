@@ -1,8 +1,8 @@
 import type { JobEntity } from '../../../../domain/entities/client/job.entity';
-import type { IJobRepository } from '../../../../domain/interfaces/client/job.interface';
+import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/interfaces/client/job.interface';
 
 export class DeleteJobUseCase {
-  constructor(private readonly jobRepo: IJobRepository) { }
+  constructor(private readonly jobRepo: IJobReadRepo & IJobWriteRepo) {}
 
   async execute(jobId: string, userID: string): Promise<JobEntity | null> {
     const job = await this.jobRepo.getJobById(jobId);

@@ -1,9 +1,9 @@
 import { IPasswordService } from "../../../../domain/interfaces/services/password.service";
-import { IUserRepository } from "../../../../domain/interfaces/client/user.interface";
+import type { IUserReadRepo, IUserWriteRepo } from "../../../../domain/interfaces/client/user.interface";
 
 export class ResetPassNotOTPUseCase {
   constructor(
-    private readonly userRepo: IUserRepository,
+    private readonly userRepo: IUserReadRepo & IUserWriteRepo,
     private readonly passwordService: IPasswordService
   ) { }
 

@@ -1,6 +1,7 @@
 import AiAnalysis from '../../models/AiAnalysis.model';
 import { AiAnalyzeEntity } from '../../../../domain/entities/client/aiAnalyze.entity';
-import type { IAiAnalysisRepository } from '../../../../domain/interfaces/client/aiAnalysis.interface';
+import type { IAiAnalysisReadRepo, IAiAnalysisWriteRepo } from '../../../../domain/interfaces/client/aiAnalysis.interface';
+import type { IAiAnalysisData } from '../../../../domain/interfaces/client/aiAnalysis.interface';
 
 const mapToEntity = (doc: any | null): AiAnalyzeEntity | null => {
   if (!doc) return null;
@@ -19,16 +20,8 @@ const mapToEntity = (doc: any | null): AiAnalyzeEntity | null => {
   });
 };
 
-export interface IAiAnalysisData {
-  jobID: string;
-  candidateID: string;
-  summary?: string;
-  matchingScore?: number;
-  redFlags?: string[];
-  suggestedQuestions?: string[];
-}
 
-export class AiAnalysisRepository implements IAiAnalysisRepository {
+export class AiAnalysisRepository implements IAiAnalysisReadRepo, IAiAnalysisWriteRepo {
   public async createAiAnalysis(data: IAiAnalysisData): Promise<AiAnalyzeEntity | null> {
     const newAnalysis = new AiAnalysis(data);
     const savedAnalysis = await newAnalysis.save();
