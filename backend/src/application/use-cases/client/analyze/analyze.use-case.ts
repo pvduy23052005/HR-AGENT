@@ -20,7 +20,7 @@ export class AnalysisUseCase {
 
   async execute(candidateID: string, jobID: string): Promise<IAnalysisResult> {
 
-    const existingAnalysis = await this.aiAnalyzeRepo.getAnalysisByCandidateId(candidateID);
+    const existingAnalysis = await this.aiAnalyzeRepo.getAnalysisByCandidateIdAndJobId(candidateID, jobID);
     if (existingAnalysis) {
       return {
         message: 'Hồ sơ ứng viên này đã được phân tích.',

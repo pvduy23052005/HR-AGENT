@@ -31,4 +31,12 @@ export class AiAnalysisRepository implements IAnalysisReadRepo, IAnalysisWriteRe
     const analysis = await AiAnalysis.findOne({ candidateID }).lean();
     return this.mapToEntity(analysis);
   }
+
+  public async getAnalysisByCandidateIdAndJobId(candidateID: string, jobID: string): Promise<AnalysisEntity | null> {
+    const analysis = await AiAnalysis.findOne({
+      candidateID: candidateID,
+      jobID: jobID
+    }).lean();
+    return this.mapToEntity(analysis);
+  }
 }
