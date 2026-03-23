@@ -48,8 +48,23 @@ function CreateUser() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      toast.warning("Mật khẩu phải có ít nhất 6 ký tự!");
+    if (formData.password.length < 8) {
+      toast.warning("Mật khẩu phải có ít nhất 8 ký tự!");
+      return;
+    }
+
+    if (!/[A-Z]/.test(formData.password)) {
+      toast.warning("Mật khẩu phải chứa ít nhất một chữ hoa!");
+      return;
+    }
+
+    if (!/\d/.test(formData.password)) {
+      toast.warning("Mật khẩu phải chứa ít nhất một chữ số!");
+      return;
+    }
+
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(formData.password)) {
+      toast.warning("Mật khẩu phải chứa ít nhất một ký tự đặc biệt!");
       return;
     }
 
@@ -138,7 +153,7 @@ function CreateUser() {
                 type={showPassword ? "text" : "password"}
                 className="user-create__input"
                 name="password"
-                placeholder="Tối thiểu 6 ký tự"
+                placeholder="Tối thiểu 8 ký tự, có chữ hoa, số và ký tự đặc biệt"
                 value={formData.password}
                 onChange={handleInputChange}
               />
