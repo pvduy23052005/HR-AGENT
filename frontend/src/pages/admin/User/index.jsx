@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   MdSearch,
   MdAdd,
-  MdDelete,
   MdLock,
   MdLockOpen,
   MdPeople,
@@ -203,12 +202,6 @@ function Users() {
                         onClick={() => handleChangeStatus(user)}
                       >
                         {user.status === "active" ? <MdLock /> : <MdLockOpen />}
-                      </button>
-                      <button
-                        className="users-table__action-btn users-table__action-btn--danger"
-                        title="Xóa"
-                      >
-                        <MdDelete />
                       </button>
                     </div>
                   </td>
