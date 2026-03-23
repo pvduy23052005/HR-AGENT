@@ -3,7 +3,7 @@ import { RequestHandler } from 'express';
 export const forgotPasswordValidate: RequestHandler = (req, res, next) => {
   const { email } = req.body as { email?: string };
 
-  if (!email) {
+  if (!email?.trim()) {
     res.status(400).json({ success: false, message: 'Vui lòng nhập Email!' });
     return;
   }
@@ -40,8 +40,23 @@ export const resetPasswordValidate: RequestHandler = (req, res, next) => {
     return;
   }
 
+  const strongPasswordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+  if (!strongPasswordRegex.test(password)) {
+    res.status(400).json({
+      success: false,
+      message: 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ số và ký tự đặc biệt!'
+    });
+    return;
+  }
+
   if (!confirmPassword) {
     res.status(400).json({ success: false, message: 'Vui lòng nhập xác nhận mật khẩu!' });
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    res.status(400).json({ success: false, message: 'Mật khẩu xác nhận không khớp!' });
     return;
   }
 
