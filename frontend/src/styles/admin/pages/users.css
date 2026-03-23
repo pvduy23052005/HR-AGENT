@@ -448,6 +448,121 @@
   }
 }
 
+/* --- Confirmation Dialog --- */
+.users-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: dialog-fade-in 0.2s ease;
+}
+
+@keyframes dialog-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.users-dialog {
+  background: #fff;
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: dialog-slide-up 0.25s ease;
+}
+
+@keyframes dialog-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.users-dialog__header {
+  padding: 24px 28px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.users-dialog__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.users-dialog__body {
+  padding: 20px 28px;
+}
+
+.users-dialog__message {
+  font-size: 14px;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.users-dialog__message strong {
+  font-weight: 600;
+  color: var(--color-error);
+}
+
+.users-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 28px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-primary);
+}
+
+.users-dialog__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: var(--border-radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.users-dialog__btn--cancel {
+  background: #fff;
+  color: var(--color-text-primary);
+  border: 1.5px solid var(--color-border);
+}
+
+.users-dialog__btn--cancel:hover {
+  background: var(--color-hover-bg);
+  border-color: var(--color-text-placeholder);
+}
+
+.users-dialog__btn--confirm {
+  background: var(--color-error);
+  color: #fff;
+}
+
+.users-dialog__btn--confirm:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  transform: translateY(-1px);
+}
+
 /* --- Modal Overlay --- */
 .users-modal-overlay {
   position: fixed;

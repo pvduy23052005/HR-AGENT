@@ -18,6 +18,7 @@ function Users() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, user: null });
 
   // Fetch users
   const fetchUsers = useCallback(async () => {
@@ -49,6 +50,17 @@ function Users() {
 
   // Toggle lock
   const handleChangeStatus = async (user) => {
+    // Only show confirmation for deactivating (locking) accounts
+    if (user.status === "active") {
+      setConfirmDialog({ isOpen: true, user });
+    } else {
+      // Directly unlock without confirmation
+      await executeChangeStatus(user);
+    }
+  };
+
+  // Execute status change
+  const executeChangeStatus = async (user) => {
     try {
       const newStatus = user.status === "active" ? "inactive" : "active";
       const data = await userService.changeStatus(
@@ -211,6 +223,39 @@ function Users() {
           </tbody>
         </table>
       </div>
+
+      {/* Confirmation Dialog */}
+      {confirmDialog.isOpen && (
+        <div className="users-dialog-overlay">
+          <div className="users-dialog">
+            <div className="users-dialog__header">
+              <h2 className="users-dialog__title">Xác nhận vô hiệu hóa tài khoản</h2>
+            </div>
+            <div className="users-dialog__body">
+              <p className="users-dialog__message">
+                Bạn có chắc chắn muốn vô hiệu hóa tài khoản <strong>{confirmDialog.user?.fullName}</strong> không?
+              </p>
+            </div>
+            <div className="users-dialog__footer">
+              <button
+                className="users-dialog__btn users-dialog__btn--cancel"
+                onClick={() => setConfirmDialog({ isOpen: false, user: null })}
+              >
+                Hủy bỏ
+              </button>
+              <button
+                className="users-dialog__btn users-dialog__btn--confirm"
+                onClick={() => {
+                  executeChangeStatus(confirmDialog.user);
+                  setConfirmDialog({ isOpen: false, user: null });
+                }}
+              >
+                Vô hiệu hóa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
