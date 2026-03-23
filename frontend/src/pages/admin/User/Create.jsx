@@ -19,6 +19,7 @@ function CreateUser() {
     fullName: "",
     email: "",
     password: "",
+    confirmPassword: "",
     status: "active",
   });
   const [saving, setSaving] = useState(false);
@@ -49,6 +50,11 @@ function CreateUser() {
 
     if (formData.password.length < 6) {
       toast.warning("Mật khẩu phải có ít nhất 6 ký tự!");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.warning("Mật khẩu xác nhận không khớp!");
       return;
     }
 
@@ -134,6 +140,36 @@ function CreateUser() {
                 name="password"
                 placeholder="Tối thiểu 6 ký tự"
                 value={formData.password}
+                onChange={handleInputChange}
+              />
+              <button
+                type="button"
+                className="user-create__eye-btn"
+                onClick={() => setShowPassword((v) => !v)}
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <MdVisibilityOff size={18} />
+                ) : (
+                  <MdVisibility size={18} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Confirm Password */}
+          <div className="user-create__field">
+            <label className="user-create__label">
+              <MdLock className="user-create__label-icon" />
+              Xác nhận mật khẩu <span className="user-create__required">*</span>
+            </label>
+            <div className="user-create__input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="user-create__input"
+                name="confirmPassword"
+                placeholder="Xác nhận mật khẩu"
+                value={formData.confirmPassword}
                 onChange={handleInputChange}
               />
               <button
