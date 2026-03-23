@@ -1,4 +1,4 @@
-import type { OTPEntity } from '../../entities/client/otp.entity';
+import type { OTPEntity } from '../../entities/client/otp';
 
 export interface IOTPReadRepo {
   findRecentOTP(email: string): Promise<OTPEntity | null>;

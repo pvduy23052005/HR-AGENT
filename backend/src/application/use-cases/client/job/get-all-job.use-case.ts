@@ -1,4 +1,4 @@
-import type { JobEntity } from '../../../../domain/entities/client/job.entity';
+import type { JobEntity } from '../../../../domain/entities/client/job';
 import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
 
 export class GetAllJobUseCase {

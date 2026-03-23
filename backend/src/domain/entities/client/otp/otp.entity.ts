@@ -1,11 +1,4 @@
-export interface IOTPProps {
-  id?: string;
-  email: string;
-  otp: string;
-  expireAt: Date | string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import type { IOTPProps } from './otp.types';
 
 export class OTPEntity {
   id: string | undefined;

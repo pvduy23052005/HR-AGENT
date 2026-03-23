@@ -1,4 +1,4 @@
-import type { JobEntity } from '../../entities/client/job.entity';
+import type { JobEntity } from '../../entities/client/job';
 import type { IJobData } from '../../../infrastructure/database/repositories/client/job.repository';
 
 export interface IJobReadRepo {

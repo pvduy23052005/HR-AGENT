@@ -1,4 +1,4 @@
-import type { IPasswordService } from '../client/user.entity';
+import type { IPasswordService } from '../client/user';
 
 export interface IAdminUserProfile {
   id: string;

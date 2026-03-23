@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { SourceCandidatesUseCase } from '../../../../application/use-cases/client/sourcing/source-candidates.use-case';
 import { GetSourcingLeadsUseCase } from '../../../../application/use-cases/client/sourcing/get-sourcing-leads.use-case';
 import { SourcingLeadRepository } from '../../../../infrastructure/database/repositories/client/sourcing-lead.repository';
-import type { SourcingSource, SourcingStatus } from '../../../../domain/entities/client/sourcing-lead.entity';
+import type { SourcingSource, SourcingStatus } from '../../../../domain/entities/client/sourcing-lead';
 
 const sourcingLeadRepository = new SourcingLeadRepository();
 

@@ -1,7 +1,7 @@
 import type { IAuth } from '../../../../domain/interfaces/client/auth.interface';
 import type { IPasswordService } from '../../../../domain/interfaces/services/password.service';
 import type { ITokenService, ITokenPayload } from '../../../../domain/interfaces/services/token.service';
-import type { IUserProfile } from '../../../../domain/entities/client/user.entity';
+import type { IUserProfile } from '../../../../domain/entities/client/user';
 
 export interface ILoginResult {
   token: string;

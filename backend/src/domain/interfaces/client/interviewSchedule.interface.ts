@@ -1,4 +1,4 @@
-import type { InterviewScheduleEntity } from '../../entities/client/interviewSchedule.entity';
+import type { InterviewScheduleEntity } from '../../entities/client/interviewSchedule';
 
 
 export interface IInterviewScheduleData {

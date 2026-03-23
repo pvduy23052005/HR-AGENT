@@ -67,7 +67,6 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-
 // [post] /user/password/reset-not-otp
 export const resetNotOTP = async (req: Request, res: Response): Promise<void> => {
   try {

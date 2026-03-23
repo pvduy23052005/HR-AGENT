@@ -4,7 +4,7 @@ import { GetCandidateDetailUseCase } from '../../../../application/use-cases/cli
 import { UpdateStatusUseCase } from '../../../../application/use-cases/client/candidate/update-status.use-case';
 
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
-import { CandidateStatus } from '../../../../domain/entities/client/candidate.entity';
+import { CandidateStatus } from '../../../../domain/entities/client/candidate';
 
 const candidateRepository = new CandidateRepository();
 

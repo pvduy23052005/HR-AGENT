@@ -13,7 +13,7 @@ export const createUser = async (data) => {
 };
 
 export const updateUser = async (id, data) => {
-  return await API.put(`/admin/users/${id}`, data);
+  return await API.patch(`/admin/users/edit/${id}`, data);
 };
 
 export const changeStatus = async (id, status) => {

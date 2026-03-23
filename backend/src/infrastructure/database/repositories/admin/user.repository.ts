@@ -51,14 +51,7 @@ export const updateStatus = async (id: string, status: string): Promise<UserEnti
   return mapToEntity(updatedDoc);
 };
 
-export interface IUpdateUserData {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  status?: string;
-}
-
-export const updateUser = async (id: string, data: IUpdateUserData): Promise<UserEntity | null> => {
-  const updatedDoc = await User.findOneAndUpdate({ _id: id }, data, { new: true });
+export const updateUser = async (id: string, data: Partial<Pick<UserEntity, 'fullName' | 'email' | 'password' | 'status'>>): Promise<UserEntity | null> => {
+  const updatedDoc = await User.findOneAndUpdate({ _id: id, deleted: false }, data, { new: true }).lean();
   return mapToEntity(updatedDoc);
 };

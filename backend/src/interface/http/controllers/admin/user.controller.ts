@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { CreateUserUseCase } from '../../../../application/use-cases/admin/user/create-user.use-case';
 import { GetUsersUseCase } from '../../../../application/use-cases/admin/user/get-users.use-case';
 import { ChangeStatusUseCase } from '../../../../application/use-cases/admin/user/change-status.use-case';
-import { UpdateUserUseCase } from '../../../../application/use-cases/admin/user/update-user.use-case';
+import { UpdateUserUseCase } from '../../../../application/use-cases/admin/user/update.use-case';
 import { PasswordService } from '../../../../infrastructure/external-service/password.service';
 import * as userRepository from '../../../../infrastructure/database/repositories/admin/user.repository';
 import type { ICreateUserInput } from '../../../../application/use-cases/admin/user/create-user.use-case';
-import type { IUpdateUserInput } from '../../../../application/use-cases/admin/user/update-user.use-case';
+import type { IUpdateUserInput } from '../../../../application/use-cases/admin/user/update.use-case';
 
 const passService = new PasswordService();
 const createUserUseCase = new CreateUserUseCase(userRepository, passService);
@@ -25,7 +25,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-// [GET] /admin/user
+// [GET] /admin/users
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await getUsersUseCase.execute();
@@ -36,7 +36,7 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// [POST] /admin/user/change-status
+// [POST] /admin/users/change-status
 export const changeStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id, status } = req.body as { id: string; status: string };
@@ -53,16 +53,15 @@ export const changeStatus = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-// [PUT] /admin/users/:id
-export const updateUser = async (req: Request, res: Response): Promise<void> => {
+// [PATCH] /admin/users/edit/:id
+export const edit = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    const updateData = req.body as IUpdateUserInput;
-    updateData.id = id;
-    const user = await updateUserUseCase.execute(updateData);
-    res.json({ code: 200, message: 'Cập nhật tài khoản thành công!', user });
+    const id = req.params.id as string;
+    const data = req.body as IUpdateUserInput;
+    const user = await updateUserUseCase.execute(id, data);
+    res.json({ code: 200, message: 'Cập nhật thông tin người dùng thành công!', user });
   } catch (error: unknown) {
     const e = error as { statusCode?: number; message?: string };
-    res.status(e.statusCode ?? 500).json({ code: e.statusCode ?? 500, message: e.message ?? 'Lỗi cập nhật tài khoản' });
+    res.status(e.statusCode ?? 500).json({ code: e.statusCode ?? 500, message: e.message ?? 'Lỗi hệ thống khi cập nhật' });
   }
 };
