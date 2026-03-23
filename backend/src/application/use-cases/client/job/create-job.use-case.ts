@@ -1,4 +1,4 @@
-import type { JobEntity } from '../../../../domain/entities/client/job.entity';
+import type { JobEntity } from '../../../../domain/entities/client/job';
 import type { IJobWriteRepo } from '../../../../domain/interfaces/client/job.interface';
 import type { IJobData } from '../../../../infrastructure/database/repositories/client/job.repository';
 

@@ -1,5 +1,5 @@
 import type { ISourcingLeadReadRepo } from '../../../../domain/interfaces/client/sourcing-lead.interface';
-import type { SourcingLeadEntity, SourcingSource } from '../../../../domain/entities/client/sourcing-lead.entity';
+import type { SourcingLeadEntity, SourcingSource } from '../../../../domain/entities/client/sourcing-lead';
 
 export interface IGetSourcingLeadsFilter {
   jobID?: string;

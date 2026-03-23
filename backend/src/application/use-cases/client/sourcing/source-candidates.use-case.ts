@@ -1,7 +1,7 @@
 import { GithubService } from '../../../../infrastructure/external-service/github.service';
 import { LinkedInService } from '../../../../infrastructure/external-service/linkedin.service';
 import type { ISourcingLeadWriteRepo } from '../../../../domain/interfaces/client/sourcing-lead.interface';
-import type { SourcingLeadEntity, SourcingSource } from '../../../../domain/entities/client/sourcing-lead.entity';
+import type { SourcingLeadEntity, SourcingSource } from '../../../../domain/entities/client/sourcing-lead';
 
 export interface ISourceCandidatesInput {
   keywords: string;

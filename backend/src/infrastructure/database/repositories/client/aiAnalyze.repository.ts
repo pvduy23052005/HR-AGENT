@@ -1,35 +1,34 @@
 import AiAnalysis from '../../models/AiAnalysis.model';
-import { AiAnalyzeEntity } from '../../../../domain/entities/client/aiAnalyze.entity';
-import type { IAiAnalysisReadRepo, IAiAnalysisWriteRepo } from '../../../../domain/interfaces/client/aiAnalysis.interface';
-import type { IAiAnalysisData } from '../../../../domain/interfaces/client/aiAnalysis.interface';
+import { AnalysisEntity } from '../../../../domain/entities/client/analysis';
+import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../../domain/interfaces/client/analysis.interface';
+import type { IAnalysisData } from '../../../../domain/interfaces/client/analysis.interface';
 
-const mapToEntity = (doc: any | null): AiAnalyzeEntity | null => {
-  if (!doc) return null;
-  const d = doc as any;
+export class AiAnalysisRepository implements IAnalysisReadRepo, IAnalysisWriteRepo {
+  private mapToEntity(doc: any | null): AnalysisEntity | null {
+    if (!doc) return null;
+    const d = doc as any;
 
-  return new AiAnalyzeEntity({
-    id: d._id.toString(),
-    jobID: d.jobID?.toString(),
-    candidateID: d.candidateID?.toString(),
-    summary: d.summary,
-    matchingScore: d.matchingScore,
-    redFlags: d.redFlags,
-    suggestedQuestions: d.suggestedQuestions,
-    createdAt: d.createdAt,
-    updatedAt: d.updatedAt,
-  });
-};
-
-
-export class AiAnalysisRepository implements IAiAnalysisReadRepo, IAiAnalysisWriteRepo {
-  public async createAiAnalysis(data: IAiAnalysisData): Promise<AiAnalyzeEntity | null> {
-    const newAnalysis = new AiAnalysis(data);
-    const savedAnalysis = await newAnalysis.save();
-    return mapToEntity(savedAnalysis);
+    return new AnalysisEntity({
+      id: d._id.toString(),
+      jobID: d.jobID?.toString(),
+      candidateID: d.candidateID?.toString(),
+      summary: d.summary,
+      matchingScore: d.matchingScore,
+      redFlags: d.redFlags,
+      suggestedQuestions: d.suggestedQuestions,
+      createdAt: d.createdAt,
+      updatedAt: d.updatedAt,
+    });
   }
 
-  public async getAnalysisByCandidateId(candidateID: string): Promise<AiAnalyzeEntity | null> {
+  public async createAiAnalysis(data: IAnalysisData): Promise<AnalysisEntity | null> {
+    const newAnalysis = new AiAnalysis(data);
+    const savedAnalysis = await newAnalysis.save();
+    return this.mapToEntity(savedAnalysis);
+  }
+
+  public async getAnalysisByCandidateId(candidateID: string): Promise<AnalysisEntity | null> {
     const analysis = await AiAnalysis.findOne({ candidateID }).lean();
-    return mapToEntity(analysis);
+    return this.mapToEntity(analysis);
   }
 }

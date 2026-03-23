@@ -74,13 +74,11 @@ chrome.runtime.onMessage.addListener(() => {
 });
 
 // Listen for messages from external web pages (e.g., frontend on localhost)
-// Listen for messages from external web pages (e.g., frontend on localhost)
 chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse) => {
   if (message.action === "NANO_START_TASK") {
     const candidateID = message.candidateID;
 
     chrome.tabs.create({ url: message.url, active: true }, async (newTab) => {
-      // Nếu không tạo được tab, báo lỗi về Frontend luôn
       if (!newTab?.id) {
         sendResponse({ success: false, error: "Không thể mở tab GitHub." });
         return;
@@ -174,7 +172,7 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
           let jsonString: any = typeof rawResult === 'string'
             ? rawResult
             : (rawResult?.final_answer || JSON.stringify(rawResult));
-          
+
           jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
           finalJson = JSON.parse(jsonString);
           console.log("JSON chuẩn bị gửi về Frontend:", finalJson);
@@ -189,7 +187,7 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
           sendResponse({ success: false, error: "Dữ liệu AI trả về bị lỗi định dạng." });
         }
 
-        // Đợi 1.5s rồi mới đóng tab để tránh lỗi session như hôm trước
+        // Đợi 1.5s rồi mới đóng tab để tránh lỗi session
         setTimeout(() => {
           if (newTab.id) chrome.tabs.remove(newTab.id);
         }, 1500);
@@ -202,8 +200,6 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
       }
     });
 
-    // 🛑 BẮT BUỘC PHẢI RETURN TRUE 
-    // Lệnh này báo cho Chrome biết: "Hãy mở cửa chờ tôi chạy async xong mới trả response nhé"
     return true;
   }
   return false;

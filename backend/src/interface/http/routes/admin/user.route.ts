@@ -10,4 +10,6 @@ router.get('/', controller.getUsers);
 
 router.post('/change-status', controller.changeStatus);
 
+router.patch("/edit/:id", controller.edit);
+
 export const userRoute: express.Router = router;

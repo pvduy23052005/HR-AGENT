@@ -1,4 +1,4 @@
-import type { SourcingLeadEntity, SourcingSource, SourcingStatus } from '../../entities/client/sourcing-lead.entity';
+import type { SourcingLeadEntity, SourcingSource, SourcingStatus } from '../../entities/client/sourcing-lead';
 import type { ISourcingLeadData } from '../../../infrastructure/database/repositories/client/sourcing-lead.repository';
 
 export interface ISourcingLeadReadRepo {

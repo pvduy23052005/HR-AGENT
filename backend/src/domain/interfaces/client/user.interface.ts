@@ -1,4 +1,4 @@
-import type { UserEntity } from '../../entities/client/user.entity';
+import type { UserEntity } from '../../entities/client/user';
 
 export interface IUserReadRepo {
   findUserByEmail(email: string): Promise<UserEntity | null>;

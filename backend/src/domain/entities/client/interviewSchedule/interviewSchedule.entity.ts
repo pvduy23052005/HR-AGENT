@@ -1,24 +1,4 @@
-export interface IInterviewScheduleProps {
-  id: string;
-  time: Date;
-  status?: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled';
-  address: string;
-  candidateId: string;
-  userId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface IInterviewScheduleDetail {
-  id: string;
-  time: Date;
-  status: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled';
-  address: string;
-  candidateId: string;
-  userId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import type { IInterviewScheduleProps, IInterviewScheduleDetail } from './interviewSchedule.types';
 
 export class InterviewScheduleEntity {
   id: string;
@@ -63,4 +43,3 @@ export class InterviewScheduleEntity {
     };
   }
 }
-

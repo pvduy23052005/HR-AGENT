@@ -1,4 +1,4 @@
-import { VerificationEntity } from "../../../../domain/entities/client/verifycation.entity";
+import { VerificationEntity } from "../../../../domain/entities/client/verifycation";
 import { IVerificationRepository } from "../../../../domain/interfaces/client/verification.interface";
 
 export class VerifyCandidateUseCase {

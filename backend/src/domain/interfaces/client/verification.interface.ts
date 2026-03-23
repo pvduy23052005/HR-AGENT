@@ -1,4 +1,4 @@
-import type { VerificationEntity } from '../../entities/client/verifycation.entity';
+import type { VerificationEntity } from '../../entities/client/verifycation';
 
 export interface IVerificationRepository {
   createVerification(candidateID: string, data: any): Promise<VerificationEntity | null>;

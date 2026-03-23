@@ -1,28 +1,6 @@
-export interface IAiAnalyzeDetail {
-  id: string;
-  jobID: string;
-  candidateID: string;
-  summary: string;
-  matchingScore: number;
-  redFlags: string[];
-  suggestedQuestions: string[];
-  createdAt: Date | undefined;
-  updatedAt: Date | undefined;
-}
+import type { IAnalysisDetail, IAnalysisProps } from './analysis.types';
 
-export interface IAiAnalyzeProps {
-  id?: string | { toString(): string };
-  jobID?: string | { toString(): string };
-  candidateID?: string | { toString(): string };
-  summary?: string;
-  matchingScore?: number;
-  redFlags?: string[];
-  suggestedQuestions?: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export class AiAnalyzeEntity {
+export class AnalysisEntity {
   id: string;
   jobID: string;
   candidateID: string;
@@ -43,7 +21,7 @@ export class AiAnalyzeEntity {
     suggestedQuestions = [],
     createdAt,
     updatedAt,
-  }: IAiAnalyzeProps) {
+  }: IAnalysisProps) {
     this.id = id ? id.toString() : '';
     this.jobID = jobID ? jobID.toString() : '';
     this.candidateID = candidateID ? candidateID.toString() : '';
@@ -55,7 +33,7 @@ export class AiAnalyzeEntity {
     this.updatedAt = updatedAt;
   }
 
-  getDetail(): IAiAnalyzeDetail {
+  getDetail(): IAnalysisDetail {
     return {
       id: this.id,
       jobID: this.jobID,
