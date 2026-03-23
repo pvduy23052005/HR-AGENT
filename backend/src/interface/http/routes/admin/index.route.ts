@@ -11,7 +11,6 @@ const indexAdminRoute = (app: Express): void => {
   
   app.use(`${BASE_URL}/users`, authMiddleware, userRoute);
   
-  // Thống kê hệ thống (Admin)
   app.use(`${BASE_URL}/report`, authMiddleware, statisticsRoute);
 };
 
