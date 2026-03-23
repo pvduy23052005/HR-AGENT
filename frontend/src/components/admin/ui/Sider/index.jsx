@@ -9,10 +9,10 @@ import {
 import "../../../../styles/admin/ui/sider.css";
 
 const menuItems = [
-  { path: "/admin/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
+  // { path: "/admin/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
   { path: "/admin/users", icon: <MdPeople />, label: "Quản lý người dùng" },
-  { path: "/admin/interview-schedule", icon: <MdSchedule />, label: "Lịch phỏng vấn" },
-  { path: "/admin/ai-config", icon: <MdSmartToy />, label: "Cấu hình AI" },
+  // { path: "/admin/interview-schedule", icon: <MdSchedule />, label: "Lịch phỏng vấn" },
+  // { path: "/admin/ai-config", icon: <MdSmartToy />, label: "Cấu hình AI" },
   { path: "/admin/statistics", icon: <MdBarChart />, label: "Thống kê" },
 ];
 
