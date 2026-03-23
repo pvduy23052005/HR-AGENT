@@ -8,10 +8,8 @@ router.post('/create', createUserValidate, controller.createUser);
 
 router.get('/', controller.getUsers);
 
-router.put('/:id', controller.updateUser);
+router.patch('/edit/:id', controller.edit);
 
 router.post('/change-status', controller.changeStatus);
-
-router.patch("/edit/:id", controller.edit);
 
 export const userRoute: express.Router = router;

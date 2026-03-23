@@ -6,7 +6,6 @@ export interface IUpdateUserInput {
   fullName?: string;
   email?: string;
   password?: string;
-  confirmPassword?: string;
   status?: string;
 }
 
@@ -21,12 +20,6 @@ export class UpdateUserUseCase {
     if (!user) {
       const error = new Error('Người dùng không tồn tại!') as Error & { statusCode: number };
       error.statusCode = 404;
-      throw error;
-    }
-
-    if (data.password && data.password !== data.confirmPassword) {
-      const error = new Error('Mật khẩu xác nhận không khớp!') as Error & { statusCode: number };
-      error.statusCode = 400;
       throw error;
     }
 

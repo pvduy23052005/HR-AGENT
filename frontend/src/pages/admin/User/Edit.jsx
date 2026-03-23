@@ -41,7 +41,7 @@ function EditUser() {
         setFormData({
           fullName: user.fullName || "",
           email: user.email || "",
-          password: "", // Don't pre-fill password
+          password: "",
           status: user.status || "active",
         });
       } else {
