@@ -15,6 +15,10 @@ export class ForgotPasswordUseCase {
     const user = await this.userRepo.findUserByEmail(email);
     if (!user) throw new Error('Email không tồn tại trong hệ thống!');
 
+    if (!user.isActive()) {
+      throw new Error("Tài khoản của bạn đã bị khóa");
+    }
+
     const recentOtp = await this.otpRepo.findRecentOTP(email);
     if (recentOtp) {
       const secondsPassed = (Date.now() - new Date(recentOtp.createdAt!).getTime()) / 1000;
