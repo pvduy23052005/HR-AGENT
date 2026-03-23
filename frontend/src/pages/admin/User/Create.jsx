@@ -187,20 +187,6 @@ function CreateUser() {
             </div>
           </div>
 
-          {/* Status */}
-          <div className="user-create__field">
-            <label className="user-create__label">Trạng thái</label>
-            <select
-              className="user-create__select"
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-            >
-              <option value="active">Hoạt động</option>
-              <option value="inactive">Đã khóa</option>
-            </select>
-          </div>
-
           {/* Divider */}
           <div className="user-create__divider" />
 
