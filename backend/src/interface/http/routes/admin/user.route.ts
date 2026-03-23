@@ -8,6 +8,8 @@ router.post('/create', createUserValidate, controller.createUser);
 
 router.get('/', controller.getUsers);
 
+router.put('/:id', controller.updateUser);
+
 router.post('/change-status', controller.changeStatus);
 
 export const userRoute: express.Router = router;

@@ -290,3 +290,30 @@
   box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
 }
 
+/* Table Actions Cell */
+.candidate-page__actions-cell {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.candidate-page__edit-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #0087f1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 16px;
+}
+
+.candidate-page__edit-btn:hover {
+  background: #0087f1;
+  border-color: #0087f1;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 135, 241, 0.2);
+}

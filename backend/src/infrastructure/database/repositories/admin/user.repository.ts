@@ -50,3 +50,15 @@ export const updateStatus = async (id: string, status: string): Promise<UserEnti
   const updatedDoc = await User.findOneAndUpdate({ _id: id }, { status }, { new: true });
   return mapToEntity(updatedDoc);
 };
+
+export interface IUpdateUserData {
+  fullName?: string;
+  email?: string;
+  password?: string;
+  status?: string;
+}
+
+export const updateUser = async (id: string, data: IUpdateUserData): Promise<UserEntity | null> => {
+  const updatedDoc = await User.findOneAndUpdate({ _id: id }, data, { new: true });
+  return mapToEntity(updatedDoc);
+};

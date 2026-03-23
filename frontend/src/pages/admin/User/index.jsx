@@ -7,6 +7,7 @@ import {
   MdLock,
   MdLockOpen,
   MdPeople,
+  MdEdit,
 } from "react-icons/md";
 import { toast } from "react-toastify";
 import * as userService from "../../../services/admin/userService";
@@ -185,6 +186,13 @@ function Users() {
                   {/* action */}
                   <td>
                     <div className="users-table__actions">
+                      <button
+                        className="users-table__action-btn users-table__action-btn--info"
+                        title="Sửa"
+                        onClick={() => navigate(`/admin/users/edit/${user.id}`)}
+                      >
+                        <MdEdit />
+                      </button>
                       <button
                         className="users-table__action-btn users-table__action-btn--warning"
                         title={
