@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdEmail, MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -17,6 +17,79 @@ function ClientForgotPassword() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [resendCountdown, setResendCountdown] = useState(0);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [otpAttempts, setOtpAttempts] = useState(0);
+  const [lockoutTime, setLockoutTime] = useState(() => {
+    const saved = localStorage.getItem('otp_lockoutTime');
+    return saved ? parseInt(saved) : null;
+  });
+  const [lockedEmail, setLockedEmail] = useState(() => {
+    const saved = localStorage.getItem('otp_lockedEmail');
+    return saved ? saved : null;
+  });
+  const MAX_OTP_ATTEMPTS = 5;
+  const LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+  // Persist lockout state to localStorage
+  useEffect(() => {
+    if (lockoutTime !== null) {
+      localStorage.setItem('otp_lockoutTime', lockoutTime.toString());
+    } else {
+      localStorage.removeItem('otp_lockoutTime');
+    }
+  }, [lockoutTime]);
+
+  useEffect(() => {
+    if (lockedEmail !== null) {
+      localStorage.setItem('otp_lockedEmail', lockedEmail);
+    } else {
+      localStorage.removeItem('otp_lockedEmail');
+    }
+  }, [lockedEmail]);
+
+  // Check if lockout has expired on mount
+  useEffect(() => {
+    if (lockoutTime !== null) {
+      const now = Date.now();
+      const timeRemaining = lockoutTime + LOCKOUT_DURATION - now;
+      
+      if (timeRemaining <= 0) {
+        setLockoutTime(null);
+        setLockedEmail(null);
+        setOtpAttempts(0);
+      }
+    }
+  }, []);
+
+  // Countdown timer for resend button
+  useEffect(() => {
+    let interval;
+    if (resendCountdown > 0) {
+      interval = setInterval(() => {
+        setResendCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [resendCountdown]);
+
+  // Lockout timer check
+  useEffect(() => {
+    if (lockoutTime) {
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const timeRemaining = lockoutTime + LOCKOUT_DURATION - now;
+        
+        if (timeRemaining <= 0) {
+          setLockoutTime(null);
+          setLockedEmail(null);
+          setOtpAttempts(0);
+          clearInterval(interval);
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [lockoutTime]);
 
   
   const handleRequestForgotPassword = async (e) => {
@@ -28,12 +101,26 @@ function ClientForgotPassword() {
       return;
     }
 
+    // Check if email is locked
+    if (lockedEmail === email && lockoutTime !== null) {
+      const timeRemaining = lockoutTime + LOCKOUT_DURATION - Date.now();
+      const minutesRemaining = Math.ceil(timeRemaining / 1000 / 60);
+      toast.error(`Email này bị khóa. Vui lòng thử lại sau ${minutesRemaining} phút`);
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await forgotPasswordService.requestForgotPassword(email);
       if (res.success) {
         toast.success("Mã OTP đã được gửi đến email của bạn!");
         setStep(2);
+        setOtpAttempts(0);
+        // Only reset lockout if it's a different email
+        if (lockedEmail !== email) {
+          setLockoutTime(null);
+        }
+        setResendCountdown(60);
       }
     } catch (error) {
       const message =
@@ -41,6 +128,27 @@ function ClientForgotPassword() {
       toast.error(message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Handle resend OTP
+  const handleResendOTP = async () => {
+    setResendLoading(true);
+    try {
+      const res = await forgotPasswordService.requestForgotPassword(email);
+      if (res.success) {
+        toast.success("Mã OTP mới đã được gửi đến email của bạn!");
+        setOtp("");
+        setErrors({});
+        setOtpAttempts(0);
+        setResendCountdown(60);
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại";
+      toast.error(message);
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -54,17 +162,34 @@ function ClientForgotPassword() {
       return;
     }
 
+    if (otpAttempts >= MAX_OTP_ATTEMPTS) {
+      toast.error("Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 30 phút");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await forgotPasswordService.verifyOTP(email, otp);
       if (res.success) {
         toast.success("Xác nhận OTP thành công!");
+        setOtpAttempts(0);
+        setLockoutTime(null);
+        setLockedEmail(null);
         setStep(3);
       }
     } catch (error) {
-      const message =
-        error.response?.data?.message || "Mã OTP không chính xác";
-      toast.error(message);
+      const newAttempts = otpAttempts + 1;
+      setOtpAttempts(newAttempts);
+
+      if (newAttempts >= MAX_OTP_ATTEMPTS) {
+        setLockoutTime(Date.now());
+        setLockedEmail(email);
+        toast.error("Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 30 phút");
+      } else {
+        const message =
+          error.response?.data?.message || "Mã OTP không chính xác";
+        toast.error(message);
+      }
     } finally {
       setLoading(false);
     }
@@ -79,8 +204,8 @@ function ClientForgotPassword() {
 
     if (!password) {
       newErrors.password = "Vui lòng nhập mật khẩu mới";
-    } else if (password.length < 6) {
-      newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
+    } else if (password.length < 8) {
+      newErrors.password = "Mật khẩu phải có ít nhất 8 ký tự";
     }
 
     if (!confirmPassword) {
@@ -221,9 +346,15 @@ function ClientForgotPassword() {
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
                   maxLength="6"
+                  disabled={lockoutTime !== null}
                 />
                 {errors.otp && (
                   <span className="client-auth__error">{errors.otp}</span>
+                )}
+                {lockoutTime !== null && (
+                  <span className="client-auth__error">
+                    Bạn đã nhập sai quá 5 lần. Vui lòng đợi để thử lại
+                  </span>
                 )}
               </div>
 
@@ -231,13 +362,26 @@ function ClientForgotPassword() {
                 type="submit"
                 className={`client-auth__submit ${loading ? "client-auth__submit--loading" : ""
                   }`}
-                disabled={loading}
+                disabled={loading || lockoutTime !== null}
               >
                 {loading ? (
                   <span className="client-auth__spinner"></span>
                 ) : (
                   "Xác nhận"
                 )}
+              </button>
+
+              <button
+                type="button"
+                className={`client-auth__resend ${
+                  resendCountdown > 0 || lockoutTime !== null ? "client-auth__resend--disabled" : ""
+                }`}
+                onClick={handleResendOTP}
+                disabled={resendCountdown > 0 || lockoutTime !== null}
+              >
+                {resendCountdown > 0 && lockoutTime === null
+                  ? `Gửi lại mã (${resendCountdown}s)`
+                  : "Gửi lại mã OTP"}
               </button>
 
               <button

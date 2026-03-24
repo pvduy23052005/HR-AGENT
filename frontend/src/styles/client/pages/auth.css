@@ -168,6 +168,13 @@
   box-shadow: 0 0 0 3px rgba(0, 135, 241, 0.1);
 }
 
+.client-auth__input:disabled {
+  background: #f0f0f0;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .client-auth__input-icon {
   position: absolute;
   left: 12px;
@@ -294,6 +301,38 @@
 
 .client-auth__back-link:hover {
   color: #333;
+}
+
+/* ===== Resend OTP Button ===== */
+.client-auth__resend {
+  width: 100%;
+  padding: 10px 16px;
+  background: #f0f0f0;
+  color: #0087f1;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.client-auth__resend:hover:not(:disabled) {
+  background: #e8f4ff;
+  border-color: #0087f1;
+  transform: translateY(-1px);
+}
+
+.client-auth__resend:disabled,
+.client-auth__resend--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  color: #888;
 }
 
 /* ===== Mobile Responsive ===== */
