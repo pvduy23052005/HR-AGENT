@@ -48,13 +48,9 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     const diff = e.clientX - dragStartRef.current.x;
     dragStartRef.current.offset = diff;
     
-    let limitedDiff = diff;
-    // Kéo sang phải (diff > 0) nhưng không có cột tiếp theo -> hãm lại
-    if (diff > 0 && !canSwipeRightToNext) limitedDiff = diff * 0.3;
-    // Kéo sang trái (diff < 0) nhưng không có cột trước đó -> hãm lại
-    if (diff < 0 && !canSwipeLeftToPrev) limitedDiff = diff * 0.3;
-    
-    setSwipeOffset(limitedDiff);
+    // ═ Cho phép kéo tự do qua bất kỳ cột nào
+    // Validation sẽ xảy ra ở RecruitmentBoard (parent)
+    setSwipeOffset(diff);
   };
 
   const handleGlobalTouchMove = (e) => {
@@ -63,11 +59,9 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     const diff = e.touches[0].clientX - dragStartRef.current.x;
     dragStartRef.current.offset = diff;
     
-    let limitedDiff = diff;
-    if (diff > 0 && !canSwipeRightToNext) limitedDiff = diff * 0.3;
-    if (diff < 0 && !canSwipeLeftToPrev) limitedDiff = diff * 0.3;
-    
-    setSwipeOffset(limitedDiff);
+    // ═ Cho phép kéo tự do qua bất kỳ cột nào
+    // Validation sẽ xảy ra ở RecruitmentBoard (parent)
+    setSwipeOffset(diff);
   };
 
   const handleEndDrag = () => {
@@ -77,15 +71,21 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     const threshold = 30; 
     const offset = dragStartRef.current.offset;
 
-    // Sửa lại logic: Vuốt sang PHẢI (offset dương) -> Chuyển cột tiếp theo
-    if (offset > threshold && canSwipeRightToNext) {
+    // ═ Cho phép kéo sang hướng nào cũng được
+    // Validation sẽ được xử lý ở RecruitmentBoard (parent)
+    if (offset > threshold) {
+      // Kéo sang phải -> Chuyển sang cột tiếp theo
       const nextStatus = STATUSES[currentStatusIndex + 1];
-      onStatusChange(id, nextStatus);
+      if (nextStatus) {
+        onStatusChange(id, nextStatus);
+      }
     } 
-    // Vuốt sang TRÁI (offset âm) -> Lùi về cột trước đó
-    else if (offset < -threshold && canSwipeLeftToPrev) {
+    else if (offset < -threshold) {
+      // Kéo sang trái -> Lùi về cột trước đó
       const prevStatus = STATUSES[currentStatusIndex - 1];
-      onStatusChange(id, prevStatus);
+      if (prevStatus) {
+        onStatusChange(id, prevStatus);
+      }
     }
 
     setSwipeOffset(0);

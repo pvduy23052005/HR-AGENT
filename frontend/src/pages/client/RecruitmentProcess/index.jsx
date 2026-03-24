@@ -21,6 +21,25 @@ const STATUS_MAPPING = {
   risky: 'applied'
 };
 
+// ═ Hàm validate quy trình tuyển dụng
+// Chỉ được chuyển trạng thái liền kề (tiến 1 hoặc lùi 1)
+const validateStatusChange = (currentStatus, newStatus) => {
+  const currentIndex = COLUMNS.findIndex(col => col.id === currentStatus);
+  const newIndex = COLUMNS.findIndex(col => col.id === newStatus);
+  
+  // Nếu trạng thái không thay đổi
+  if (currentIndex === newIndex) {
+    return { isValid: false, message: 'Trạng thái không thay đổi.' };
+  }
+  
+  // Nếu distance > 1 (nhảy cóc)
+  if (Math.abs(newIndex - currentIndex) > 1) {
+    return { isValid: false, message: 'Quy trình không hợp lệ' };
+  }
+  
+  return { isValid: true };
+};
+
 const RecruitmentBoard = () => {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +80,23 @@ const RecruitmentBoard = () => {
 
   const handleStatusChange = async (candidateId, newStatus) => {
     try {
-      // Optimistic update
+      // Lấy current status của candidate
+      const candidate = candidates.find(c => c.id === candidateId);
+      if (!candidate) {
+        toast.error('Không tìm thấy ứng viên!');
+        return;
+      }
+
+      const currentStatus = candidate.status;
+      
+      // ═ Validate quy trình tuyển dụng
+      const validation = validateStatusChange(currentStatus, newStatus);
+      if (!validation.isValid) {
+        toast.error(validation.message);
+        return; // ← Dừng lại, không cập nhật state, không gọi API
+      }
+
+      // ═ Nếu hợp lệ: Optimistic update
       setCandidates(prevCandidates => 
         prevCandidates.map(c => 
           c.id === candidateId ? { ...c, status: newStatus } : c
