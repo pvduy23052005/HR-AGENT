@@ -8,7 +8,6 @@ import { candidateRoute } from "./candidate.route";
 import { interviewRoute } from './interview.route';
 import { emailRoute } from './email.route';
 import { reportRoute } from './report.route';
-import { sourcingRoute } from './sourcing.route';
 import { verificationRoute } from './verfication.route';
 
 import { authMiddleware } from '../../middlewares/client/auth.middleware';
@@ -31,8 +30,6 @@ const indexClientRoute = (app: Express): void => {
   app.use('/email', authMiddleware, emailRoute);
 
   app.use('/report', authMiddleware, reportRoute);
-
-  app.use('/sourcing', authMiddleware, sourcingRoute);
 
   app.use('/verification', authMiddleware, verificationRoute);
 };

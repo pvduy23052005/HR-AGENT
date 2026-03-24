@@ -2,12 +2,11 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   MdDashboard,
-  MdCloudUpload,
   MdPeople,
   MdBarChart,
   MdAccountTree,
-  MdPersonSearch,
   MdLogout,
+  MdAdminPanelSettings,
 } from "react-icons/md";
 import { toast } from "react-toastify";
 import authService from "../../../services/client/authService";
@@ -15,9 +14,8 @@ import "../../../styles/client/ui/siderbar.css";
 
 const menuItems = [
   { path: "/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
-  { path: "/upload_cv", icon: <MdCloudUpload />, label: "Upload CV" },
-  { path: "/sourcing", icon: <MdPersonSearch />, label: "Tìm kiếm Ứng viên" },
   { path: "/candidates", icon: <MdPeople />, label: "Quản lý ứng viên" },
+  { path: "/users", icon: <MdAdminPanelSettings />, label: "Quản lý người dùng" },
   { path: "/reports", icon: <MdBarChart />, label: "Báo cáo & Thống kê" },
   { path: "/recruitment", icon: <MdAccountTree />, label: "Quy trình tuyển dụng" },
 ];

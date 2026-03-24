@@ -3,6 +3,73 @@
    Follows the design system defined in base.css
    ================================================================ */
 
+/* ── Dashboard Two-Column Layout ─────────────────────────────── */
+.dashboard-container {
+  display: flex;
+  gap: 24px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.dashboard-column {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dashboard-column--left {
+  min-width: 0;
+}
+
+.dashboard-column--right {
+  min-width: 0;
+  max-width: 450px;
+}
+
+.dashboard-column--right::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dashboard-column--right::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dashboard-column--right::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.dashboard-column--right::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+@media (max-width: 1200px) {
+  .dashboard-container {
+    gap: 16px;
+  }
+
+  .dashboard-column--right {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    flex-direction: column;
+    gap: 24px;
+    height: auto;
+  }
+
+  .dashboard-column {
+    max-width: 100%;
+    overflow-y: visible;
+  }
+
+  .dashboard-column--right {
+    max-width: 100%;
+  }
+}
+
 /* ── Shared Page Shell ────────────────────────────────────────── */
 .job-page {
   width: 100%;
@@ -515,6 +582,205 @@
   font-size: 0.88rem;
   color: var(--color-text-primary);
   background: transparent;
+}
+
+/* ================================================================
+   UPLOAD CV PANEL COMPONENT
+   Right-side panel for uploading CVs in Dashboard
+   ================================================================ */
+
+.upload-cv-panel {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--border-radius-md);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.upload-cv-panel__header {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 16px;
+}
+
+.upload-cv-panel__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.upload-cv-panel__subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.upload-cv-panel__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.upload-cv-panel__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-cv-panel__label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.upload-cv-panel__select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.upload-cv-panel__select:hover {
+  border-color: #9ca3af;
+}
+
+.upload-cv-panel__select:focus {
+  outline: none;
+  border-color: #0087f1;
+  box-shadow: 0 0 0 3px rgba(0, 135, 241, 0.1);
+}
+
+.upload-cv-panel__dropzone {
+  border: 2px dashed #d1d5db;
+  border-radius: var(--border-radius-md);
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #f9fafb;
+}
+
+.upload-cv-panel__dropzone:hover {
+  border-color: #0087f1;
+  background-color: #eff6ff;
+}
+
+.upload-cv-panel__dropzone.dragging {
+  border-color: #0087f1;
+  background-color: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(0, 135, 241, 0.1);
+}
+
+.upload-cv-panel__dropzone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-cv-panel__icon {
+  font-size: 2.5rem;
+}
+
+.upload-cv-panel__text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.upload-cv-panel__hint {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.upload-cv-panel__preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  gap: 12px;
+}
+
+.upload-cv-panel__preview-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.upload-cv-panel__preview-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upload-cv-panel__preview-size {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.upload-cv-panel__preview-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.upload-cv-panel__preview-remove:hover {
+  transform: scale(1.1);
+}
+
+.upload-cv-panel__btn-upload {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #0087f1, #0060d0);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 135, 241, 0.25);
+  white-space: nowrap;
+}
+
+.upload-cv-panel__btn-upload:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 135, 241, 0.35);
+}
+
+.upload-cv-panel__btn-upload:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.upload-cv-panel__btn-upload:disabled {
+  background: linear-gradient(135deg, #d1d5db, #9ca3af);
+  cursor: not-allowed;
+  box-shadow: none;
+}
   padding: 2px 0;
 }
 

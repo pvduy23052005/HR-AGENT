@@ -10,10 +10,9 @@ import routeClientAuth from "./client/routeClientAuth";
 
 import ProtectedRoute from "./ProtectedRoute";
 import ClientProtectedRoute from "./ClientProtectedRoute";
-import UploadCV from "../pages/client/UploadCV/UploadCV";
 import Dashbroad from "../pages/client/dashbroad/dashbroad";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
-import Sourcing from "../pages/client/Sourcing/Sourcing";
+import UserManagement from "../pages/client/UserManagement/UserManagement";
 
 import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
 import VerificationDetail from "../pages/client/Verification/VerificationDetail";
@@ -41,9 +40,8 @@ const routes = [
         children: [
           { path: "dashboard", element: <Dashbroad /> },
 
-          { path: "upload_cv", element: <UploadCV /> },
-          { path: "sourcing", element: <Sourcing /> },
           { path: "candidates", element: <CandidateManagement /> },
+          { path: "users", element: <UserManagement /> },
           { path: "candidates/emails", element: <EmailTemplates /> },
           { path: "candidates/emails/:id/detail", element: <EmailDetail /> },
           { path: "candidates/:id", element: <CandidateDetail /> },
@@ -59,10 +57,6 @@ const routes = [
 
           { path: "reports", element: <ReportStatistics /> },
           { path: "recruitment", element: <RecruitmentBoard /> },
-          {
-            path: "upload_cv",
-            element: <UploadCV />,
-          },
           {
             path: "candidates",
             element: <CandidateManagement />,
