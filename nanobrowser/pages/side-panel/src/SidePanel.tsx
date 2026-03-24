@@ -1081,7 +1081,7 @@ const SidePanel = () => {
                 </div>
               </div>
             )}
-
+            
             {/* Show setup message when no models are configured */}
             {hasConfiguredModels === false && (
               <div
