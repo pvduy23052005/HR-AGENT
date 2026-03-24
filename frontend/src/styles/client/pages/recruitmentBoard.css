@@ -35,6 +35,8 @@
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  /* Không giới hạn chiều cao để column tự dãn theo số lượng thẻ */
+  overflow: visible;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
@@ -76,10 +78,13 @@
 
 .kanban-column__content {
   padding: 12px;
+  /* flex column + gap để các thẻ xếp thẳng hàng, dãn đều nhau */
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   min-height: 150px;
+  /* overflow visible để dropdown popover không bị clip */
+  overflow: visible;
 }
 
 /* Candidate Card */
@@ -95,7 +100,10 @@
   transition: transform 0.3s ease-out, box-shadow 0.2s;
   user-select: none;
   touch-action: none;
+  /* overflow: visible để dropdown không bị cắt */
   overflow: visible;
+  /* Đảm bảo mỗi thẻ không bị collapse hay overlap */
+  flex-shrink: 0;
 }
 
 .candidate-card:not(.candidate-card--dragging):hover {
@@ -283,58 +291,55 @@
   transform: scale(0.98);
 }
 
-/* Popover Menu */
+/* Popover Menu — render bằng React Portal vào document.body */
+/* position: fixed + tọa độ được set bằng inline style trong JSX */
 .candidate-card__popover {
-  position: absolute;
-  top: 100%;
-  right: -20px;
-  margin-top: 8px;
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   overflow: hidden;
-  min-width: 140px;
-  z-index: 1000;
-  animation: popoverFadeIn 0.2s ease-out;
+  min-width: 160px;
+  border: 1px solid #e9ecef;
+  animation: popoverFadeIn 0.18s ease-out;
 }
 
 @keyframes popoverFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .candidate-card__popover-header {
   background-color: #cfe2ff;
-  padding: 10px 12px;
+  padding: 12px 12px;
   font-size: 12px;
   font-weight: 700;
   color: #084298;
   border-bottom: 1px solid #b6d4fe;
+  line-height: 1.4;
+  display: block;
 }
 
 .candidate-card__popover-body {
   display: flex;
   flex-direction: column;
+  gap: 0;
 }
 
 .candidate-card__popover-item {
   background: transparent;
   border: none;
-  padding: 10px 12px;
+  padding: 12px 12px;
   text-align: left;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #212529;
   cursor: pointer;
   transition: all 0.15s;
   user-select: none;
   border-radius: 0;
+  line-height: 1.4;
+  width: 100%;
+  text-align: left;
 }
 
 .candidate-card__popover-item:not(.active):hover {

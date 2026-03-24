@@ -34,7 +34,7 @@ const validateStatusChange = (currentStatus, newStatus) => {
   
   // Nếu distance > 1 (nhảy cóc)
   if (Math.abs(newIndex - currentIndex) > 1) {
-    return { isValid: false, message: 'Quy trình không hợp lệ' };
+    return { isValid: false, message: 'Quy trình không hợp lệ!' };
   }
   
   return { isValid: true };
