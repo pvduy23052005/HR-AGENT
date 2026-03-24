@@ -4,7 +4,6 @@ import { MdAdd, MdWork, MdDelete, MdCheckCircle, MdCancel, MdArrowBack, MdFormat
 import { toast } from "react-toastify";
 import axios from "axios";
 import jobService from "../../../services/client/jobService";
-import UploadCVPanel from "./UploadCVPanel";
 import "../../../styles/client/pages/jobManagement.css";
 
 const formatDate = (dateStr) => {
@@ -202,9 +201,6 @@ const JobListView = ({ onCreateClick, jobs, loading, search, setSearch, handleDe
             </div>
           )}
         </div>
-      </div>
-      <div className="dashboard-column dashboard-column--right">
-        <UploadCVPanel />
       </div>
     </div>
   );

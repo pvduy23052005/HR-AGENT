@@ -13,6 +13,7 @@ import ClientProtectedRoute from "./ClientProtectedRoute";
 import Dashbroad from "../pages/client/dashbroad/dashbroad";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
 import UserManagement from "../pages/client/UserManagement/UserManagement";
+import UploadCV from "../pages/client/UploadCV/UploadCV";
 
 import CandidateDetail from "../pages/client/CandidateManagement/CandidateDetail";
 import VerificationDetail from "../pages/client/Verification/VerificationDetail";
@@ -42,6 +43,7 @@ const routes = [
 
           { path: "candidates", element: <CandidateManagement /> },
           { path: "users", element: <UserManagement /> },
+          { path: "upload-cv", element: <UploadCV /> },
           { path: "candidates/emails", element: <EmailTemplates /> },
           { path: "candidates/emails/:id/detail", element: <EmailDetail /> },
           { path: "candidates/:id", element: <CandidateDetail /> },
