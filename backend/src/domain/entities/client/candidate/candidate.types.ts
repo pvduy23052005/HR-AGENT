@@ -50,6 +50,7 @@ export interface ICandidateSummaryProfile {
   phone: string;
   cvLink: string;
   topSkills: string[];
+  duration: string;
   isVerify?: boolean;
   status: CandidateStatus;
   appliedAt: Date | undefined;
@@ -66,6 +67,7 @@ export interface ICandidateDetailProfile {
   experiences: IExperience[];
   projects: IProject[];
   allSkills: string[];
+  duration: string;
   createdAt: Date | undefined;
   updatedAt: Date | undefined;
 }
