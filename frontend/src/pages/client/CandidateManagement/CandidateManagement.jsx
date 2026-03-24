@@ -13,6 +13,11 @@ const CandidateManagement = () => {
   const [candidates, setCandidates] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Input values (before clicking search)
+  const [searchSkillInput, setSearchSkillInput] = useState("");
+  const [searchExpInput, setSearchExpInput] = useState("");
+  const [filterStatusInput, setFilterStatusInput] = useState("all");
+  // Applied filters (after clicking search)
   const [searchSkill, setSearchSkill] = useState("");
   const [searchExp, setSearchExp] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -55,6 +60,11 @@ const CandidateManagement = () => {
     );
   };
 
+  const matchesExperience = (candidate, searchTerm) => {
+    if (!searchTerm) return true;
+    const years = candidate.yearsOfExperience || candidate.experiences?.length || 0;
+    return years.toString().includes(searchTerm);
+  };
 
   const matchesStatus = (candidate, status) => {
     if (status === "all") return true; 
@@ -65,19 +75,17 @@ const CandidateManagement = () => {
   const filtered = useMemo(() => {
     return candidates.filter((candidate) => {
       const hasSkill = matchesSkill(candidate, searchSkill);
+      const hasExp = matchesExperience(candidate, searchExp);
       const hasStatus = matchesStatus(candidate, filterStatus);
-      return hasSkill && hasStatus; 
+      return hasSkill && hasExp && hasStatus; 
     });
-  }, [candidates, searchSkill, filterStatus]);
+  }, [candidates, searchSkill, searchExp, filterStatus]);
 
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE; 
   const endIndex = currentPage * ITEMS_PER_PAGE;         
   const paginatedData = filtered.slice(startIndex, endIndex);
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchSkill, searchExp, filterStatus]);
 
  
   const toggleSelect = (id) => {
@@ -130,6 +138,19 @@ const CandidateManagement = () => {
   };
 
   const handleSearch = () => {
+    setSearchSkill(searchSkillInput);
+    setSearchExp(searchExpInput);
+    setFilterStatus(filterStatusInput);
+    setCurrentPage(1);
+  };
+
+  const handleClearFilters = () => {
+    setSearchSkillInput("");
+    setSearchExpInput("");
+    setFilterStatusInput("all");
+    setSearchSkill("");
+    setSearchExp("");
+    setFilterStatus("all");
     setCurrentPage(1);
   };
 
@@ -147,8 +168,8 @@ const CandidateManagement = () => {
           <input
             type="text"
             placeholder="Kĩ năng"
-            value={searchSkill}
-            onChange={(e) => setSearchSkill(e.target.value)}
+            value={searchSkillInput}
+            onChange={(e) => setSearchSkillInput(e.target.value)}
           />
         </div>
         <div className="candidate-page__filter-input">
@@ -156,21 +177,30 @@ const CandidateManagement = () => {
           <input
             type="text"
             placeholder="Năm kinh nghiệm"
-            value={searchExp}
-            onChange={(e) => setSearchExp(e.target.value)}
+            value={searchExpInput}
+            onChange={(e) => setSearchExpInput(e.target.value)}
           />
         </div>
-        <select
-          className="candidate-page__filter-select"
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-        >
-          <option value="all">Tất cả trạng thái</option>
-          <option value="unverified">Chưa kiểm chứng</option>
-          <option value="verified">Đã kiểm chứng</option>
-          <option value="scheduled">Đã lên lịch</option>
-          <option value="risky">Rủi ro</option>
-        </select>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <select
+            className="candidate-page__filter-select"
+            value={filterStatusInput}
+            onChange={(e) => setFilterStatusInput(e.target.value)}
+          >
+            <option value="all">Tất cả trạng thái</option>
+            <option value="unverified">Chưa kiểm chứng</option>
+            <option value="verified">Đã kiểm chứng</option>
+            <option value="scheduled">Đã lên lịch</option>
+            <option value="risky">Rủi ro</option>
+          </select>
+          <button 
+            className="candidate-page__btn-clear"
+            onClick={handleClearFilters}
+            title="Xóa bộ lọc"
+          >
+            ✕
+          </button>
+        </div>
         <button className="candidate-page__btn-search" onClick={handleSearch}>
           Tìm kiếm
         </button>
