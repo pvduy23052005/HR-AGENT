@@ -116,11 +116,15 @@ const ScheduleInterviewPage = () => {
 
            
             <div className="sip-form-group">
-              <label className="sip-form-label">Người tham gia:</label>
-              <div className="sip-form-input-wrap sip-form-input-wrap--readonly">
-                <span className="sip-form-readonly">
-                  {candidate?.personal?.email || "—"}
-                </span>
+              <label htmlFor="email" className="sip-form-label">Người tham gia:</label>
+              <div className="sip-form-input-wrap">
+                <input
+                  id="email"
+                  type="email"
+                  className="sip-form-input"
+                  value={candidate?.personal?.email || ""}
+                  readOnly
+                />
               </div>
             </div>
 

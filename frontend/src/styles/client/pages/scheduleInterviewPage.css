@@ -240,18 +240,21 @@
 }
 
 .sip-btn {
-  padding: 14px 36px;
+  padding: 8px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 500;
   transition: all 0.2s ease;
   text-align: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
+  min-width: auto;
+  height: 36px;
+  white-space: nowrap;
 }
 
 .sip-btn:disabled {
