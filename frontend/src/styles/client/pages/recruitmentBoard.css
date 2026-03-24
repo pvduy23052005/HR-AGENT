@@ -95,6 +95,7 @@
   transition: transform 0.3s ease-out, box-shadow 0.2s;
   user-select: none;
   touch-action: none;
+  overflow: visible;
 }
 
 .candidate-card:not(.candidate-card--dragging):hover {
@@ -110,15 +111,51 @@
 .candidate-card__header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 8px;
+  position: relative;
+}
+
+.candidate-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .candidate-card__id {
   font-size: 12px;
   color: #6c757d;
   font-weight: 500;
-  margin-top: 4px;
+}
+
+.candidate-card__menu-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.candidate-card__menu-trigger {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #495057;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.candidate-card__menu-trigger:hover {
+  background-color: #f1f3f5;
+  color: #212529;
+}
+
+.candidate-card__menu-trigger:active {
+  transform: scale(0.95);
 }
 
 .candidate-card__status-badge {
@@ -244,6 +281,76 @@
 
 .candidate-card__btn-detail:active {
   transform: scale(0.98);
+}
+
+/* Popover Menu */
+.candidate-card__popover {
+  position: absolute;
+  top: 100%;
+  right: -20px;
+  margin-top: 8px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 140px;
+  z-index: 1000;
+  animation: popoverFadeIn 0.2s ease-out;
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.candidate-card__popover-header {
+  background-color: #cfe2ff;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #084298;
+  border-bottom: 1px solid #b6d4fe;
+}
+
+.candidate-card__popover-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.candidate-card__popover-item {
+  background: transparent;
+  border: none;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: #212529;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  border-radius: 0;
+}
+
+.candidate-card__popover-item:not(.active):hover {
+  background-color: #f1f3f5;
+  padding-left: 14px;
+}
+
+.candidate-card__popover-item.active {
+  background-color: #0d6efd;
+  color: white;
+  font-weight: 600;
+}
+
+.candidate-card__popover-item.active:hover {
+  background-color: #0b5ed7;
+  padding-left: 14px;
 }
 
 /* Scrollbar styling for Kanban */

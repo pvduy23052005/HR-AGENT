@@ -14,9 +14,12 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
   const { id, candidateCode, name, position, status } = candidate;
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [showMenuId, setShowMenuId] = useState(null);
   
   const dragStartRef = useRef({ x: 0, offset: 0 });
   const cardRef = useRef(null);
+  const menuRef = useRef(null);
+  const menuTriggerRef = useRef(null);
   const isDownRef = useRef(false);
 
   const currentStatusIndex = STATUSES.indexOf(status);
@@ -106,11 +109,38 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     };
   }, [isDragging, currentStatusIndex, canSwipeRightToNext, canSwipeLeftToPrev, id, onStatusChange]);
 
+  // Close menu khi click outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target) && 
+          cardRef.current && !cardRef.current.querySelector('.candidate-card__menu-trigger')?.contains(e.target)) {
+        setShowMenuId(null);
+      }
+    };
+
+    if (showMenuId === id) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showMenuId, id]);
+
   const getSwipeHint = () => {
     // Sửa lại text cho đúng hướng vuốt
     if (swipeOffset > 20) return 'Tiếp tục →';
     if (swipeOffset < -20) return '← Trở về';
     return 'Vuốt để chuyển';
+  };
+
+  const handleMenuToggle = (e) => {
+    e.stopPropagation();
+    setShowMenuId(showMenuId === id ? null : id);
+  };
+
+  const handleStatusSelect = (newStatus) => {
+    if (newStatus !== status) {
+      onStatusChange(id, newStatus);
+    }
+    setShowMenuId(null);
   };
 
   return (
@@ -131,8 +161,43 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     >
       <div className="candidate-card__header">
         <span className="candidate-card__id">#{candidateCode}</span>
-        <span className="candidate-card__status-badge">{STATUS_LABELS[status]}</span>
+        <div className="candidate-card__header-actions">
+          <span className="candidate-card__status-badge">{STATUS_LABELS[status]}</span>
+          <div className="candidate-card__menu-wrapper">
+            <button
+              ref={menuTriggerRef}
+              className="candidate-card__menu-trigger"
+              onClick={handleMenuToggle}
+              aria-label="Menu"
+            >
+              ☰
+            </button>
+            
+            {showMenuId === id && (
+              <div 
+                className="candidate-card__popover" 
+                ref={menuRef}
+              >
+                <div className="candidate-card__popover-header">
+                  Trạng thái mới
+                </div>
+                <div className="candidate-card__popover-body">
+                  {STATUSES.map(st => (
+                    <button
+                      key={st}
+                      className={`candidate-card__popover-item ${st === status ? 'active' : ''}`}
+                      onClick={() => handleStatusSelect(st)}
+                    >
+                      {STATUS_LABELS[st]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
+      
       <h3 className="candidate-card__name">{name}</h3>
       <p className="candidate-card__position">{position}</p>
       
@@ -143,13 +208,11 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
       )}
 
       <div className="candidate-card__swipe-indicators">
-        {/* Mũi tên trái xuất hiện khi lùi về */}
         {canSwipeLeftToPrev && (
           <div className={`candidate-card__indicator candidate-card__indicator--left ${swipeOffset < -20 ? 'active' : ''}`}>
             ←
           </div>
         )}
-        {/* Mũi tên phải xuất hiện khi đi tiếp */}
         {canSwipeRightToNext && (
           <div className={`candidate-card__indicator candidate-card__indicator--right ${swipeOffset > 20 ? 'active' : ''}`}>
             →
