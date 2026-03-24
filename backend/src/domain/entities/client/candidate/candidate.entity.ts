@@ -102,9 +102,59 @@ export class CandidateEntity {
       cvLink: this.personal.cvLink,
       topSkills: this.getAllTechStacks().slice(0, 5),
       isVerify: this.isVerify,
+      duration: this.calculateTotalDuration(),
       status: this.status,
       appliedAt: this.createdAt,
     };
+  }
+
+  calculateTotalDuration(): string {
+    let totalMonths = 0;
+
+    for (const exp of this.experiences) {
+      if (!exp.duration) continue;
+
+      const durationStr = exp.duration.toLowerCase();
+
+      const yearMatch = durationStr.match(/(\d+)\s*(?:năm|year|years|yr|yrs)/);
+      const monthMatch = durationStr.match(/(\d+)\s*(?:tháng|month|months|mo|mos)/);
+
+      let parsed = false;
+      if (yearMatch) {
+        totalMonths += parseInt(yearMatch[1], 10) * 12;
+        parsed = true;
+      }
+      if (monthMatch) {
+        totalMonths += parseInt(monthMatch[1], 10);
+        parsed = true;
+      }
+
+      if (!parsed) {
+        const matches = durationStr.match(/\b(19|20)\d{2}\b/g);
+        if (matches && matches.length >= 2) {
+          const startYear = parseInt(matches[0], 10);
+          const endYear = parseInt(matches[matches.length - 1], 10);
+          if (endYear >= startYear) {
+            totalMonths += (endYear - startYear) * 12;
+          }
+        } else if (matches && matches.length === 1 && (durationStr.includes('present') || durationStr.includes('nay') || durationStr.includes('hiện tại') || durationStr.includes('now'))) {
+          const startYear = parseInt(matches[0], 10);
+          const currentYear = new Date().getFullYear();
+          if (currentYear >= startYear) {
+            totalMonths += (currentYear - startYear) * 12;
+          }
+        }
+      }
+    }
+
+    if (totalMonths === 0) return '0 tháng';
+    if (totalMonths < 12) return `${totalMonths} tháng`;
+
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    if (months === 0) return `${years} năm`;
+    return `${years} năm ${months} tháng`;
   }
 
   getDetailProfile(): ICandidateDetailProfile {
@@ -119,6 +169,7 @@ export class CandidateEntity {
       experiences: this.experiences,
       projects: this.projects,
       allSkills: this.getAllTechStacks(),
+      duration: this.calculateTotalDuration(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

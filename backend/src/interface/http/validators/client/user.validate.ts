@@ -14,7 +14,7 @@ export const forgotPasswordValidate: RequestHandler = (req, res, next) => {
 export const otpPasswordValidate: RequestHandler = (req, res, next) => {
   const { email, otp } = req.body as { email?: string; otp?: string };
 
-  if (!email) {
+  if (!email?.trim()) {
     res.status(400).json({ success: false, message: 'Vui lòng nhập Email!' });
     return;
   }
@@ -30,12 +30,12 @@ export const otpPasswordValidate: RequestHandler = (req, res, next) => {
 export const resetPasswordValidate: RequestHandler = (req, res, next) => {
   const { email, password, confirmPassword } = req.body as { email?: string; password?: string; confirmPassword?: string };
 
-  if (!email) {
+  if (!email?.trim()) {
     res.status(400).json({ success: false, message: 'Vui lòng nhập Email!' });
     return;
   }
 
-  if (!password) {
+  if (!password?.trim()) {
     res.status(400).json({ success: false, message: 'Vui lòng nhập mật khẩu mới!' });
     return;
   }
