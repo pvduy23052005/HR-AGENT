@@ -120,22 +120,39 @@ const CandidateManagement = () => {
     });
   };
 
-  const getStatusLabel = (status) => {
+  const getRecruitmentStatusLabel = (status) => {
     const labels = {
-      unverified: "Chưa kiểm chứng",
-      verified: "Đã kiểm chứng",
-      scheduled: "Phỏng vấn",
-      risky: "Rủi ro",
+      applied: "Ứng tuyển",
+      screening: "Sàng lọc",
+      interview: "Phỏng vấn",
+      offer: "Đề nghị",
     };
-
     return labels[status] || status || "—";
   };
 
-  const getStatusClass = (status) => {
+  const getRecruitmentStatusClass = (status) => {
+    const classes = {
+      applied: "status-applied",
+      screening: "status-screening",
+      interview: "status-interview",
+      offer: "status-offer",
+    };
+    return classes[status] || "";
+  };
+
+  const getVerificationStatusLabel = (status) => {
+    const labels = {
+      unverified: "Chưa kiểm chứng",
+      verified: "Đã kiểm chứng ✅",
+      risky: "Rủi ro ⚠️",
+    };
+    return labels[status] || status || "—";
+  };
+
+  const getVerificationStatusClass = (status) => {
     const classes = {
       unverified: "status-unanalyzed",
       verified: "status-verified",
-      scheduled: "status-scheduled",
       risky: "status-risk",
     };
     return classes[status] || "";
@@ -227,11 +244,11 @@ const CandidateManagement = () => {
             value={filterStatusInput}
             onChange={(e) => setFilterStatusInput(e.target.value)}
           >
-            <option value="all">Tất cả trạng thái</option>
-            <option value="unverified">Chưa kiểm chứng</option>
-            <option value="verified">Đã kiểm chứng</option>
-            <option value="scheduled">Đã lên lịch</option>
-            <option value="risky">Rủi ro</option>
+            <option value="all">Tất cả quy trình</option>
+            <option value="applied">Ứng tuyển</option>
+            <option value="screening">Sàng lọc</option>
+            <option value="interview">Phỏng vấn</option>
+            <option value="offer">Đề nghị</option>
           </select>
           <button 
             className="candidate-page__btn-clear"
@@ -319,11 +336,11 @@ const CandidateManagement = () => {
                       style={{ cursor: "pointer" }}
                     >
                       <span
-                        className={`candidate-page__status ${getStatusClass(
+                        className={`candidate-page__status ${getRecruitmentStatusClass(
                           c.status
                         )}`}
                       >
-                        {getStatusLabel(c.status)}
+                        {getRecruitmentStatusLabel(c.status)}
                       </span>
                     </td>
                   </tr>

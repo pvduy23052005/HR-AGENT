@@ -1,9 +1,10 @@
-import type { CandidateEntity, CandidateStatus } from '../../entities/client/candidate';
+import type { CandidateEntity, CandidateStatus, VerificationStatus } from '../../entities/client/candidate';
 
 export interface ICandidateData {
   jobID?: string;
   addedBy?: string;
   status?: CandidateStatus;
+  verificationStatus?: VerificationStatus;
   objective?: string;
   fullTextContent?: string;
   personal?: Record<string, unknown>;
@@ -13,7 +14,8 @@ export interface ICandidateData {
 }
 
 export interface IStatus {
-  status: CandidateStatus;
+  status?: CandidateStatus;
+  verificationStatus?: VerificationStatus;
 }
 
 export interface ICandidateReadRepo {

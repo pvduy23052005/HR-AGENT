@@ -1,6 +1,7 @@
 export { CandidateEntity } from './candidate.entity';
 export {
   CandidateStatus,
+  VerificationStatus,
   type IPersonal,
   type IEducation,
   type IExperience,

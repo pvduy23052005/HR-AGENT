@@ -13,6 +13,7 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
       jobID: doc.jobID?.toString(),
       addedBy: doc.addedBy?.toString(),
       status: doc.status,
+      verificationStatus: doc.verificationStatus,
       objective: doc.objective,
       fullTextContent: doc.fullTextContent,
       personal: doc.personal,
@@ -48,13 +49,24 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
       .filter((entity): entity is CandidateEntity => entity !== null);
   }
 
-  public async updateStatus(candidateID: string, status: IStatus): Promise<void> {
+  public async updateStatus(candidateID: string, updateData: IStatus): Promise<void> {
     try {
+      const updateFields: any = {};
+      
+      if (updateData.status) {
+        updateFields.status = updateData.status;
+      }
+      if (updateData.verificationStatus) {
+        updateFields.verificationStatus = updateData.verificationStatus;
+      }
+
+      if (Object.keys(updateFields).length === 0) {
+        throw new Error("Không có trường nào để cập nhật");
+      }
+
       const result = await Candidate.updateOne({
         _id: candidateID
-      }, {
-        status: status.status
-      });
+      }, updateFields);
 
       if (result.modifiedCount === 0) {
         throw new Error("Không thể cập nhật trạng thái ứng viên");

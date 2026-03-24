@@ -39,10 +39,10 @@ const verificationService = {
 
   confirmVerification: async (candidateID, confirmData) => {
     try {
+      // Keep status as-is: "verified" or "risky"
       const payload = {
         candidateID,
-        status: confirmData.status, 
-        verification: confirmData.verification,
+        status: confirmData.status, // "verified" or "risky"
       };
 
   
@@ -56,8 +56,8 @@ const verificationService = {
           return {
             success: true,
             message:
-              confirmData.status === "trusted"
-                ? "Xác nhận uy tín thành công!"
+              confirmData.status === "verified"
+                ? "Kiểm chứng thành công!"
                 : "Đã gắn cờ rủi ro!",
           };
         }

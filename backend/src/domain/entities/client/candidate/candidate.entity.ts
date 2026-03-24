@@ -7,13 +7,14 @@ import type {
   ICandidateDetailProfile,
   ICandidateProps,
 } from './candidate.types';
-import { CandidateStatus } from './candidate.types';
+import { CandidateStatus, VerificationStatus } from './candidate.types';
 
 export class CandidateEntity {
   id: string | null;
   jobID: string | null;
   addedBy: string | null;
   status: CandidateStatus;
+  verificationStatus: VerificationStatus;
   objective: string;
   isVerify?: boolean;
   fullTextContent: string;
@@ -28,7 +29,8 @@ export class CandidateEntity {
     id,
     jobID,
     addedBy,
-    status = CandidateStatus.UNVERIFIED,
+    status = CandidateStatus.APPLIED,
+    verificationStatus = VerificationStatus.UNVERIFIED,
     objective = '',
     isVerify,
     fullTextContent = '',
@@ -43,6 +45,7 @@ export class CandidateEntity {
     this.jobID = jobID ? jobID.toString() : null;
     this.addedBy = addedBy ? addedBy.toString() : null;
     this.status = status;
+    this.verificationStatus = verificationStatus;
     this.objective = objective;
     this.fullTextContent = fullTextContent;
     this.isVerify = isVerify;
@@ -163,6 +166,7 @@ export class CandidateEntity {
       jobID: this.jobID,
       addedBy: this.addedBy,
       status: this.status,
+      verificationStatus: this.verificationStatus,
       objective: this.objective,
       personal: this.personal,
       educations: this.educations,

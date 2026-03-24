@@ -51,8 +51,13 @@ const candidateSchema = new mongoose.Schema(
     addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     status: {
       type: String,
-      enum: ["unverified", "scheduled", "verified", "risky", "applied", "screening", "interview", "offer"],
+      enum: ["applied", "screening", "interview", "offer"],
       default: "applied"
+    },
+    verificationStatus: {
+      type: String,
+      enum: ["unverified", "verified", "risky"],
+      default: "unverified"
     },
     objective: { type: String, trim: true },
     fullTextContent: { type: String, trim: true },

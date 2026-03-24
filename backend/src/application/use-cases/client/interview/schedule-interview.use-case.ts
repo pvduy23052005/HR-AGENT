@@ -94,7 +94,7 @@ export class ScheduleInterviewUseCase {
       },
     ]);
 
-    await this.candidateRepo.updateStatus(input.candidateID, { status: CandidateStatus.SCHEDULED });
+    await this.candidateRepo.updateStatus(input.candidateID, { status: CandidateStatus.INTERVIEW });
 
     return { schedule: created.getDetail(), emailSent };
   }

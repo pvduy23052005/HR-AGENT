@@ -4,7 +4,7 @@ import { VerifyCandidateUseCase } from '../../../../application/use-cases/client
 
 import { VerificationRepository } from '../../../../infrastructure/database/repositories/client/verification.repository';
 import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
-import { CandidateStatus } from '../../../../domain/entities/client/candidate';
+import { CandidateStatus, VerificationStatus } from '../../../../domain/entities/client/candidate';
 
 const verificationRepository = new VerificationRepository();
 const candidateRepository = new CandidateRepository();
@@ -86,23 +86,42 @@ export const confirmVerification = async (req: Request, res: Response): Promise<
       return;
     }
 
-    if (!status || !['trusted', 'risky'].includes(status)) {
-      res.status(400).json({ success: false, message: 'Status không hợp lệ. Chỉ cho phép: trusted hoặc risky' });
+    if (!status || !['verified', 'risky'].includes(status)) {
+      res.status(400).json({ success: false, message: 'Status không hợp lệ. Chỉ cho phép: verified hoặc risky' });
       return;
     }
 
-    await verificationRepository.updateVerificationStatus(candidateID, status === 'trusted');
+    await verificationRepository.updateVerificationStatus(candidateID, status === 'verified');
 
-    if (status === 'risky') {
-      await candidateRepository.updateStatus(candidateID, { status: CandidateStatus.RISKY });
-    } else if (status === 'trusted') {
-      await candidateRepository.updateStatus(candidateID, { status: CandidateStatus.VERIFIED });
+    // Get current candidate status to handle transitions properly
+    const candidate = await candidateRepository.getCandidateById(candidateID);
+    if (!candidate) {
+      res.status(404).json({ success: false, message: 'Ứng viên không tìm thấy' });
+      return;
     }
 
-    res.status(200).json({
-      success: true,
-      message: status === 'trusted' ? 'Xác nhận uy tín thành công!' : 'Đã gắn cờ rủi ro!',
-    });
+    // Update candidate's verificationStatus AND recruitment status based on current status
+    if (status === 'risky') {
+      // Nếu rủi ro → Reset lại APPLIED for re-evaluation
+      await candidateRepository.updateStatus(candidateID, { 
+        verificationStatus: VerificationStatus.RISKY,
+        status: CandidateStatus.APPLIED
+      });
+      res.status(200).json({
+        success: true,
+        message: 'Đánh dấu rủi ro. Reset lại Ứng tuyển.',
+      });
+    } else if (status === 'verified') {
+      // Nếu verified → Auto advance to OFFER
+      await candidateRepository.updateStatus(candidateID, { 
+        verificationStatus: VerificationStatus.VERIFIED,
+        status: CandidateStatus.OFFER
+      });
+      res.status(200).json({
+        success: true,
+        message: 'Kiểm chứng thành công! Chuyển sang Đề nghị.',
+      });
+    }
   } catch (error: any) {
     console.error('Lỗi khi xác nhận verification:', error);
     res.status(400).json({

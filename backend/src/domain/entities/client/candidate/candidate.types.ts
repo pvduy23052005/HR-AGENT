@@ -1,12 +1,14 @@
 export enum CandidateStatus {
-  UNVERIFIED = "unverified",
-  SCHEDULED = "scheduled",
-  VERIFIED = "verified",
-  RISKY = "risky",
   APPLIED = "applied",
   SCREENING = "screening",
   INTERVIEW = "interview",
   OFFER = "offer",
+}
+
+export enum VerificationStatus {
+  UNVERIFIED = "unverified",
+  VERIFIED = "verified",
+  RISKY = "risky",
 }
 
 export interface IPersonal {
@@ -53,6 +55,7 @@ export interface ICandidateSummaryProfile {
   duration: string;
   isVerify?: boolean;
   status: CandidateStatus;
+  verificationStatus: VerificationStatus;
   appliedAt: Date | undefined;
 }
 
@@ -61,6 +64,7 @@ export interface ICandidateDetailProfile {
   jobID: string | null;
   addedBy: string | null;
   status: CandidateStatus;
+  verificationStatus: VerificationStatus;
   objective: string;
   personal: IPersonal;
   educations: IEducation[];
@@ -77,6 +81,7 @@ export interface ICandidateProps {
   jobID?: string | { toString(): string } | null;
   addedBy?: string | { toString(): string } | null;
   status: CandidateStatus;
+  verificationStatus?: VerificationStatus;
   objective?: string;
   fullTextContent?: string;
   isVerify?: boolean;

@@ -152,11 +152,11 @@ const CandidateDetail = () => {
         // Bước 2: Xác nhận và chuyển trường từ Ứng tuyển → Sàng lọc
         try {
           const confirmRes = await verificationService.confirmVerification(id, {
-            status: 'trusted', // Kiểm chứng thành công → uy tín
+            status: 'verified', // Kiểm chứng thành công
           });
           
           if (confirmRes.success) {
-            toast.success("Ứng viên đã chuyển sang Sàng lọc!");
+            toast.success("Ứng viên đã kiểm chứng thành công!");
             // Reload dữ liệu candidate để cập nhật status
             await fetchDetail();
             setTimeout(() => {
@@ -211,20 +211,36 @@ const CandidateDetail = () => {
     createdAt,
   } = candidate;
 
-  const statusLabels = {
-    unverified: "Chưa kiểm chứng",
-    verified: "Đã kiểm chứng",
-    scheduled: "Đã lên lịch",
-    risky: "Rủi ro",
+  // Recruitment Status Labels
+  const recruitmentStatusLabels = {
+    applied: "Ứng tuyển",
+    screening: "Sàng lọc",
+    interview: "Phỏng vấn",
+    offer: "Đề nghị",
   };
-  const statusClasses = {
+  const recruitmentStatusClasses = {
+    applied: "status-applied",
+    screening: "status-screening",
+    interview: "status-interview",
+    offer: "status-offer",
+  };
+
+  // Verification Status Labels
+  const verificationStatusLabels = {
+    unverified: "Chưa kiểm chứng",
+    verified: "Đã kiểm chứng ✅",
+    risky: "Rủi ro ⚠️",
+  };
+  const verificationStatusClasses = {
     unverified: "status-unanalyzed",
     verified: "status-verified",
-    scheduled: "status-scheduled",
     risky: "status-risk",
   };
-  const statusLabel = statusLabels[status] || status || "—";
-  const statusClass = statusClasses[status] || "";
+
+  const recruitmentLabel = recruitmentStatusLabels[status] || status || "—";
+  const recruitmentClass = recruitmentStatusClasses[status] || "";
+  const verificationLabel = verificationStatusLabels[candidate.verificationStatus] || candidate.verificationStatus || "—";
+  const verificationClass = verificationStatusClasses[candidate.verificationStatus] || "";
   const firstEdu = educations[0];
   const firstExp = experiences[0];
 
@@ -337,11 +353,21 @@ const CandidateDetail = () => {
 
   
         <div className="cd-field">
-          <div className="cd-field__label">Trạng thái</div>
+          <div className="cd-field__label">Quy Trình Tuyển Dụng</div>
           <div className="cd-field__row">
             <MdSearch className="cd-field__icon" />
-            <span className={`cd-field__value ${statusClass}`}>
-              {statusLabel}
+            <span className={`cd-field__value ${recruitmentClass}`}>
+              {recruitmentLabel}
+            </span>
+          </div>
+        </div>
+
+        <div className="cd-field">
+          <div className="cd-field__label">Kiểm Chứng GitHub</div>
+          <div className="cd-field__row">
+            <MdSearch className="cd-field__icon" />
+            <span className={`cd-field__value ${verificationClass}`}>
+              {verificationLabel}
             </span>
           </div>
         </div>

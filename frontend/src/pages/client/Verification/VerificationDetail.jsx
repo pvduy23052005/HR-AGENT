@@ -51,8 +51,9 @@ const VerificationDetail = () => {
   };
 
   const handleConfirm = async (status) => {
-    if (candidateStatus === "scheduled") {
-      toast.warning("Ứng viên đã lên lịch, không cần kiểm chứng!");
+    // Allow verification at both APPLIED and SCREENING stages
+    if (candidateStatus !== "screening" && candidateStatus !== "applied") {
+      toast.warning("Ứng viên chỉ có thể kiểm chứng ở giai đoạn Ứng tuyển hoặc Sàng lọc!");
       return;
     }
 
@@ -66,7 +67,6 @@ const VerificationDetail = () => {
      
       const response = await verificationService.confirmVerification(id, {
         status: status,
-        verification: verification,
       });
 
       if (response.success) {
