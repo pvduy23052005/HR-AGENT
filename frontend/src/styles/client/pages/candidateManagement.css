@@ -111,6 +111,210 @@
   color: #333;
 }
 
+/* Tooltip / Quick Preview */
+.candidate-page__tooltip {
+  background: linear-gradient(180deg, #2a2a3e 0%, #1a1a2e 100%);
+  border: 1px solid rgba(0, 135, 241, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  width: 240px;
+  animation: slideUp 0.2s ease-out;
+  margin-bottom: 12px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -90%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+.candidate-page__tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+
+.candidate-page__tooltip-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0087f1, #00c6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0 auto;
+}
+
+.candidate-page__tooltip-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  margin: 4px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.candidate-page__tooltip-title {
+  font-size: 13px;
+  color: #aaa;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.candidate-page__tooltip-links {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+.candidate-page__tooltip-links {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+.candidate-page__tooltip-github {
+  text-align: center;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+}
+
+.candidate-page__tooltip-github-link {
+  display: inline-block;
+  color: #00c6ff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  word-break: break-all;
+  transition: color 0.2s ease;
+  max-width: 200px;
+}
+
+.candidate-page__tooltip-github-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.candidate-page__tooltip-github-link.cv-link {
+  color: #ffa500;
+}
+
+.candidate-page__tooltip-github-link.cv-link:hover {
+  color: #ffb84d;
+}
+
+.candidate-page__tooltip-no-github {
+  display: inline-block;
+  color: #999;
+  font-size: 12px;
+}
+
+.candidate-page__tooltip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(0, 135, 241, 0.2);
+  color: #00c6ff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(0, 135, 241, 0.4);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.candidate-page__tooltip-link:hover {
+  background: rgba(0, 135, 241, 0.4);
+  border-color: #00c6ff;
+  box-shadow: 0 2px 8px rgba(0, 198, 255, 0.3);
+}
+
+.candidate-page__tooltip-link.cv-link {
+  color: #ffa500;
+  border-color: rgba(255, 165, 0, 0.4);
+  background: rgba(255, 165, 0, 0.1);
+}
+
+.candidate-page__tooltip-link.cv-link:hover {
+  background: rgba(255, 165, 0, 0.2);
+  border-color: #ffa500;
+  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.3);
+}
+
+.candidate-page__tooltip-link.github-link {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.candidate-page__tooltip-link.github-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+.candidate-page__tooltip-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.candidate-page__tooltip-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.candidate-page__tooltip-btn.primary {
+  background: linear-gradient(135deg, #0087f1, #00c6ff);
+  color: #fff;
+}
+
+.candidate-page__tooltip-btn.primary:hover {
+  background: linear-gradient(135deg, #006ed0, #00a8d8);
+  box-shadow: 0 4px 12px rgba(0, 135, 241, 0.4);
+}
+
+.candidate-page__tooltip-btn.secondary {
+  background: transparent;
+  color: #00c6ff;
+  border: 1px solid #00c6ff;
+}
+
+.candidate-page__tooltip-btn.secondary:hover {
+  background: rgba(0, 198, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 198, 255, 0.2);
+}
+
 /* Table Wrapper */
 .candidate-page__table-wrapper {
   background: #fff;
