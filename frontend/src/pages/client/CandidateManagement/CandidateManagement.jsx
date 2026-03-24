@@ -53,17 +53,32 @@ const CandidateManagement = () => {
 
   
   const matchesSkill = (candidate, searchTerm) => {
-    if (!searchTerm) return true; 
-    const skills = candidate.topSkills || [];
-    return skills.some(skill => 
-      skill.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    if (!searchTerm) return true;
+    
+    let skills = candidate.allSkills || [];
+    
+    // Xử lý nếu skills là string
+    if (typeof skills === "string") {
+      skills = skills.split(",").map(s => s.trim()).filter(s => s);
+    }
+    
+    // Đảm bảo là mảng
+    if (!Array.isArray(skills)) {
+      skills = [];
+    }
+    
+    const trimmedSearchTerm = searchTerm.trim().toLowerCase();
+    
+    return skills.some(skill => {
+      if (!skill) return false;
+      return skill.toLowerCase().trim().includes(trimmedSearchTerm);
+    });
   };
 
   const matchesExperience = (candidate, searchTerm) => {
     if (!searchTerm) return true;
     const years = candidate.yearsOfExperience || candidate.experiences?.length || 0;
-    return years.toString().includes(searchTerm);
+    return years.toString().includes(searchTerm.trim());
   };
 
   const matchesStatus = (candidate, status) => {

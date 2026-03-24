@@ -21,7 +21,10 @@ export const getCandidates = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const listSummaryProfile = candidates.map((c) => c.getSummaryProfile());
+    const listSummaryProfile = candidates.map((c) => ({
+      ...c.getSummaryProfile(),
+      allSkills: c.getAllTechStacks(), // Thêm tất cả kỹ năng
+    }));
 
     res.status(200).json({ success: true, message: 'Thành công', candidates: listSummaryProfile });
   } catch (error: unknown) {
