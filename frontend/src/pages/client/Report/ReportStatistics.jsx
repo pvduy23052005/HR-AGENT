@@ -23,7 +23,7 @@ import '../../../styles/client/pages/reportStatistics.css';
 const ReportStatistics = () => {
   const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState('Theo tháng');
-  const [filterDate, setFilterDate] = useState('2026-03'); 
+  const [filterDate, setFilterDate] = useState('2026-03');
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({
     totalCVs: 0,
@@ -103,7 +103,7 @@ const ReportStatistics = () => {
       window.removeEventListener('candidate-status-changed', handleCustomEvent);
     };
   }, [fetchStatistics]);
-  
+
   const handleBack = () => {
     navigate(-1);
   };
@@ -131,10 +131,10 @@ const ReportStatistics = () => {
 
     // Tạo Worksheet và Workbook
     const ws = XLSX.utils.json_to_sheet(finalData);
-    
+
     // Auto-size columns cơ bản
     ws['!cols'] = [{ wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 }];
-    
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Thong_Ke");
 
@@ -145,8 +145,8 @@ const ReportStatistics = () => {
   const exportToPDF = async () => {
     const reportElement = document.getElementById("report-client-content");
     if (!reportElement) {
-        toast.error("Không tìm thấy nội dung để xuất PDF!");
-        return;
+      toast.error("Không tìm thấy nội dung để xuất PDF!");
+      return;
     }
 
     try {
@@ -154,11 +154,11 @@ const ReportStatistics = () => {
       // html2canvas chụp phần background trắng và scale để nét hơn
       const canvas = await html2canvas(reportElement, { scale: 2, backgroundColor: "#f8f9fa" });
       const imgData = canvas.toDataURL('image/png');
-      
+
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`Bao_Cao_Thong_Ke_${filterCriteria.replace(' ', '_')}.pdf`);
       toast.success("Xuất PDF thành công!");
@@ -183,7 +183,7 @@ const ReportStatistics = () => {
       {/* Header Area */}
       <div className="report-header">
         <a href="#!" className="report-back-btn" onClick={(e) => { e.preventDefault(); handleBack(); }}>
-          <FaArrowLeft className="me-2" />
+
           &lt;- Quay lại
         </a>
         <h1 className="report-title">Báo cáo &amp; Thống kê</h1>
@@ -225,15 +225,15 @@ const ReportStatistics = () => {
             ) : (
               <>
                 <div className="stat-row">
-                  <span className="stat-label">Số lượng CV đã tiếp nhận:</span>
+                  <span className="stat-label">Số lượng CV đã quét/thu nhập:</span>
                   <span className="stat-value">{stats.totalCVs}</span>
                 </div>
                 <div className="stat-row">
-                  <span className="stat-label">Số lịch phỏng vấn đã tạo:</span>
+                  <span className="stat-label">Số lượng email đã gửi:</span>
                   <span className="stat-value">{stats.totalEmailsSent}</span>
                 </div>
                 <div className="stat-row">
-                  <span className="stat-label">Tỷ lệ phỏng vấn hoàn thành:</span>
+                  <span className="stat-label">Tỷ lệ phản hồi:</span>
                   <span className="stat-value">{stats.responseRate}</span>
                 </div>
               </>
@@ -254,29 +254,29 @@ const ReportStatistics = () => {
                 ) : (
                   <BarChart
                     data={stats.chartData}
-                  margin={{
-                    top: 20,
-                    right: 30,
-                    left: 0,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fill: '#6c757d' }} axisLine={{ stroke: '#ced4da' }} tickLine={false} />
-                  <YAxis tick={{ fill: '#6c757d' }} axisLine={false} tickLine={false} />
-                  <Tooltip cursor={{ fill: '#f8f9fa' }} />
-                  <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
-                  
-                  <Bar dataKey="blueValue" name="CV tiếp nhận" fill="#0d6efd" radius={[4, 4, 0, 0]} maxBarSize={50}>
-                    <LabelList dataKey="blueValue" position="top" fill="#6c757d" fontSize={12} fontWeight={600} />
-                  </Bar>
-                  <Bar dataKey="orangeValue" name="Lịch phỏng vấn" fill="#fd7e14" radius={[4, 4, 0, 0]} maxBarSize={50}>
-                    <LabelList dataKey="orangeValue" position="top" fill="#6c757d" fontSize={12} fontWeight={600} />
-                  </Bar>
-                  <Bar dataKey="grayValue" name="Hoàn thành" fill="#6c757d" radius={[4, 4, 0, 0]} maxBarSize={50}>
-                    <LabelList dataKey="grayValue" position="top" fill="#6c757d" fontSize={12} fontWeight={600} />
-                  </Bar>
-                </BarChart>
+                    margin={{
+                      top: 20,
+                      right: 30,
+                      left: 0,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="name" tick={{ fill: '#6c757d' }} axisLine={{ stroke: '#ced4da' }} tickLine={false} />
+                    <YAxis tick={{ fill: '#6c757d' }} axisLine={false} tickLine={false} />
+                    <Tooltip cursor={{ fill: '#f8f9fa' }} />
+                    <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
+
+                    <Bar dataKey="blueValue" name="CV tiếp nhận" fill="#0d6efd" radius={[4, 4, 0, 0]} maxBarSize={50}>
+                      <LabelList dataKey="blueValue" position="top" fill="#6c757d" fontSize={12} fontWeight={600} />
+                    </Bar>
+                    <Bar dataKey="orangeValue" name="Lịch phỏng vấn" fill="#fd7e14" radius={[4, 4, 0, 0]} maxBarSize={50}>
+                      <LabelList dataKey="orangeValue" position="top" fill="#6c757d" fontSize={12} fontWeight={600} />
+                    </Bar>
+                    <Bar dataKey="grayValue" name="Hoàn thành" fill="#6c757d" radius={[4, 4, 0, 0]} maxBarSize={50}>
+                      <LabelList dataKey="grayValue" position="top" fill="#6c757d" fontSize={12} fontWeight={600} />
+                    </Bar>
+                  </BarChart>
                 )}
               </ResponsiveContainer>
             </div>
@@ -286,7 +286,7 @@ const ReportStatistics = () => {
 
       {/* Footer Area */}
       <div className="report-footer">
-        <button 
+        <button
           className="btn btn-export-data"
           onClick={() => setShowExportModal(true)}
         >
@@ -301,20 +301,20 @@ const ReportStatistics = () => {
             {/* Header Modal */}
             <div className="export-modal-header">
               <h5 className="export-modal-title">Xuất dữ liệu thống kê</h5>
-              <button 
-                className="export-modal-close" 
+              <button
+                className="export-modal-close"
                 onClick={() => setShowExportModal(false)}
                 title="Đóng"
               >
                 &times;
               </button>
             </div>
-            
+
             {/* Body Modal */}
             <div className="export-modal-body">
               <div className="export-modal-row">
                 <label className="export-modal-label">Chọn định dạng :</label>
-                <select 
+                <select
                   className="export-modal-select"
                   value={exportFormat}
                   onChange={(e) => setExportFormat(e.target.value)}
@@ -327,13 +327,13 @@ const ReportStatistics = () => {
 
             {/* Footer Modal */}
             <div className="export-modal-footer">
-              <button 
+              <button
                 className="export-modal-btn export-modal-btn--cancel"
                 onClick={() => setShowExportModal(false)}
               >
                 Hủy
               </button>
-              <button 
+              <button
                 className="export-modal-btn export-modal-btn--download"
                 onClick={handleExport}
               >
