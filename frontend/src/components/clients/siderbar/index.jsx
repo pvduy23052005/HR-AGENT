@@ -16,7 +16,6 @@ import "../../../styles/client/ui/siderbar.css";
 const menuItems = [
   { path: "/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
   { path: "/candidates", icon: <MdPeople />, label: "Quản lý ứng viên" },
-  { path: "/users", icon: <MdAdminPanelSettings />, label: "Quản lý người dùng" },
   { path: "/upload-cv", icon: <MdFileUpload />, label: "Upload CV" },
   { path: "/reports", icon: <MdBarChart />, label: "Báo cáo & Thống kê" },
   { path: "/recruitment", icon: <MdAccountTree />, label: "Quy trình tuyển dụng" },
