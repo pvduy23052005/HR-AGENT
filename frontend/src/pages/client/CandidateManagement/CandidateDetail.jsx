@@ -130,7 +130,7 @@ const CandidateDetail = () => {
         return;
       }
 
-      chrome.runtime.sendMessage(
+      window.chrome.runtime.sendMessage(
         extensionId,
         {
           action: "NANO_START_TASK",

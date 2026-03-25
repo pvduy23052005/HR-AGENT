@@ -36,8 +36,12 @@ function EditUser() {
       // Get all users and find by ID since single user endpoint may not exist
       const res = await userService.getUsers();
       const user = (res.users || []).find((u) => u.id === id);
-      
       if (user) {
+        if (user.status !== "active") {
+          toast.error("Không thể chỉnh sửa tài khoản đã bị khóa!");
+          navigate("/admin/users");
+          return;
+        }
         setFormData({
           fullName: user.fullName || "",
           email: user.email || "",

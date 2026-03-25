@@ -200,6 +200,11 @@ function Users() {
                         className="users-table__action-btn users-table__action-btn--info"
                         title="Sửa"
                         onClick={() => navigate(`/admin/users/edit/${user.id}`)}
+                        disabled={user.status !== "active"}
+                        style={{
+                          opacity: user.status === "active" ? 1 : 0.4,
+                          cursor: user.status === "active" ? "pointer" : "not-allowed"
+                        }}
                       >
                         <MdEdit />
                       </button>
