@@ -59,22 +59,20 @@
   font-size: 14px;
 }
 
-/* Specific colors for columns */
-.kanban-column--applied .kanban-column__header {
-  background-color: #fff3cd; /* Vàng nhạt */
-}
-
-.kanban-column--screening .kanban-column__header {
-  background-color: #fde8e8; /* Vàng/hơi hồng nhạt */
-}
-
-.kanban-column--interview .kanban-column__header {
-  background-color: #e0f2fe; /* Xanh lợt */
-}
-
+/* Specific colors for columns — tất cả header vàng như screenshot */
+.kanban-column--applied .kanban-column__header,
+.kanban-column--screening .kanban-column__header,
+.kanban-column--interview .kanban-column__header,
 .kanban-column--offer .kanban-column__header {
-  background-color: #fef08a; /* Vàng sáng */
+  background-color: #f5e642; /* Vàng đồng nhất */
+  color: #333;
 }
+
+/* Màu nền thẻ theo từng cột */
+.candidate-card--applied   { background-color: #ffd9d9; border-color: #f5b8b8; } /* Pink   */
+.candidate-card--screening { background-color: #e8e0ff; border-color: #c9bef5; } /* Lavender */
+.candidate-card--interview { background-color: #d0eaff; border-color: #a8d0f5; } /* Sky blue */
+.candidate-card--offer     { background-color: #d0f5e0; border-color: #9de5be; } /* Mint green */
 
 .kanban-column__content {
   padding: 12px;
@@ -89,20 +87,18 @@
 
 /* Candidate Card */
 .candidate-card {
-  background-color: #ffffff;
-  border: 1px solid #e9ecef;
+  /* background-color được override bởi class --applied/--screening/etc */
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
   position: relative;
   transition: transform 0.3s ease-out, box-shadow 0.2s;
   user-select: none;
   touch-action: none;
-  /* overflow: visible để dropdown không bị cắt */
   overflow: visible;
-  /* Đảm bảo mỗi thẻ không bị collapse hay overlap */
   flex-shrink: 0;
 }
 
@@ -177,18 +173,34 @@
   letter-spacing: 0.5px;
 }
 
-.candidate-card__name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #212529;
-  margin: 0 0 4px 0;
+/* Card body: khu vực hiển thị các trường label: value */
+.candidate-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
 }
 
-.candidate-card__position {
-  font-size: 14px;
-  color: #495057;
-  margin: 0 0 16px 0;
+.candidate-card__field {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #212529;
+  flex-wrap: wrap;
 }
+
+.candidate-card__field-label {
+  font-weight: 600;
+  color: #212529;
+  white-space: nowrap;
+}
+
+.candidate-card__field-value {
+  color: #333;
+}
+
 
 /* Swipe hint text */
 .candidate-card__swipe-hint {

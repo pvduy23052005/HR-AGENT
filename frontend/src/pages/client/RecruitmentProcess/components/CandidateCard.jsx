@@ -191,7 +191,7 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     <>
       <div
         ref={cardRef}
-        className={`candidate-card ${isDragging ? 'candidate-card--dragging' : ''}`}
+        className={`candidate-card candidate-card--${status} ${isDragging ? 'candidate-card--dragging' : ''}`}
         style={{
           transform: `translateX(${swipeOffset}px)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out',
@@ -206,26 +206,35 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
       >
+        {/* Hàng trên: chứa menu icon ở góc phải */}
         <div className="candidate-card__header">
-          <span className="candidate-card__id">#{candidateCode}</span>
-          <div className="candidate-card__header-actions">
-            <span className="candidate-card__status-badge">{STATUS_LABELS[status]}</span>
-            {/* Wrapper chỉ cần display: inline-flex, không cần position: relative nữa vì dùng portal */}
-            <div className="candidate-card__menu-wrapper">
-              <button
-                ref={menuTriggerRef}
-                className="candidate-card__menu-trigger"
-                onClick={handleMenuToggle}
-                aria-label="Menu"
-              >
-                ☰
-              </button>
-            </div>
+          <div className="candidate-card__menu-wrapper" style={{ marginLeft: 'auto' }}>
+            <button
+              ref={menuTriggerRef}
+              className="candidate-card__menu-trigger"
+              onClick={handleMenuToggle}
+              aria-label="Menu"
+            >
+              ☰
+            </button>
           </div>
         </div>
 
-        <h3 className="candidate-card__name">{name}</h3>
-        <p className="candidate-card__position">{position}</p>
+        {/* Nội dung thẻ: hiển thị theo dạng label: value */}
+        <div className="candidate-card__body">
+          <p className="candidate-card__field">
+            <span className="candidate-card__field-label">Mã :</span>
+            <span className="candidate-card__field-value">{candidateCode}</span>
+          </p>
+          <p className="candidate-card__field">
+            <span className="candidate-card__field-label">Họ Tên :</span>
+            <span className="candidate-card__field-value">{name}</span>
+          </p>
+          <p className="candidate-card__field">
+            <span className="candidate-card__field-label">Vị trí ứng tuyển:</span>
+            <span className="candidate-card__field-value">{position}</span>
+          </p>
+        </div>
 
         {isDragging && (
           <div className="candidate-card__swipe-hint">
