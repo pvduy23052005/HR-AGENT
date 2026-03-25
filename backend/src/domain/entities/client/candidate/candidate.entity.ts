@@ -12,6 +12,7 @@ import { CandidateStatus, VerificationStatus } from './candidate.types';
 export class CandidateEntity {
   id: string | null;
   jobID: string | null;
+  jobTitle: string;
   addedBy: string | null;
   status: CandidateStatus;
   verificationStatus: VerificationStatus;
@@ -28,6 +29,7 @@ export class CandidateEntity {
   constructor({
     id,
     jobID,
+    jobTitle = '',
     addedBy,
     status = CandidateStatus.APPLIED,
     verificationStatus = VerificationStatus.UNVERIFIED,
@@ -43,6 +45,7 @@ export class CandidateEntity {
   }: ICandidateProps) {
     this.id = id ? id.toString() : null;
     this.jobID = jobID ? jobID.toString() : null;
+    this.jobTitle = jobTitle;
     this.addedBy = addedBy ? addedBy.toString() : null;
     this.status = status;
     this.verificationStatus = verificationStatus;
@@ -99,6 +102,7 @@ export class CandidateEntity {
     return {
       id: this.id,
       jobID: this.jobID,
+      jobTitle: this.jobTitle,
       fullName: this.personal.fullName,
       email: this.personal.email,
       phone: this.personal.phone,
@@ -107,6 +111,7 @@ export class CandidateEntity {
       isVerify: this.isVerify,
       duration: this.calculateTotalDuration(),
       status: this.status,
+      verificationStatus: this.verificationStatus,
       appliedAt: this.createdAt,
     };
   }

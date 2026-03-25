@@ -64,7 +64,7 @@ const RecruitmentBoard = () => {
           id: c.id,
           candidateCode: c.id.substring(0, 6).toUpperCase(), // Fake ID ngắn
           name: c.fullName,
-          position: (c.topSkills && c.topSkills.length > 0) ? c.topSkills[0] : 'Chưa cập nhật',
+          position: c.jobTitle || 'Chưa cập nhật',
           status: kanbanStatus
         };
       });

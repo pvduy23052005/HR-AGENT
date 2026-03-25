@@ -47,6 +47,7 @@ export interface IProject {
 export interface ICandidateSummaryProfile {
   id: string | null;
   jobID: string | null;
+  jobTitle: string;
   fullName: string;
   email: string;
   phone: string;
@@ -79,6 +80,7 @@ export interface ICandidateDetailProfile {
 export interface ICandidateProps {
   id?: string | { toString(): string } | null;
   jobID?: string | { toString(): string } | null;
+  jobTitle?: string;
   addedBy?: string | { toString(): string } | null;
   status: CandidateStatus;
   verificationStatus?: VerificationStatus;

@@ -10,7 +10,8 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
     if (!doc) return null;
     return new CandidateEntity({
       id: doc._id.toString(),
-      jobID: doc.jobID?.toString(),
+      jobID: doc.jobID?._id?.toString() ?? doc.jobID?.toString(),
+      jobTitle: doc.jobID?.title ?? '',
       addedBy: doc.addedBy?.toString(),
       status: doc.status,
       verificationStatus: doc.verificationStatus,
@@ -42,7 +43,10 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
   public async getCandidates(userID: string): Promise<CandidateEntity[] | null> {
     const objectId = new mongoose.Types.ObjectId(userID);
     const selectedFields = "jobID status isVerify createdAt personal.fullName personal.email personal.phone personal.cvLink experiences projects";
-    const candidates = await Candidate.find({ addedBy: objectId }).select(selectedFields).lean();
+    const candidates = await Candidate.find({ addedBy: objectId })
+      .select(selectedFields)
+      .populate('jobID', 'title')
+      .lean();
     if (!candidates || candidates.length === 0) return null;
     return candidates
       .map((doc) => this.mapToEntity(doc))
