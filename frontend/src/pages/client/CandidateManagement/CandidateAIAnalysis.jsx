@@ -177,14 +177,14 @@ const CandidateAIAnalysis = () => {
 
           
             <div className="caa-actions">
-              <button className="caa-btn caa-btn--secondary" onClick={() => navigate(`/candidates/${id}`)}>
-                Hủy
-              </button>
               <button className="caa-btn caa-btn--secondary" onClick={handlePrint}>
                 In
               </button>
-              <button className="caa-btn caa-btn--secondary" onClick={handleReanalyze} disabled={analyzing}>
-                {analyzing ? "Đang phân tích..." : "Phân tích lại"}
+              <button className="caa-btn caa-btn--secondary" onClick={() => navigate(`/candidates/${id}`)}>
+                Cập nhật trạng thái
+              </button>
+              <button className="caa-btn caa-btn--secondary" onClick={() => navigate(`/candidates/${id}`)}>
+                Lưu kết quả
               </button>
             </div>
           </div>
