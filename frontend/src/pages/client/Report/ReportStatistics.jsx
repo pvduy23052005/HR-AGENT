@@ -48,6 +48,14 @@ const ReportStatistics = () => {
       const response = await reportService.getStatistics(filterCriteria, filterDate);
       if (response && response.success) {
         setStats(response.data);
+
+        // Hiện thông báo nếu lọc theo tháng mà không có dữ liệu
+        if (filterCriteria === 'Theo tháng' && response.data.totalCVs === 0 && response.data.totalEmailsSent === 0) {
+          toast.info('Không có dữ liệu thống kê!', {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        }
       }
     } catch (error) {
       console.error('Lỗi khi tải thống kê:', error);
