@@ -19,6 +19,10 @@ const CandidateDetail = () => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [tempVerificationData, setTempVerificationData] = useState(null);
 
+  // Manual GitHub link state
+  const [showManualLinkModal, setShowManualLinkModal] = useState(false);
+  const [manualLink, setManualLink] = useState("");
+
   useEffect(() => {
     fetchDetail();
     fetchJobs();
@@ -72,13 +76,14 @@ const CandidateDetail = () => {
 
   const handleVerify = async (githubLink, candidateID) => {
     if (!githubLink) {
-      toast.warning("Ứng viên này chưa có link GitHub!");
+      toast.warning("Ứng viên chưa có link GitHub. Vui lòng nhập link thủ công!");
+      setShowManualLinkModal(true);
       return;
     }
 
     // Kiểm tra Email và SĐT
     console.log("DEBUG - Full candidate object:", JSON.stringify(candidate, null, 2));
-    
+
     const candidateEmail = candidate?.contact?.email || candidate?.email || candidate?.personal?.email;
     const candidatePhone = candidate?.contact?.phone || candidate?.phone || candidate?.personal?.phone;
 
@@ -104,7 +109,7 @@ const CandidateDetail = () => {
         }
       } catch (checkError) {
         if (checkError.response?.status !== 404) {
-          throw checkError; 
+          throw checkError;
         }
         console.log("Chưa có dữ liệu kiểm chứng, bắt đầu quét mới...");
       }
@@ -142,7 +147,7 @@ const CandidateDetail = () => {
           } else {
             toast.error(
               "Lỗi xác thực: " +
-                (response?.error || "Không kết nối được Extension"),
+              (response?.error || "Không kết nối được Extension"),
             );
             setVerifyingLoading(false);
           }
@@ -174,7 +179,7 @@ const CandidateDetail = () => {
           const confirmRes = await verificationService.confirmVerification(id, {
             status: 'verified', // Kiểm chứng thành công
           });
-          
+
           if (confirmRes.success) {
             toast.success("Ứng viên đã kiểm chứng thành công!");
             // Reload dữ liệu candidate để cập nhật status
@@ -276,7 +281,7 @@ const CandidateDetail = () => {
       </div>
 
       <div className="cd-card">
-       
+
         <div className="cd-field">
           <div className="cd-field__label">Họ tên</div>
           <div className="cd-field__row">
@@ -285,7 +290,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-   
+
         <div className="cd-field">
           <div className="cd-field__label">Email</div>
           <div className="cd-field__row">
@@ -300,7 +305,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-     
+
         <div className="cd-field">
           <div className="cd-field__label">SĐT</div>
           <div className="cd-field__row">
@@ -325,7 +330,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-    
+
         <div className="cd-field">
           <div className="cd-field__label">Kỹ năng</div>
           <div className="cd-field__row">
@@ -371,7 +376,7 @@ const CandidateDetail = () => {
           </div>
         )}
 
-  
+
         <div className="cd-field">
           <div className="cd-field__label">Quy Trình Tuyển Dụng</div>
           <div className="cd-field__row">
@@ -431,7 +436,7 @@ const CandidateDetail = () => {
         </div>
       </div>
 
-   
+
       <div className="cd-actions">
         <button
           className="cd-btn cd-btn--cancel"
@@ -485,7 +490,7 @@ const CandidateDetail = () => {
         </button>
       </div>
 
-     
+
       {showSaveModal && (
         <div className="cd-modal-overlay">
           <div className="cd-modal">
@@ -507,6 +512,46 @@ const CandidateDetail = () => {
                 onClick={handleConfirmSave}
               >
                 Lưu & Kiểm tra
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Thêm Link Thủ Công */}
+      {showManualLinkModal && (
+        <div className="cd-modal-overlay">
+          <div className="cd-modal">
+            <h3>Thêm link GitHub thủ công</h3>
+            <p style={{ marginBottom: "12px", color: "#555" }}>
+              Hệ thống không tìm thấy link GitHub nguyên bản của ứng viên này. Vui lòng dán link thủ công để đối chiếu dữ liệu:
+            </p>
+            <input
+              type="text"
+              value={manualLink}
+              onChange={(e) => setManualLink(e.target.value)}
+              placeholder="Ví dụ: https://github.com/nguyenvana123"
+              style={{ width: "100%", padding: "10px", margin: "10px 0", border: "1px solid #ccc", borderRadius: "4px" }}
+            />
+            <div className="cd-modal__actions" style={{ marginTop: "16px" }}>
+              <button
+                className="cd-modal__btn cd-modal__btn--cancel"
+                onClick={() => { setShowManualLinkModal(false); setManualLink(""); }}
+              >
+                Huỷ bỏ
+              </button>
+              <button
+                className="cd-modal__btn cd-modal__btn--save"
+                onClick={() => {
+                  if (!manualLink.trim() || !manualLink.includes("github.com/")) {
+                    toast.error("Vui lòng nhập đúng định dạng link GitHub!");
+                    return;
+                  }
+                  setShowManualLinkModal(false);
+                  handleVerify(manualLink.trim(), id);
+                }}
+              >
+                Gửi và Kiểm chứng
               </button>
             </div>
           </div>
