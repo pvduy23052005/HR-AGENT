@@ -44,6 +44,11 @@ export class ScheduleInterviewUseCase {
     const analysis = await this.aiAnalysisRepo.getAnalysisByCandidateId(input.candidateID);
     if (!analysis) throw new Error('Ứng viên chưa được AI phân tích. Vui lòng chạy phân tích trước khi đặt lịch.');
 
+    const isOverlap = await this.interviewScheduleRepo.checkOverlap(input.userId, input.time, input.durationMinutes);
+    if (isOverlap) {
+      throw new Error('Khung giờ này đã có lịch khác. Vui lòng chọn giờ lại');
+    }
+
     const created = await this.interviewScheduleRepo.createSchedule({
       time: input.time,
       address: input.address,

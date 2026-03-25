@@ -27,5 +27,19 @@ export class InterviewScheduleRepository implements IInterviewScheduleRepository
     const saved = await newSchedule.save();
     return this.mapToEntity(saved);
   }
+
+  public async checkOverlap(userId: string, startTime: Date, durationMinutes: number): Promise<boolean> {
+    // Check if there's any active interview that overlaps with [startTime - duration, startTime + duration]
+    const startWindow = new Date(startTime.getTime() - (durationMinutes - 1) * 60000);
+    const endWindow = new Date(startTime.getTime() + (durationMinutes - 1) * 60000);
+
+    const overlap = await InterviewSchedule.exists({
+      userId,
+      status: { $in: ['scheduled', 'rescheduled'] },
+      time: { $gte: startWindow, $lte: endWindow }
+    });
+
+    return overlap !== null;
+  }
 }
 
