@@ -22,8 +22,9 @@ import '../../../styles/client/pages/reportStatistics.css';
 
 const ReportStatistics = () => {
   const navigate = useNavigate();
-  const [filterCriteria, setFilterCriteria] = useState('Theo tháng');
-  const [filterDate, setFilterDate] = useState('2026-03');
+  const [filterCriteria, setFilterCriteria] = useState('Toàn thời gian');
+  const [filterMonth, setFilterMonth] = useState('1');
+  const [filterWeek, setFilterWeek] = useState('1');
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({
     totalCVs: 0,
@@ -34,10 +35,14 @@ const ReportStatistics = () => {
 
   // Modal State
   const [showExportModal, setShowExportModal] = useState(false);
-  const [exportFormat, setExportFormat] = useState('pdf');
+  const [exportFormat, setExportFormat] = useState('');
 
   // Fetch statistics - wrapped in useCallback để tránh vấn đề closure
   const fetchStatistics = useCallback(async () => {
+    let filterDate = '';
+    if (filterCriteria === 'Theo tháng') filterDate = filterMonth;
+    else if (filterCriteria === 'Theo Tuần') filterDate = filterWeek;
+
     try {
       setLoading(true);
       const response = await reportService.getStatistics(filterCriteria, filterDate);
@@ -50,7 +55,7 @@ const ReportStatistics = () => {
     } finally {
       setLoading(false);
     }
-  }, [filterCriteria, filterDate]);
+  }, [filterCriteria, filterMonth, filterWeek]);
 
   React.useEffect(() => {
     fetchStatistics();
@@ -202,20 +207,43 @@ const ReportStatistics = () => {
                 value={filterCriteria}
                 onChange={(e) => setFilterCriteria(e.target.value)}
               >
+                <option value="Toàn thời gian">Toàn thời gian</option>
                 <option value="Theo tháng">Theo tháng</option>
-                <option value="Theo quý">Theo quý</option>
-                <option value="Theo năm">Theo năm</option>
+                <option value="Theo Tuần">Theo Tuần</option>
               </select>
             </div>
-            <div className="filter-row">
-              <label className="filter-label">Thời gian :</label>
-              <input
-                type="month"
-                className="filter-input"
-                value={filterDate}
-                onChange={(e) => setFilterDate(e.target.value)}
-              />
-            </div>
+
+            {/* Dropdown tháng */}
+            {filterCriteria === 'Theo tháng' && (
+              <div className="filter-row">
+                <label className="filter-label">Thời gian :</label>
+                <select
+                  className="filter-input"
+                  value={filterMonth}
+                  onChange={(e) => setFilterMonth(e.target.value)}
+                >
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                    <option key={m} value={String(m)}>Tháng {m}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Dropdown tuần */}
+            {filterCriteria === 'Theo Tuần' && (
+              <div className="filter-row">
+                <label className="filter-label">Thời gian :</label>
+                <select
+                  className="filter-input"
+                  value={filterWeek}
+                  onChange={(e) => setFilterWeek(e.target.value)}
+                >
+                  {Array.from({ length: 52 }, (_, i) => i + 1).map((w) => (
+                    <option key={w} value={String(w)}>Tuần {w}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           {/* Stats Card */}
@@ -288,7 +316,7 @@ const ReportStatistics = () => {
       <div className="report-footer">
         <button
           className="btn btn-export-data"
-          onClick={() => setShowExportModal(true)}
+          onClick={() => { setExportFormat(''); setShowExportModal(true); }}
         >
           Xuất dữ liệu
         </button>
@@ -319,6 +347,7 @@ const ReportStatistics = () => {
                   value={exportFormat}
                   onChange={(e) => setExportFormat(e.target.value)}
                 >
+                  <option value="" disabled></option>
                   <option value="pdf">PDF</option>
                   <option value="excel">Excel</option>
                 </select>
@@ -329,13 +358,15 @@ const ReportStatistics = () => {
             <div className="export-modal-footer">
               <button
                 className="export-modal-btn export-modal-btn--cancel"
-                onClick={() => setShowExportModal(false)}
+                onClick={() => { setExportFormat(''); setShowExportModal(false); }}
               >
                 Hủy
               </button>
               <button
                 className="export-modal-btn export-modal-btn--download"
                 onClick={handleExport}
+                disabled={!exportFormat}
+                style={{ opacity: exportFormat ? 1 : 0.5, cursor: exportFormat ? 'pointer' : 'not-allowed' }}
               >
                 Tải xuống
               </button>
