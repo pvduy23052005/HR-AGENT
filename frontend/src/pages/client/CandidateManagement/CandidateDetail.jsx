@@ -76,6 +76,20 @@ const CandidateDetail = () => {
       return;
     }
 
+    // Kiểm tra Email và SĐT
+    console.log("DEBUG - Full candidate object:", JSON.stringify(candidate, null, 2));
+    
+    const candidateEmail = candidate?.contact?.email || candidate?.email || candidate?.personal?.email;
+    const candidatePhone = candidate?.contact?.phone || candidate?.phone || candidate?.personal?.phone;
+
+    console.log("DEBUG - Email found:", candidateEmail);
+    console.log("DEBUG - Phone found:", candidatePhone);
+
+    if (!candidateEmail && !candidatePhone) {
+      toast.error("Không đủ thông tin định danh để thực hiện kiểm chứng. Vui lòng cập nhật Email hoặc SĐT");
+      return;
+    }
+
     try {
       setVerifyingLoading(true);
 
