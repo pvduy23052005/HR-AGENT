@@ -50,12 +50,11 @@ function Users() {
 
   // Toggle lock
   const handleChangeStatus = async (user) => {
-    // Only show confirmation for deactivating (locking) accounts
+    // Only allow locking active accounts. Unlocking is disabled permanent.
     if (user.status === "active") {
       setConfirmDialog({ isOpen: true, user });
     } else {
-      // Directly unlock without confirmation
-      await executeChangeStatus(user);
+      toast.warning("Tài khoản này đã bị khóa vĩnh viễn và không thể mở lại!");
     }
   };
 
@@ -75,7 +74,7 @@ function Users() {
         );
         fetchUsers();
       }
-    } catch (error) {
+    } catch {
       toast.error("Lỗi cập nhật trạng thái!");
     }
   };
@@ -209,11 +208,16 @@ function Users() {
                         title={
                           user.status === "active"
                             ? "Khóa tài khoản"
-                            : "Mở khóa"
+                            : "Đã khóa vĩnh viễn"
                         }
                         onClick={() => handleChangeStatus(user)}
+                        disabled={user.status !== "active"}
+                        style={{
+                          opacity: user.status === "active" ? 1 : 0.4,
+                          cursor: user.status === "active" ? "pointer" : "not-allowed"
+                        }}
                       >
-                        {user.status === "active" ? <MdLock /> : <MdLockOpen />}
+                        {user.status === "active" ? <MdLock /> : <MdLock />}
                       </button>
                     </div>
                   </td>
