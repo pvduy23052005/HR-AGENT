@@ -35,6 +35,7 @@ export interface ExecutorExtraArgs {
   generalSettings?: GeneralSettingsConfig;
 }
 
+// class execute task 
 export class Executor {
   private readonly navigator: NavigatorAgent;
   private readonly planner: PlannerAgent;

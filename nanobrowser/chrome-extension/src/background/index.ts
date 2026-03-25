@@ -19,6 +19,8 @@ import { SpeechToTextService } from './services/speechToText';
 import { injectBuildDomTreeScripts } from './browser/dom/service';
 import { analytics } from './services/analytics';
 
+import { VERIFICATION_PROMPT } from './prompts/verification';
+
 const logger = createLogger('background');
 
 const browserContext = new BrowserContext({});
@@ -73,10 +75,9 @@ chrome.runtime.onMessage.addListener(() => {
   // return false;
 });
 
-// Listen for messages from external web pages (e.g., frontend on localhost)
+// Listen for external service 
 chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse) => {
   if (message.action === "NANO_START_TASK") {
-    const candidateID = message.candidateID;
 
     chrome.tabs.create({ url: message.url, active: true }, async (newTab) => {
       if (!newTab?.id) {
@@ -84,64 +85,7 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
         return;
       }
 
-      const aiPrompt = `Analyze this GitHub profile page.
-        CRITICAL RULE:
-        If the page shows "404", "Not Found", or is NOT a valid GitHub profile page, immediately return exactly this JSON and nothing else:
-        {
-          "isVerified": false,
-          "name": null,
-          "phone": null,
-          "age": null,
-          "email": null,
-          "school": null,
-          "topLanguages": [],
-          "probedProjects": [],
-          "githubStars": 0,
-          "aiReasoning": "Link GitHub không tồn tại."
-        }
-
-        Otherwise perform these tasks:
-        1. Extract the candidate’s personal information from the profile README or bio:
-          - Name
-          - Phone number (if visible)
-          - School/University
-          - If a birth year (for example: 2005) appears in the username or email, calculate the age from that year. If not found, set age = null.
-
-        2. Locate the "Pinned" repositories section.
-          Only analyze repositories in this section.
-
-        3. For each pinned repository extract:
-          - projectName
-          - programming language
-          - star count
-          - repository URL
-
-        OUTPUT RULES:
-        - Return ONLY pure JSON.
-        - Do NOT use markdown.
-        - Do NOT wrap the response in code blocks.
-        - Do NOT include explanations outside the JSON.
-        - The JSON must strictly follow this structure:
-
-        {
-          "isVerified": true,
-          "name": "<string: Candidate full name>",
-          "email": "<string or null. CRITICAL: Do NOT use placeholders like [EMAIL]. If the email is hidden, redacted by filters, or not clearly visible, you MUST return null>",
-          "phone": "<string or null>",
-          "age": <number or null>,
-          "school": "<string or null>",
-          "githubStars": <number: total stars across all pinned projects>,
-          "topLanguages": ["<unique programming languages from pinned projects>"],
-          "probedProjects": [
-            {
-              "name": "<name of the pinned project>",
-              "language": "<programming language or null>",
-              "stars": <number, 0 if none>,
-              "url": "<string: absolute URL to the project>"
-            }
-          ],
-          "aiReasoning": "<one sentence evaluation of the candidate based on pinned projects>"
-        }`;
+      const aiPrompt = VERIFICATION_PROMPT;
 
       try {
         try {
@@ -167,25 +111,7 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
 
         console.log("Đã tóm được kết quả từ AI:", rawResult);
 
-        let finalJson: any = {};
-        try {
-          let jsonString: any = typeof rawResult === 'string'
-            ? rawResult
-            : (rawResult?.final_answer || JSON.stringify(rawResult));
-
-          jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
-          finalJson = JSON.parse(jsonString);
-          console.log("JSON chuẩn bị gửi về Frontend:", finalJson);
-
-          sendResponse({
-            success: true,
-            data: JSON.stringify(finalJson.details)
-          });
-
-        } catch (e) {
-          console.error("Lỗi Parse JSON:", e);
-          sendResponse({ success: false, error: "Dữ liệu AI trả về bị lỗi định dạng." });
-        }
+        let finalJson: any = parseAIResponse(rawResult);
 
         // Đợi 1.5s rồi mới đóng tab để tránh lỗi session
         setTimeout(() => {
@@ -194,7 +120,6 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
 
       } catch (error: any) {
         console.error("Lỗi hệ thống AI:", error);
-        // Trả lỗi về cho Frontend nếu AI tạch
         sendResponse({ success: false, error: error.message || "Lỗi không xác định từ AI." });
         if (newTab.id) chrome.tabs.remove(newTab.id);
       }
@@ -205,23 +130,17 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
   return false;
 });
 
-async function saveToDatabase(candiateID: string, data: any) {
+export const parseAIResponse = (rawResult: any) => {
   try {
-    console.log("Đang bắn API về Backend...");
+    let jsonString = typeof rawResult === 'string'
+      ? rawResult
+      : (rawResult?.final_answer || JSON.stringify(rawResult));
 
-    const response = await fetch('http://localhost:5050/verification/candidate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        candidateID: candiateID,
-        data: data
-      })
-    });
-
-    const result = await response.json();
-    console.log("Bắn API thành công:", result);
-  } catch (err) {
-    console.error("Lỗi Fetch API (Hãy kiểm tra lại xem Server Node.js cổng 5050 đã CHẠY chưa!):", err);
+    jsonString = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error("Lỗi Parse JSON từ AI:", error);
+    throw new Error("Dữ liệu AI trả về bị lỗi định dạng.");
   }
 }
 
@@ -416,6 +335,7 @@ chrome.runtime.onConnect.addListener(port => {
   }
 });
 
+// 
 async function setupExecutor(taskId: string, task: string, browserContext: BrowserContext) {
   const providers = await llmProviderStore.getAllProviders();
   // if no providers, need to display the options page
