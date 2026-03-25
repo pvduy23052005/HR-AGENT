@@ -95,7 +95,13 @@ const CandidateDetail = () => {
         console.log("Chưa có dữ liệu kiểm chứng, bắt đầu quét mới...");
       }
 
-      const extensionId = "bbebdnbhjphhndgmipcaljcpeoppmaik";
+      const extensionId = import.meta.env.VITE_EXTENSION_ID;
+
+      if (!extensionId) {
+        toast.error("Extension ID chưa được cấu hình. Kiểm tra file .env!");
+        setVerifyingLoading(false);
+        return;
+      }
 
       if (!window.chrome?.runtime?.sendMessage) {
         toast.error(
