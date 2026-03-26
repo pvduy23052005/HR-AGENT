@@ -104,4 +104,3 @@ export class ScheduleInterviewUseCase {
     return { schedule: created.getDetail(), emailSent };
   }
 }
-

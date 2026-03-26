@@ -22,10 +22,14 @@ export interface ICandidateReadRepo {
   getCandidateById(id: string): Promise<CandidateEntity | null>;
 
   getCandidates(userID: string): Promise<CandidateEntity[] | null>;
+
+  checkExistsCandidate(email: string): Promise<boolean>;
 }
 
 export interface ICandidateWriteRepo {
   createCandidate(data: ICandidateData): Promise<CandidateEntity | null>;
 
   updateStatus(candidateID: string, status: IStatus): Promise<void>;
+
+  updateCandidate(email: string, data: ICandidateData): Promise<CandidateEntity | null>;
 }

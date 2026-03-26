@@ -38,7 +38,11 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   }
 
   public async getJobById(id: string): Promise<JobEntity | null> {
-    const job = await Job.findOne({ _id: id, deleted: false }).lean();
+    const job = await Job.findOne({
+      _id: id,
+      deleted: false
+    }
+    ).lean();
     return this.mapToEntity(job);
   }
 

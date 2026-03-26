@@ -2,7 +2,6 @@ import Candidate from '../../../../infrastructure/database/models/candidate.mode
 import InterviewSchedule from '../../../../infrastructure/database/models/interviewSchedule.model';
 import mongoose from 'mongoose';
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
 
 /** Trả về ngày đầu và cuối của một tuần ISO (Thứ 2 → Chủ nhật) trong năm hiện tại */
 function getWeekRange(isoWeek: number, year: number): { start: Date; end: Date } {

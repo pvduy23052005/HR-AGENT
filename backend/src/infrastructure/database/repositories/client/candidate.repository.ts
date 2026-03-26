@@ -56,7 +56,7 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
   public async updateStatus(candidateID: string, updateData: IStatus): Promise<void> {
     try {
       const updateFields: any = {};
-      
+
       if (updateData.status) {
         updateFields.status = updateData.status;
       }
@@ -80,4 +80,22 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
       throw error;
     }
   }
+
+  public async checkExistsCandidate(email: string): Promise<boolean> {
+    const candidate = await Candidate.exists({ "personal.email": email });
+    return candidate !== null;
+  }
+
+  public async updateCandidate(email: string, data: ICandidateData): Promise<CandidateEntity | null> {
+    const candidate = await Candidate.findOneAndUpdate(
+      { "personal.email": email },
+      { $set: data },
+      {
+        new: true,
+        runValidators: true
+      });
+    return this.mapToEntity(candidate);
+  }
 }
+
+
