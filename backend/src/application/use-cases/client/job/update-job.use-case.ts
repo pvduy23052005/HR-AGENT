@@ -1,9 +1,9 @@
 import type { JobEntity } from '../../../../domain/entities/client/job';
-import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/interfaces/client/job.interface';
+import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/repositories/client/job.interface';
 import type { IJobData } from '../../../../infrastructure/database/repositories/client/job.repository';
 
 export class UpdateJobUseCase {
-  constructor(private readonly jobRepo: IJobReadRepo & IJobWriteRepo) {}
+  constructor(private readonly jobRepo: IJobReadRepo & IJobWriteRepo) { }
 
   async execute(
     jobId: string,

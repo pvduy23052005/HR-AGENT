@@ -1,6 +1,6 @@
 import User from '../../models/user.model';
 import { UserEntity } from '../../../../domain/entities/client/user';
-import { IAuth } from '../../../../domain/interfaces/client/auth.interface';
+import { IAuth } from '../../../../domain/repositories/client/auth.interface';
 
 export class AuthRepository implements IAuth {
   private mapToEntity(doc: any | null): UserEntity | null {

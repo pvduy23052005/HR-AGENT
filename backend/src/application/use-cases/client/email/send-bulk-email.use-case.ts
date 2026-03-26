@@ -1,6 +1,6 @@
-import type { ICandidateReadRepo } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
-import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
+import type { ICandidateReadRepo } from '../../../../domain/repositories/client/candidate.interface';
+import type { IJobReadRepo } from '../../../../domain/repositories/client/job.interface';
+import type { IMailService } from '../../../../domain/repositories/services/mail.service';
 
 export interface SendBulkEmailInput {
   candidateIds: string[];
@@ -28,7 +28,7 @@ export class SendBulkEmailUseCase {
     private readonly candidateRepo: ICandidateReadRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly mailSvc: IMailService,
-  ) {}
+  ) { }
 
   private replacePlaceholders(content: string, candidate: any, jobTitle?: string): string {
     let result = content;

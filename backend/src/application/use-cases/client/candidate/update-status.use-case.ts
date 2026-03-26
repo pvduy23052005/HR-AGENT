@@ -1,4 +1,4 @@
-import type { ICandidateReadRepo, ICandidateWriteRepo, IStatus } from "../../../../domain/interfaces/client/candidate.interface";
+import type { ICandidateReadRepo, ICandidateWriteRepo, IStatus } from "../../../../domain/repositories/client/candidate.interface";
 
 export class UpdateStatusUseCase {
 

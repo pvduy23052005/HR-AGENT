@@ -4,7 +4,7 @@ import { InterviewScheduleEntity } from '../../../../domain/entities/client/inte
 import type {
   IInterviewScheduleData,
   IInterviewScheduleRepository,
-} from '../../../../domain/interfaces/client/interviewSchedule.interface';
+} from '../../../../domain/repositories/client/interviewSchedule.interface';
 
 export class InterviewScheduleRepository implements IInterviewScheduleRepository {
   private mapToEntity(doc: any | null): InterviewScheduleEntity | null {

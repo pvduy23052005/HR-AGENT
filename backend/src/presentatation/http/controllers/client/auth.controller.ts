@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
+
 import { LoginUseCase } from '../../../../application/use-cases/client/auth/login.use-case';
 import { LogoutUseCase } from '../../../../application/use-cases/client/auth/logut.use-case';
 import { AuthRepository } from '../../../../infrastructure/database/repositories/client/auth.repository';
+
 import { PasswordService } from '../../../../infrastructure/external-service/password.service';
 import { TokenService } from '../../../../infrastructure/external-service/token.service';
 

@@ -1,5 +1,5 @@
 import { VerificationEntity } from '../../../../domain/entities/client/verifycation';
-import { IVerificationRepository } from '../../../../domain/interfaces/client/verification.interface';
+import { IVerificationRepository } from '../../../../domain/repositories/client/verification.interface';
 
 export class GetVerificationUseCase {
   constructor(private readonly candidateRepo: IVerificationRepository) { }

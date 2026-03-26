@@ -2,7 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { candidatePrompt } from '../../prompts/candiate.prompt';
 import { aiAnalyzePrompt } from '../../prompts/aiAnalyze.prompt';
-import { ILocalAiService } from '../../domain/interfaces/services/localAI.service';
+import { ILocalAiService } from '../../domain/repositories/services/localAI.service';
 
 dotenv.config();
 

@@ -1,6 +1,6 @@
 import User from '../../models/user.model';
 import { UserEntity } from '../../../../domain/entities/client/user';
-import type { IUserReadRepo, IUserWriteRepo } from '../../../../domain/interfaces/client/user.interface';
+import type { IUserReadRepo, IUserWriteRepo } from '../../../../domain/repositories/client/user.interface';
 
 export class UserRepository implements IUserReadRepo, IUserWriteRepo {
   private mapToEntity(doc: any | null): UserEntity | null {

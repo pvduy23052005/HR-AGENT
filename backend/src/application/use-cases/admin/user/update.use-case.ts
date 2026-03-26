@@ -1,6 +1,6 @@
 import type * as userRepository from '../../../../infrastructure/database/repositories/admin/user.repository';
 import type { IAdminUserProfile } from '../../../../domain/entities/admin/user.entity';
-import type { IPasswordService } from '../../../../domain/interfaces/services/password.service';
+import type { IPasswordService } from '../../../../domain/repositories/services/password.service';
 
 export interface IUpdateUserInput {
   fullName?: string;

@@ -1,11 +1,11 @@
-import type { ICandidateReadRepo } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IInterviewScheduleRepository } from '../../../../domain/interfaces/client/interviewSchedule.interface';
+import type { ICandidateReadRepo } from '../../../../domain/repositories/client/candidate.interface';
+import type { IInterviewScheduleRepository } from '../../../../domain/repositories/client/interviewSchedule.interface';
 
 export class GetStatisticsUseCase {
   constructor(
     private readonly candidateRepo: ICandidateReadRepo,
     private readonly interviewScheduleRepo: IInterviewScheduleRepository
-  ) {}
+  ) { }
 
   /** Trả về ngày đầu và cuối của một tuần ISO (Thứ 2 → Chủ nhật) trong năm hiện tại */
   private getWeekRange(isoWeek: number, year: number): { start: Date; end: Date } {
@@ -41,7 +41,7 @@ export class GetStatisticsUseCase {
     if (filterCriteria === 'Theo tháng') {
       const month = parseInt(filterDate ?? String(now.getMonth() + 1), 10) || now.getMonth() + 1;
       startDate = new Date(currentYear, month - 1, 1);
-      endDate   = new Date(currentYear, month,     1);
+      endDate = new Date(currentYear, month, 1);
     } else if (filterCriteria === 'Theo Tuần') {
       const isoWeek = parseInt(filterDate ?? '1', 10) || 1;
       const { start, end } = this.getWeekRange(isoWeek, currentYear);
@@ -69,7 +69,7 @@ export class GetStatisticsUseCase {
 
       for (const m of months) {
         const start = new Date(currentYear, m - 1, 1);
-        const end   = new Date(currentYear, m,     1);
+        const end = new Date(currentYear, m, 1);
 
         const [cvCount, ivCount, doneCount] = await Promise.all([
           this.candidateRepo.countForStatistics(userId, start, end),
@@ -79,9 +79,9 @@ export class GetStatisticsUseCase {
 
         chartData.push({
           name: this.MONTH_LABELS[m],
-          blueValue:   cvCount,
+          blueValue: cvCount,
           orangeValue: ivCount,
-          grayValue:   doneCount,
+          grayValue: doneCount,
         });
       }
     }
@@ -90,19 +90,19 @@ export class GetStatisticsUseCase {
     else if (filterCriteria === 'Theo tháng') {
       const month = parseInt(filterDate ?? String(now.getMonth() + 1), 10) || now.getMonth() + 1;
       const startOfMonth = new Date(currentYear, month - 1, 1);
-      const endOfMonth   = new Date(currentYear, month,     1);
+      const endOfMonth = new Date(currentYear, month, 1);
 
       const getWeekOfMonth = (date: Date): number => {
         const day = date.getDate();
-        if (day <= 7)  return 1;
+        if (day <= 7) return 1;
         if (day <= 14) return 2;
         if (day <= 21) return 3;
         return 4;
       };
 
-      const cvsByWeek:        Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0 };
+      const cvsByWeek: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0 };
       const interviewsByWeek: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0 };
-      const completedByWeek:  Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0 };
+      const completedByWeek: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0 };
 
       const [cvsThisMonth, ivThisMonth, doneThisMonth] = await Promise.all([
         this.candidateRepo.getForStatistics(userId, startOfMonth, endOfMonth),
@@ -121,10 +121,10 @@ export class GetStatisticsUseCase {
       }
 
       chartData = [1, 2, 3, 4].map((w) => ({
-        name:        `Tuần ${w}`,
-        blueValue:   cvsByWeek[w],
+        name: `Tuần ${w}`,
+        blueValue: cvsByWeek[w],
         orangeValue: interviewsByWeek[w],
-        grayValue:   completedByWeek[w],
+        grayValue: completedByWeek[w],
       }));
     }
 
@@ -134,9 +134,9 @@ export class GetStatisticsUseCase {
       const { start: weekStart, end: weekEnd } = this.getWeekRange(isoWeek, currentYear);
 
       const DAY_LABELS = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
-      const cvsByDay:        number[] = Array(7).fill(0);
+      const cvsByDay: number[] = Array(7).fill(0);
       const interviewsByDay: number[] = Array(7).fill(0);
-      const completedByDay:  number[] = Array(7).fill(0);
+      const completedByDay: number[] = Array(7).fill(0);
 
       const [cvsThisWeek, ivThisWeek, doneThisWeek] = await Promise.all([
         this.candidateRepo.getForStatistics(userId, weekStart, weekEnd),
@@ -161,10 +161,10 @@ export class GetStatisticsUseCase {
       }
 
       chartData = DAY_LABELS.map((label, i) => ({
-        name:        label,
-        blueValue:   cvsByDay[i],
+        name: label,
+        blueValue: cvsByDay[i],
         orangeValue: interviewsByDay[i],
-        grayValue:   completedByDay[i],
+        grayValue: completedByDay[i],
       }));
     }
 

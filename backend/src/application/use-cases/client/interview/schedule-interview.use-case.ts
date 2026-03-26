@@ -1,10 +1,10 @@
-import type { IAnalysisReadRepo } from '../../../../domain/interfaces/client/analysis.interface';
-import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IInterviewScheduleRepository } from '../../../../domain/interfaces/client/interviewSchedule.interface';
-import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
+import type { IAnalysisReadRepo } from '../../../../domain/repositories/client/analysis.interface';
+import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain/repositories/client/candidate.interface';
+import type { IInterviewScheduleRepository } from '../../../../domain/repositories/client/interviewSchedule.interface';
+import type { IJobReadRepo } from '../../../../domain/repositories/client/job.interface';
 import type { IInterviewScheduleDetail } from '../../../../domain/entities/client/interviewSchedule';
-import type { IAIService } from '../../../../domain/interfaces/services/ai.service';
-import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
+import type { IAIService } from '../../../../domain/repositories/services/ai.service';
+import type { IMailService } from '../../../../domain/repositories/services/mail.service';
 import { buildInterviewCalendarInvite } from '../../../../infrastructure/external-service/calendarInvite.service';
 import { CandidateStatus } from '../../../../domain/entities/client/candidate';
 

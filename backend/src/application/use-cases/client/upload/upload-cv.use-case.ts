@@ -1,7 +1,7 @@
-import type { ICandidateWriteRepo, ICandidateData, ICandidateReadRepo } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
-import type { IUploadService } from '../../../../domain/interfaces/services/upload.service';
-import type { IAIService } from '../../../../domain/interfaces/services/ai.service';
+import type { ICandidateWriteRepo, ICandidateData, ICandidateReadRepo } from '../../../../domain/repositories/client/candidate.interface';
+import type { IJobReadRepo } from '../../../../domain/repositories/client/job.interface';
+import type { IUploadService } from '../../../../domain/repositories/services/upload.service';
+import type { IAIService } from '../../../../domain/repositories/services/ai.service';
 import type { CandidateEntity } from '../../../../domain/entities/client/candidate';
 
 export interface IUploadCVResult {

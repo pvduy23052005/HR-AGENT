@@ -1,5 +1,5 @@
 import type * as userRepository from '../../../../infrastructure/database/repositories/admin/user.repository';
-import type { IPasswordService } from '../../../../domain/interfaces/services/password.service';
+import type { IPasswordService } from '../../../../domain/repositories/services/password.service';
 import type { IAdminUserProfile } from '../../../../domain/entities/admin/user.entity';
 
 export interface ICreateUserInput {

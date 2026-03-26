@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { VerificationEntity } from '../../../../domain/entities/client/verifycation';
-import type { IVerificationRepository } from '../../../../domain/interfaces/client/verification.interface';
+import type { IVerificationRepository } from '../../../../domain/repositories/client/verification.interface';
 import Verification from '../../models/verification.model';
 import Candidate from '../../models/candidate.model';
 
@@ -25,7 +25,7 @@ export class VerificationRepository implements IVerificationRepository {
   }
 
   public async createVerification(candidateID: string, data: any): Promise<VerificationEntity | null> {
-    
+
     const objectId = new mongoose.Types.ObjectId(candidateID);
 
     const saved = await Verification.findOneAndUpdate(

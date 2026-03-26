@@ -5,5 +5,6 @@ export interface ITokenPayload {
 
 export interface ITokenService {
   generateToken(payload: ITokenPayload): Promise<string>;
+  
   verifyToken(token: string): Promise<string>;
 }

@@ -1,6 +1,6 @@
 import Job from '../../models/job.model';
 import { JobEntity } from '../../../../domain/entities/client/job';
-import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/interfaces/client/job.interface';
+import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/repositories/client/job.interface';
 
 export interface IJobData {
   title: string;
