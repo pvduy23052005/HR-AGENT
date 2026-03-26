@@ -24,6 +24,10 @@ export interface ICandidateReadRepo {
   getCandidates(userID: string): Promise<CandidateEntity[] | null>;
 
   checkExistsCandidate(email: string): Promise<boolean>;
+
+  countForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<number>;
+
+  getForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<{ createdAt?: Date, updatedAt?: Date }[]>;
 }
 
 export interface ICandidateWriteRepo {

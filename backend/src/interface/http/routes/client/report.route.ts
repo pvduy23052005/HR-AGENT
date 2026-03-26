@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import { ReportController } from '../../controllers/client/report.controller';
+import * as controller from '../../controllers/client/report.controller';
 
 const router = Router();
-const reportController = new ReportController();
 
-router.get('/statistics', reportController.getStatistics);
+router.get('/statistics', controller.getStatistics);
 
 export const reportRoute = router;

@@ -96,6 +96,36 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
       });
     return this.mapToEntity(candidate);
   }
+
+  public async countForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<number> {
+    const objectId = new mongoose.Types.ObjectId(userId);
+    const filter: any = { addedBy: objectId };
+    if (status) filter.status = status;
+    if (startDate && endDate) {
+      if (status === 'offer') {
+        filter.updatedAt = { $gte: startDate, $lt: endDate };
+      } else {
+        filter.createdAt = { $gte: startDate, $lt: endDate };
+      }
+    }
+    return await Candidate.countDocuments(filter);
+  }
+
+  public async getForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<{ createdAt?: Date, updatedAt?: Date }[]> {
+    const objectId = new mongoose.Types.ObjectId(userId);
+    const filter: any = { addedBy: objectId };
+    if (status) filter.status = status;
+    if (startDate && endDate) {
+      if (status === 'offer') {
+        filter.updatedAt = { $gte: startDate, $lt: endDate };
+      } else {
+        filter.createdAt = { $gte: startDate, $lt: endDate };
+      }
+    }
+    const selectField = status === 'offer' ? 'updatedAt' : 'createdAt';
+    const docs = await Candidate.find(filter).select(selectField).lean();
+    return docs as { createdAt?: Date, updatedAt?: Date }[];
+  }
 }
 
 

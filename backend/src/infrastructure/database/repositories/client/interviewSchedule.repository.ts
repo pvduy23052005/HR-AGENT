@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import InterviewSchedule from '../../models/interviewSchedule.model';
 import { InterviewScheduleEntity } from '../../../../domain/entities/client/interviewSchedule';
 import type {
@@ -40,6 +41,25 @@ export class InterviewScheduleRepository implements IInterviewScheduleRepository
     });
 
     return overlap !== null;
+  }
+
+  public async countForStatistics(userId: string, startDate?: Date, endDate?: Date): Promise<number> {
+    const objectId = new mongoose.Types.ObjectId(userId);
+    const filter: any = { userId: objectId };
+    if (startDate && endDate) {
+      filter.time = { $gte: startDate, $lt: endDate };
+    }
+    return await InterviewSchedule.countDocuments(filter);
+  }
+
+  public async getForStatistics(userId: string, startDate?: Date, endDate?: Date): Promise<{ time: Date }[]> {
+    const objectId = new mongoose.Types.ObjectId(userId);
+    const filter: any = { userId: objectId };
+    if (startDate && endDate) {
+      filter.time = { $gte: startDate, $lt: endDate };
+    }
+    const docs = await InterviewSchedule.find(filter).select('time').lean();
+    return docs as { time: Date }[];
   }
 }
 
