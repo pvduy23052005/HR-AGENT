@@ -70,28 +70,45 @@ const CandidateDetail = () => {
   const handleJobChange = (e) => {
     const jobId = e.target.value;
     setSelectedJobId(jobId);
-    console.log("Job được chọn:", jobId, jobs.find((j) => (j.id === jobId || j._id === jobId)));
+    console.log(
+      "Job được chọn:",
+      jobId,
+      jobs.find((j) => j.id === jobId || j._id === jobId),
+    );
     // TODO: Sẽ gửi API cùng với phân tích AI sau
   };
 
   const handleVerify = async (githubLink, candidateID) => {
     if (!githubLink) {
-      toast.warning("Ứng viên chưa có link GitHub. Vui lòng nhập link thủ công!");
+      toast.warning(
+        "Ứng viên chưa có link GitHub. Vui lòng nhập link thủ công!",
+      );
       setShowManualLinkModal(true);
       return;
     }
 
     // Kiểm tra Email và SĐT
-    console.log("DEBUG - Full candidate object:", JSON.stringify(candidate, null, 2));
+    console.log(
+      "DEBUG - Full candidate object:",
+      JSON.stringify(candidate, null, 2),
+    );
 
-    const candidateEmail = candidate?.contact?.email || candidate?.email || candidate?.personal?.email;
-    const candidatePhone = candidate?.contact?.phone || candidate?.phone || candidate?.personal?.phone;
+    const candidateEmail =
+      candidate?.contact?.email ||
+      candidate?.email ||
+      candidate?.personal?.email;
+    const candidatePhone =
+      candidate?.contact?.phone ||
+      candidate?.phone ||
+      candidate?.personal?.phone;
 
     console.log("DEBUG - Email found:", candidateEmail);
     console.log("DEBUG - Phone found:", candidatePhone);
 
     if (!candidateEmail && !candidatePhone) {
-      toast.error("Không đủ thông tin định danh để thực hiện kiểm chứng. Vui lòng cập nhật Email hoặc SĐT");
+      toast.error(
+        "Không đủ thông tin định danh để thực hiện kiểm chứng. Vui lòng cập nhật Email hoặc SĐT",
+      );
       return;
     }
 
@@ -99,7 +116,8 @@ const CandidateDetail = () => {
       setVerifyingLoading(true);
 
       try {
-        const checkRes = await verificationService.getVerificationDetail(candidateID);
+        const checkRes =
+          await verificationService.getVerificationDetail(candidateID);
         if (checkRes.success && checkRes.verification) {
           toast.info("Ứng viên đã được kiểm chứng.");
           setTimeout(() => {
@@ -147,7 +165,7 @@ const CandidateDetail = () => {
           } else {
             toast.error(
               "Lỗi xác thực: " +
-              (response?.error || "Không kết nối được Extension"),
+                (response?.error || "Không kết nối được Extension"),
             );
             setVerifyingLoading(false);
           }
@@ -177,7 +195,7 @@ const CandidateDetail = () => {
         // Bước 2: Xác nhận và chuyển trường từ Ứng tuyển → Sàng lọc
         try {
           const confirmRes = await verificationService.confirmVerification(id, {
-            status: 'verified', // Kiểm chứng thành công
+            status: "verified", // Kiểm chứng thành công
           });
 
           if (confirmRes.success) {
@@ -190,7 +208,9 @@ const CandidateDetail = () => {
           }
         } catch (confirmError) {
           console.error("Lỗi khi xác nhận verification:", confirmError);
-          toast.warning("Đã lưu kiểm chứng nhưng chưa cập nhật trường. Vui lòng tải lại!");
+          toast.warning(
+            "Đã lưu kiểm chứng nhưng chưa cập nhật trường. Vui lòng tải lại!",
+          );
           await fetchDetail();
           setTimeout(() => {
             navigate(`/candidates/${id}/verify`);
@@ -243,6 +263,7 @@ const CandidateDetail = () => {
     interview: "Phỏng vấn",
     offer: "Đề nghị",
   };
+
   const recruitmentStatusClasses = {
     applied: "status-applied",
     screening: "status-screening",
@@ -264,8 +285,12 @@ const CandidateDetail = () => {
 
   const recruitmentLabel = recruitmentStatusLabels[status] || status || "—";
   const recruitmentClass = recruitmentStatusClasses[status] || "";
-  const verificationLabel = verificationStatusLabels[candidate.verificationStatus] || candidate.verificationStatus || "—";
-  const verificationClass = verificationStatusClasses[candidate.verificationStatus] || "";
+  const verificationLabel =
+    verificationStatusLabels[candidate.verificationStatus] ||
+    candidate.verificationStatus ||
+    "—";
+  const verificationClass =
+    verificationStatusClasses[candidate.verificationStatus] || "";
   const firstEdu = educations[0];
   const firstExp = experiences[0];
 
@@ -281,7 +306,6 @@ const CandidateDetail = () => {
       </div>
 
       <div className="cd-card">
-
         <div className="cd-field">
           <div className="cd-field__label">Họ tên</div>
           <div className="cd-field__row">
@@ -289,7 +313,6 @@ const CandidateDetail = () => {
             <span className="cd-field__value">{personal.fullName || "—"}</span>
           </div>
         </div>
-
 
         <div className="cd-field">
           <div className="cd-field__label">Email</div>
@@ -304,7 +327,6 @@ const CandidateDetail = () => {
             </span>
           </div>
         </div>
-
 
         <div className="cd-field">
           <div className="cd-field__label">SĐT</div>
@@ -330,7 +352,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-
         <div className="cd-field">
           <div className="cd-field__label">Kỹ năng</div>
           <div className="cd-field__row">
@@ -353,7 +374,6 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-
         <div className="cd-field">
           <div className="cd-field__label">Kinh nghiệm</div>
           <div className="cd-field__row">
@@ -375,7 +395,6 @@ const CandidateDetail = () => {
             </div>
           </div>
         )}
-
 
         <div className="cd-field">
           <div className="cd-field__label">Quy Trình Tuyển Dụng</div>
@@ -421,7 +440,7 @@ const CandidateDetail = () => {
                   fontFamily: "inherit",
                   backgroundColor: "#fff",
                   cursor: "pointer",
-                  width: "100%"
+                  width: "100%",
                 }}
               >
                 <option value="">-- Chọn vị trí công việc --</option>
@@ -435,7 +454,6 @@ const CandidateDetail = () => {
           </div>
         </div>
       </div>
-
 
       <div className="cd-actions">
         <button
@@ -480,7 +498,9 @@ const CandidateDetail = () => {
           className="cd-btn cd-btn--ai"
           onClick={() => {
             if (!selectedJobId) {
-              toast.warning("Vui lòng chọn vị trí công việc trước khi phân tích!");
+              toast.warning(
+                "Vui lòng chọn vị trí công việc trước khi phân tích!",
+              );
               return;
             }
             navigate(`/candidates/${id}/ai-analysis?jobId=${selectedJobId}`);
@@ -489,7 +509,6 @@ const CandidateDetail = () => {
           Phân tích AI
         </button>
       </div>
-
 
       {showSaveModal && (
         <div className="cd-modal-overlay">
@@ -524,26 +543,39 @@ const CandidateDetail = () => {
           <div className="cd-modal">
             <h3>Thêm link GitHub thủ công</h3>
             <p style={{ marginBottom: "12px", color: "#555" }}>
-              Hệ thống không tìm thấy link GitHub nguyên bản của ứng viên này. Vui lòng dán link thủ công để đối chiếu dữ liệu:
+              Hệ thống không tìm thấy link GitHub nguyên bản của ứng viên này.
+              Vui lòng dán link thủ công để đối chiếu dữ liệu:
             </p>
             <input
               type="text"
               value={manualLink}
               onChange={(e) => setManualLink(e.target.value)}
               placeholder="Ví dụ: https://github.com/nguyenvana123"
-              style={{ width: "100%", padding: "10px", margin: "10px 0", border: "1px solid #ccc", borderRadius: "4px" }}
+              style={{
+                width: "100%",
+                padding: "10px",
+                margin: "10px 0",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
             />
             <div className="cd-modal__actions" style={{ marginTop: "16px" }}>
               <button
                 className="cd-modal__btn cd-modal__btn--cancel"
-                onClick={() => { setShowManualLinkModal(false); setManualLink(""); }}
+                onClick={() => {
+                  setShowManualLinkModal(false);
+                  setManualLink("");
+                }}
               >
                 Huỷ bỏ
               </button>
               <button
                 className="cd-modal__btn cd-modal__btn--save"
                 onClick={() => {
-                  if (!manualLink.trim() || !manualLink.includes("github.com/")) {
+                  if (
+                    !manualLink.trim() ||
+                    !manualLink.includes("github.com/")
+                  ) {
                     toast.error("Vui lòng nhập đúng định dạng link GitHub!");
                     return;
                   }
