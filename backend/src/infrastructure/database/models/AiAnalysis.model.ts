@@ -27,6 +27,6 @@ const aiAnalysisSchema = new mongoose.Schema(
 
 aiAnalysisSchema.index({ jobID: 1, candidateID: 1 }, { unique: true });
 
-const AiAnalysis = mongoose.model('AiAnalysis', aiAnalysisSchema);
+const AiAnalysis = mongoose.model('AiAnalysis', aiAnalysisSchema , "aianalyses");
 
 export default AiAnalysis;

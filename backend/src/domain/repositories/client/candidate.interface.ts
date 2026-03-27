@@ -1,4 +1,4 @@
-import type { CandidateEntity, CandidateStatus, VerificationStatus } from '../../entities/client/candidate';
+import type { CandidateEntity, CandidateStatus, VerificationStatus, IPersonal } from '../../entities/client/candidate';
 
 export interface ICandidateData {
   jobID?: string;
@@ -18,6 +18,12 @@ export interface IStatus {
   verificationStatus?: VerificationStatus;
 }
 
+export interface ICanidateWithScore {
+  id: string;
+  personal: Partial<IPersonal>;
+  matchingScore: number | null;
+}
+
 export interface ICandidateReadRepo {
   getCandidateById(id: string): Promise<CandidateEntity | null>;
 
@@ -28,6 +34,8 @@ export interface ICandidateReadRepo {
   countForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<number>;
 
   getForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<{ createdAt?: Date, updatedAt?: Date }[]>;
+
+  getCanidateByJob(jobID: string): Promise<ICanidateWithScore[]>;
 }
 
 export interface ICandidateWriteRepo {

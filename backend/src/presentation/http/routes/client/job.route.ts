@@ -5,8 +5,13 @@ import { createJobValidate } from '../../validators/client/job.validate';
 const router = express.Router();
 
 router.get('/', controller.getAllJob);
+
+router.get("/:id/candidates", controller.getCandidateByJob);
+
 router.post('/create', createJobValidate, controller.createJob);
+
 router.patch('/update/:id', createJobValidate, controller.updateJob);
+
 router.delete('/delete/:id', controller.deleteJob);
 
 export const jobRoute: express.Router = router;

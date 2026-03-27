@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
 const personalSchema = new mongoose.Schema(
   {
@@ -72,6 +72,10 @@ const candidateSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+candidateSchema.index({
+  jobID: 1
+})
 
 const Candidate = mongoose.model('Candidate', candidateSchema);
 

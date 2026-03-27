@@ -3,7 +3,8 @@ import Candidate from '../../models/candidate.model';
 import { CandidateEntity } from '../../../../domain/entities/client/candidate';
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../../domain/repositories/client/candidate.interface';
 import type { IStatus } from '../../../../domain/repositories/client/candidate.interface';
-import type { ICandidateData } from '../../../../domain/repositories/client/candidate.interface';
+import type { ICandidateData, ICanidateWithScore } from '../../../../domain/repositories/client/candidate.interface';
+
 
 export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteRepo {
   private mapToEntity(doc: any | null): CandidateEntity | null {
@@ -42,7 +43,7 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
 
   public async getCandidates(userID: string): Promise<CandidateEntity[]> {
     const objectId = new mongoose.Types.ObjectId(userID);
-    
+
     const selectedFields = "jobID status isVerify createdAt personal.fullName personal.email personal.phone personal.cvLink experiences projects";
     const candidates = await Candidate.find({ addedBy: objectId })
       .select(selectedFields)
@@ -52,6 +53,48 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
     return candidates
       .map((doc) => this.mapToEntity(doc))
       .filter((entity) => entity !== null);
+  }
+
+  public async getCanidateByJob(jobID: string): Promise<ICanidateWithScore[]> {
+    const candidates = await Candidate.aggregate([
+      {
+        $match: { jobID: new mongoose.Types.ObjectId(jobID) }
+      },
+      {
+        $lookup: {
+          from: "aianalyses",
+          localField: "_id",
+          foreignField: "candidateID",
+          as: "aiAnalyze"
+        }
+      },
+      {
+        $unwind: {
+          path: "$aiAnalyze",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          personal: 1,
+          matchingScore: '$aiAnalyze.matchingScore',
+        }
+      },
+      {
+        $sort: { matchingScore: -1 }
+      }
+    ]);
+
+    const listCandidate: ICanidateWithScore[] = 
+    candidates.filter((c) => c !== null)
+      .map(c => ({
+        id: c._id,
+        personal: c.personal,
+        matchingScore: c.matchingScore ? c.matchingScore : null
+      }))
+
+    return listCandidate;
   }
 
   public async updateStatus(candidateID: string, updateData: IStatus): Promise<void> {

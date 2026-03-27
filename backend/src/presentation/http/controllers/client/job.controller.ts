@@ -3,13 +3,18 @@ import { CreateJobUseCase } from '../../../../application/use-cases/client/job/c
 import { UpdateJobUseCase } from '../../../../application/use-cases/client/job/update-job.use-case';
 import { GetAllJobUseCase } from '../../../../application/use-cases/client/job/get-all-job.use-case';
 import { DeleteJobUseCase } from '../../../../application/use-cases/client/job/delete-job.use-case';
+import { GetCanidateByJobUseCase } from '../../../../application/use-cases/client/candidate/get-candidate-by-job.use-case';
+
 import { JobRepository } from '../../../../infrastructure/database/repositories/client/job.repository';
+import { CandidateRepository } from '../../../../infrastructure/database/repositories/client/candidate.repository';
 
 const jobRepository = new JobRepository();
+const candidateRepo = new CandidateRepository();
 const createJobUseCase = new CreateJobUseCase(jobRepository);
 const updateJobUseCase = new UpdateJobUseCase(jobRepository);
 const getAllJobUseCase = new GetAllJobUseCase(jobRepository);
 const deleteJobUseCase = new DeleteJobUseCase(jobRepository);
+const getCandidateByJobUseCase = new GetCanidateByJobUseCase(candidateRepo);
 
 // [POST] /job/create
 export const createJob = async (req: Request, res: Response): Promise<void> => {
@@ -57,7 +62,7 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// [GET] /jobs
+// [GET] /job
 export const getAllJob = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
@@ -70,6 +75,25 @@ export const getAllJob = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi tải danh sách công việc!' });
   }
 };
+
+// [GET] /job/:id/candidates 
+export const getCandidateByJob = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const jobID: string = req.params.id.toString() || "";
+
+    console.log(jobID);
+    const candidates = await getCandidateByJobUseCase.execute(jobID);
+
+    res.status(200).json({
+      success: true,
+      candidates: candidates
+    });
+  } catch (error: unknown) {
+    console.log("Get candidate by job error", error);
+    const e = error as { message?: string };
+    res.status(400).json({ success: false, message: e.message ?? 'Get candidate by job error ' });
+  }
+}
 
 // [DELETE] /job/delete/:id
 export const deleteJob = async (req: Request, res: Response): Promise<void> => {
