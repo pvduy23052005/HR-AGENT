@@ -21,7 +21,7 @@ export interface IStatus {
 export interface ICandidateReadRepo {
   getCandidateById(id: string): Promise<CandidateEntity | null>;
 
-  getCandidates(userID: string): Promise<CandidateEntity[] | null>;
+  getCandidates(userID: string): Promise<CandidateEntity[]>;
 
   checkExistsCandidate(email: string): Promise<boolean>;
 

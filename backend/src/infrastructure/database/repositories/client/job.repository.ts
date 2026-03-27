@@ -1,14 +1,7 @@
 import Job from '../../models/job.model';
 import { JobEntity } from '../../../../domain/entities/client/job';
 import type { IJobReadRepo, IJobWriteRepo } from '../../../../domain/repositories/client/job.interface';
-
-export interface IJobData {
-  title: string;
-  userID: string;
-  description: string;
-  requirements: string[];
-  status?: boolean;
-}
+import type { IJobData } from '../../../../domain/repositories/client/job.interface';
 
 export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   private mapToEntity(doc: any | null): JobEntity | null {
@@ -32,9 +25,11 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
     return this.mapToEntity(savedJob);
   }
 
-  public async getAllJob(userID: string): Promise<(JobEntity | null)[]> {
-    const jobs = await Job.find({ userID, deleted: false }).lean();
-    return jobs.map((j) => this.mapToEntity(j));
+  public async getAllJob(userID: string): Promise<JobEntity[]> {
+    const data = await Job.find({ userID, deleted: false }).lean();
+
+    const jobs = data.map(job => this.mapToEntity(job)).filter(job => job !== null);
+    return jobs;
   }
 
   public async getJobById(id: string): Promise<JobEntity | null> {

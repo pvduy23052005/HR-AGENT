@@ -5,8 +5,8 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import * as database from './infrastructure/config/database';
-import indexAdminRoute from './presentatation/http/routes/admin/index.route';
-import indexClientRoute from './presentatation/http/routes/client/index.route';
+import indexAdminRoute from './presentation/http/routes/admin/index.route';
+import indexClientRoute from './presentation/http/routes/client/index.route';
 
 const app = express();
 const PORT: number = parseInt(process.env.PORT ?? '3000', 10);

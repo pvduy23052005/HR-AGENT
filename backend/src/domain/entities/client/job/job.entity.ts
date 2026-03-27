@@ -57,6 +57,7 @@ export class JobEntity {
       id: this.id,
       title: this.title,
       status: this.status,
+      requirements: this.requirements,
       createdAt: this.createdAt,
     };
   }

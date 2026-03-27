@@ -40,17 +40,18 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
     return this.mapToEntity(candidate);
   }
 
-  public async getCandidates(userID: string): Promise<CandidateEntity[] | null> {
+  public async getCandidates(userID: string): Promise<CandidateEntity[]> {
     const objectId = new mongoose.Types.ObjectId(userID);
+    
     const selectedFields = "jobID status isVerify createdAt personal.fullName personal.email personal.phone personal.cvLink experiences projects";
     const candidates = await Candidate.find({ addedBy: objectId })
       .select(selectedFields)
       .populate('jobID', 'title')
       .lean();
-    if (!candidates || candidates.length === 0) return null;
+
     return candidates
       .map((doc) => this.mapToEntity(doc))
-      .filter((entity): entity is CandidateEntity => entity !== null);
+      .filter((entity) => entity !== null);
   }
 
   public async updateStatus(candidateID: string, updateData: IStatus): Promise<void> {
