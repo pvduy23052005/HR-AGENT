@@ -1,6 +1,6 @@
 import OTP from '../../models/otp.model';
 import { OTPEntity } from '../../../../domain/entities/client/otp';
-import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/interfaces/client/otp.interface';
+import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/repositories/client/otp.interface';
 
 export class OtpRepository implements IOTPReadRepo, IOTPWriteRepo {
   private mapToEntity(doc: any | null): OTPEntity | null {

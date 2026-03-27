@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { ITokenService } from "../../domain/interfaces/services/token.service";
-import { ITokenPayload } from "../../domain/interfaces/services/token.service";
+import { ITokenService } from "../../domain/repositories/services/token.service";
+import { ITokenPayload } from "../../domain/repositories/services/token.service";
 
 
 export class TokenService implements ITokenService {

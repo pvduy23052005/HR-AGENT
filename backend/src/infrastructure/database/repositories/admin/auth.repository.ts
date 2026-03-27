@@ -1,6 +1,6 @@
 import Account from '../../models/accountAdmin.model';
 import { AdminEntity } from '../../../../domain/entities/admin/accountAdmin.entity';
-import { IAccountAdmin } from '../../../../domain/interfaces/admin/accountAdmin.interface';
+import { IAccountAdmin } from '../../../../domain/repositories/admin/accountAdmin.interface';
 
 export class AuthRepository implements IAccountAdmin {
   private mapToEntity(doc: any | null): AdminEntity | null {

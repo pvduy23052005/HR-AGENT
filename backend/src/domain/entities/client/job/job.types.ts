@@ -2,6 +2,7 @@ export interface IJobSummary {
   id: string;
   title: string;
   status: boolean;
+  requirements: string[];
   createdAt: Date | undefined;
 }
 

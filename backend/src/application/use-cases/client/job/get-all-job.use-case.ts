@@ -1,11 +1,13 @@
-import type { JobEntity } from '../../../../domain/entities/client/job';
-import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
+import type { IJobReadRepo } from '../../../../domain/repositories/client/job.interface';
+import type { IJobSummary } from '../../../../domain/entities/client/job';
 
 export class GetAllJobUseCase {
-  constructor(private readonly jobRepo: IJobReadRepo) {}
+  constructor(private readonly jobRepo: IJobReadRepo) { }
 
-  async execute(userID: string): Promise<(JobEntity | null)[]> {
+  async execute(userID: string): Promise<IJobSummary[]> {
 
-    return await this.jobRepo.getAllJob(userID);
+    const jobs = await this.jobRepo.getAllJob(userID);
+
+    return jobs.map(job => job.getSummary());
   }
 }

@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-import { IUploadService, IUploadFile } from '../../domain/interfaces/services/upload.service';
+import { IUploadService, IUploadFile } from '../../domain/repositories/services/upload.service';
 
 export class UploadService implements IUploadService {
   public async uploadCloud(files: IUploadFile[]): Promise<(string | unknown)[]> {

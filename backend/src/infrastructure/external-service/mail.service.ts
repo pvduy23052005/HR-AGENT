@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-import { IMailService } from '../../domain/interfaces/services/mail.service';
+import { IMailService } from '../../domain/repositories/services/mail.service';
 
 export class MailService implements IMailService {
   public async sendEmail(

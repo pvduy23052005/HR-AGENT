@@ -15,7 +15,6 @@ export interface IAnalysisReadRepo {
   getAnalysisByCandidateIdAndJobId(candidateID: string, jobID: string): Promise<AnalysisEntity | null>;
 }
 
-
 export interface IAnalysisWriteRepo {
   createAiAnalysis(data: IAnalysisData): Promise<AnalysisEntity | null>;
 }

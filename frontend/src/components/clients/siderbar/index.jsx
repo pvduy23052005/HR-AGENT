@@ -15,10 +15,14 @@ import "../../../styles/client/ui/siderbar.css";
 
 const menuItems = [
   { path: "/dashboard", icon: <MdDashboard />, label: "Tổng quan" },
-  { path: "/candidates", icon: <MdPeople />, label: "Quản lý ứng viên" },
-  { path: "/upload-cv", icon: <MdFileUpload />, label: "Upload CV" },
   { path: "/reports", icon: <MdBarChart />, label: "Báo cáo & Thống kê" },
-  { path: "/recruitment", icon: <MdAccountTree />, label: "Quy trình tuyển dụng" },
+  {
+    path: "/recruitment",
+    icon: <MdAccountTree />,
+    label: "Quy trình tuyển dụng",
+  },
+  { path: "/upload-cv", icon: <MdFileUpload />, label: "Upload CV" },
+  { path: "/candidates", icon: <MdPeople />, label: "Quản lý ứng viên" },
 ];
 
 function ClientSidebar() {
@@ -29,7 +33,7 @@ function ClientSidebar() {
     try {
       const raw = localStorage.getItem("user");
       return raw ? JSON.parse(raw) : null;
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (e) {
       return null;
     }

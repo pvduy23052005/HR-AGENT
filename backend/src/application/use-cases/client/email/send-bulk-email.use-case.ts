@@ -1,6 +1,6 @@
-import type { ICandidateReadRepo } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
-import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
+import type { ICandidateReadRepo } from '../../../../domain/repositories/client/candidate.interface';
+import type { IJobReadRepo } from '../../../../domain/repositories/client/job.interface';
+import type { IMailService } from '../../../../domain/repositories/services/mail.service';
 
 export interface SendBulkEmailInput {
   candidateIds: string[];
@@ -28,12 +28,11 @@ export class SendBulkEmailUseCase {
     private readonly candidateRepo: ICandidateReadRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly mailSvc: IMailService,
-  ) {}
+  ) { }
 
   private replacePlaceholders(content: string, candidate: any, jobTitle?: string): string {
     let result = content;
 
-    // Replace candidate placeholders
     if (candidate.personal?.fullName) {
       result = result.replace(/\[Tên Ứng Viên\]/g, candidate.personal.fullName);
       result = result.replace(/\[Tên Ứng viên\]/g, candidate.personal.fullName);
@@ -48,13 +47,11 @@ export class SendBulkEmailUseCase {
       result = result.replace(/\[SĐT\]/g, candidate.personal.phone);
     }
 
-    // Replace job placeholders
     if (jobTitle) {
       result = result.replace(/\[Tên Vị Trí\]/g, jobTitle);
       result = result.replace(/\[Vị Trí\]/g, jobTitle);
     }
 
-    // Replace company placeholder (can be customized)
     result = result.replace(/\[Công ty\]/g, process.env.COMPANY_NAME || 'công ty chúng tôi');
 
     return result;
@@ -80,13 +77,11 @@ export class SendBulkEmailUseCase {
     }> = [];
     let totalSent = 0;
 
-    // Fetch all candidates
     const candidatePromises = input.candidateIds.map(id =>
       this.candidateRepo.getCandidateById(id)
     );
     const candidates = await Promise.all(candidatePromises);
 
-    // Send emails
     for (let i = 0; i < candidates.length; i++) {
       const candidate = candidates[i];
       const candidateId = input.candidateIds[i];
@@ -109,7 +104,6 @@ export class SendBulkEmailUseCase {
           continue;
         }
 
-        // Get job info if available
         let jobTitle: string | undefined;
         if (candidate.jobID) {
           try {
@@ -120,11 +114,9 @@ export class SendBulkEmailUseCase {
           }
         }
 
-        // Replace placeholders
         const personalizedTitle = this.replacePlaceholders(input.title, candidate, jobTitle);
         const personalizedContent = this.replacePlaceholders(input.content, candidate, jobTitle);
 
-        // Build HTML email
         const htmlContent = `
           <html>
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">

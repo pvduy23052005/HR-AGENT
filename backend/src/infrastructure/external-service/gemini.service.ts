@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { candidatePrompt } from '../../prompts/candiate.prompt';
 import { aiAnalyzePrompt } from '../../prompts/aiAnalyze.prompt';
 import { interviewEmailPrompt } from '../../prompts/interviewEmail.prompt';
-import { IGeminiService } from '../../domain/interfaces/services/ai.service';
+import { IGeminiService } from '../../domain/repositories/services/ai.service';
 
 
 dotenv.config();

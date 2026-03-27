@@ -24,7 +24,7 @@ export const getCandidates = async (req: Request, res: Response): Promise<void> 
     const listSummaryProfile = candidates.map((c) => ({
       ...c.getSummaryProfile(),
       allSkills: c.getAllTechStacks(),
-      personal: c.personal, // Thêm personal info (gồm githubLink, cvLink, email, phone, etc)
+      personal: c.personal, 
     }));
 
     res.status(200).json({ success: true, message: 'Thành công', candidates: listSummaryProfile });

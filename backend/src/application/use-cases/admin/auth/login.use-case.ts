@@ -1,5 +1,5 @@
-import type { ITokenPayload, ITokenService } from '../../../../domain/interfaces/services/token.service';
-import type { IAccountAdmin } from '../../../../domain/interfaces/admin/accountAdmin.interface';
+import type { ITokenPayload, ITokenService } from '../../../../domain/repositories/services/token.service';
+import type { IAccountAdmin } from '../../../../domain/repositories/admin/accountAdmin.interface';
 import type { IAdminProfile } from '../../../../domain/entities/admin/accountAdmin.entity';
 
 export interface IAdminLoginResult {
@@ -8,7 +8,7 @@ export interface IAdminLoginResult {
 }
 
 export class LoginUseCase {
-  
+
   constructor(
     private readonly authRepo: IAccountAdmin,
     private readonly tokService: ITokenService

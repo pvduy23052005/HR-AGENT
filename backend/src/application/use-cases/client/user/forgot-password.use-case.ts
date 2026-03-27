@@ -1,8 +1,8 @@
 import { randomNumber } from '../../../../shared/utils/randomNumber.util';
 import { htmlEmailOtp } from '../../../../templates/email/otp';
-import type { IUserReadRepo } from '../../../../domain/interfaces/client/user.interface';
-import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/interfaces/client/otp.interface';
-import type { IMailService } from '../../../../domain/interfaces/services/mail.service';
+import type { IUserReadRepo } from '../../../../domain/repositories/client/user.interface';
+import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/repositories/client/otp.interface';
+import type { IMailService } from '../../../../domain/repositories/services/mail.service';
 
 export class ForgotPasswordUseCase {
   constructor(

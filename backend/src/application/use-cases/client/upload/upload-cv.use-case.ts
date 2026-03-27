@@ -1,19 +1,19 @@
-import type { ICandidateWriteRepo, ICandidateData } from '../../../../domain/interfaces/client/candidate.interface';
-import type { IJobReadRepo } from '../../../../domain/interfaces/client/job.interface';
-import type { IUploadService } from '../../../../domain/interfaces/services/upload.service';
-import type { IAIService } from '../../../../domain/interfaces/services/ai.service';
+import type { ICandidateWriteRepo, ICandidateData, ICandidateReadRepo } from '../../../../domain/repositories/client/candidate.interface';
+import type { IJobReadRepo } from '../../../../domain/repositories/client/job.interface';
+import type { IUploadService } from '../../../../domain/repositories/services/upload.service';
+import type { IAIService } from '../../../../domain/repositories/services/ai.service';
 import type { CandidateEntity } from '../../../../domain/entities/client/candidate';
 
 export interface IUploadCVResult {
   cvLink: unknown;
   avatarLink?: unknown;
   newCandidate: CandidateEntity | null;
-  dataCV: Record<string, unknown>;
+  dataCV: ICandidateData;
 }
 
 export class UploadCVUseCase {
   constructor(
-    private readonly candidateRepo: ICandidateWriteRepo,
+    private readonly candidateRepo: ICandidateWriteRepo & ICandidateReadRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly uploadSvc: IUploadService,
     private readonly geminiSvc: IAIService,
@@ -42,7 +42,7 @@ export class UploadCVUseCase {
     const cvLink = fileUrls[0];
     const avatarLink = avatarFile && fileUrls[1] ? fileUrls[1] : undefined;
 
-    let dataCV: Record<string, unknown> = {
+    let dataCV: ICandidateData = {
       jobID,
       addedBy: userID,
       personal: { cvLink, ...(avatarLink ? { avatar: avatarLink } : {}) },
@@ -62,7 +62,21 @@ export class UploadCVUseCase {
       }
     }
 
-    const newCandidate = await this.candidateRepo.createCandidate(dataCV as ICandidateData);
+    const personalData = dataCV.personal as Record<string, any>;
+    const email = personalData?.email;
+
+    if (!email) {
+      throw new Error('không thể trích xuất được Email từ CV ');
+    }
+
+    const isExist = await this.candidateRepo.checkExistsCandidate(email);
+    let newCandidate: CandidateEntity | null;
+
+    if (isExist) {
+      newCandidate = await this.candidateRepo.updateCandidate(email, dataCV);
+    } else {
+      newCandidate = await this.candidateRepo.createCandidate(dataCV);
+    }
 
     return { cvLink, avatarLink, newCandidate, dataCV };
   }

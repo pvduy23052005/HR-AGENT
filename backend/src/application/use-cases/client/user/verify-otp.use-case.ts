@@ -1,5 +1,5 @@
-import type { IUserReadRepo } from '../../../../domain/interfaces/client/user.interface';
-import type { IOTPReadRepo } from '../../../../domain/interfaces/client/otp.interface';
+import type { IUserReadRepo } from '../../../../domain/repositories/client/user.interface';
+import type { IOTPReadRepo } from '../../../../domain/repositories/client/otp.interface';
 
 export class VerifyOtpUseCase {
   constructor(

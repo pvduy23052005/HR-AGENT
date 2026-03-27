@@ -1,6 +1,6 @@
-import type { IUserReadRepo, IUserWriteRepo } from '../../../../domain/interfaces/client/user.interface';
-import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/interfaces/client/otp.interface';
-import type { IPasswordService } from '../../../../domain/interfaces/services/password.service';
+import type { IUserReadRepo, IUserWriteRepo } from '../../../../domain/repositories/client/user.interface';
+import type { IOTPReadRepo, IOTPWriteRepo } from '../../../../domain/repositories/client/otp.interface';
+import type { IPasswordService } from '../../../../domain/repositories/services/password.service';
 
 export class ResetPasswordUseCase {
   constructor(

@@ -1,8 +1,15 @@
 import type { JobEntity } from '../../entities/client/job';
-import type { IJobData } from '../../../infrastructure/database/repositories/client/job.repository';
+
+export interface IJobData {
+  title: string;
+  userID: string;
+  description: string;
+  requirements: string[];
+  status?: boolean;
+}
 
 export interface IJobReadRepo {
-  getAllJob(userID: string): Promise<(JobEntity | null)[]>;
+  getAllJob(userID: string): Promise<(JobEntity[])>;
 
   getJobById(id: string): Promise<JobEntity | null>;
 }

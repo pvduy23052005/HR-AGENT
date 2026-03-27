@@ -1,5 +1,5 @@
 import { VerificationEntity } from "../../../../domain/entities/client/verifycation";
-import { IVerificationRepository } from "../../../../domain/interfaces/client/verification.interface";
+import { IVerificationRepository } from "../../../../domain/repositories/client/verification.interface";
 
 export class VerifyCandidateUseCase {
   constructor(
@@ -9,14 +9,10 @@ export class VerifyCandidateUseCase {
   async execute(candidateID: string, dataVerification: any): Promise<VerificationEntity | null> {
 
     const [result] = await Promise.all([
-      this.repo.createVerification(candidateID, dataVerification),
-      this.repo.updateIsverfiy(candidateID, true)
+      this.candidateRepo.createVerification(candidateID, dataVerification),
+      this.candidateRepo.updateIsverfiy(candidateID, true)
     ]);
 
     return result;
-  }
-
-  private get repo(): IVerificationRepository {
-    return this.candidateRepo;
   }
 }

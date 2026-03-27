@@ -11,5 +11,10 @@ export interface IInterviewScheduleData {
 
 export interface IInterviewScheduleRepository {
   createSchedule(data: IInterviewScheduleData): Promise<InterviewScheduleEntity | null>;
+
   checkOverlap(userId: string, startTime: Date, durationMinutes: number): Promise<boolean>;
+  
+  countForStatistics(userId: string, startDate?: Date, endDate?: Date): Promise<number>;
+  
+  getForStatistics(userId: string, startDate?: Date, endDate?: Date): Promise<{ time: Date }[]>;
 }
