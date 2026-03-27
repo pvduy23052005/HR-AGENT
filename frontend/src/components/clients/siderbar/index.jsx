@@ -8,6 +8,7 @@ import {
   MdLogout,
   MdAdminPanelSettings,
   MdFileUpload,
+  MdWork,
 } from "react-icons/md";
 import { toast } from "react-toastify";
 import authService from "../../../services/client/authService";
@@ -23,6 +24,7 @@ const menuItems = [
   },
   { path: "/upload-cv", icon: <MdFileUpload />, label: "Upload CV" },
   { path: "/candidates", icon: <MdPeople />, label: "Quản lý ứng viên" },
+  { path: "/jobs", icon: <MdWork />, label: "Danh sách công việc" },
 ];
 
 function ClientSidebar() {

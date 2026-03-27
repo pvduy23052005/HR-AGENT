@@ -50,8 +50,6 @@ export const verifyCandidate = async (req: Request, res: Response): Promise<void
   try {
     const { candidateID, data } = req.body;
 
-    console.log(data);
-
     if (!candidateID) {
       res.status(400).json({ success: false, message: 'Thiếu candidateID!' });
       return;

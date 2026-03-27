@@ -88,10 +88,6 @@ const CandidateDetail = () => {
     }
 
     // Kiểm tra Email và SĐT
-    console.log(
-      "DEBUG - Full candidate object:",
-      JSON.stringify(candidate, null, 2),
-    );
 
     const candidateEmail =
       candidate?.contact?.email ||
@@ -182,7 +178,6 @@ const CandidateDetail = () => {
     try {
       toast.info("Đang lưu kết quả kiểm chứng GitHub...");
 
-      // Bước 1: Lưu dữ liệu xác minh từ GitHub
       const response = await verificationService.verifyCandidate(
         id,
         tempVerificationData,

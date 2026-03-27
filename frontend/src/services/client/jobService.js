@@ -7,7 +7,11 @@ const jobService = {
     return res;
   },
 
-  
+  getCandidatesByJob: async (id) => {
+    const res = await API.get(`/job/${id}/candidates`);
+    return res;
+  },
+
   create: async (data) => {
     const res = await API.post("/job/create", data);
     return res;

@@ -96,8 +96,6 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
         const taskId = crypto.randomUUID();
         const executor = await setupExecutor(taskId, aiPrompt, browserContext);
 
-        console.log("Bắt đầu chạy AI...");
-
         const rawResult: any = await new Promise((resolve, reject) => {
           executor.subscribeExecutionEvents(async (event: any): Promise<void> => {
             if (event.state === ExecutionState.TASK_OK) {
@@ -111,9 +109,14 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
 
         console.log("Đã tóm được kết quả từ AI:", rawResult);
 
-        let finalJson: any = parseAIResponse(rawResult);
+        let finalJson: any = parseAIResponse(rawResult.details);
 
-        // Đợi 1.5s rồi mới đóng tab để tránh lỗi session
+        console.log(finalJson);
+        sendResponse({
+          success: true,
+          data: JSON.stringify(finalJson)
+        });
+
         setTimeout(() => {
           if (newTab.id) chrome.tabs.remove(newTab.id);
         }, 1500);
@@ -129,6 +132,8 @@ chrome.runtime.onMessageExternal.addListener((message: any, sender, sendResponse
   }
   return false;
 });
+
+// chrome.runtime.onMessageExternal.addListener((message : any.  ))
 
 export const parseAIResponse = (rawResult: any) => {
   try {
