@@ -56,6 +56,12 @@ const JobCard = ({ job, onViewDetail }) => {
           Xem chi tiết
         </button>
         <button 
+          onClick={() => navigate(`/jobs/${job.id || job._id}`, { state: { editMode: true } })}
+          className="job-card__btn job-card__btn--secondary"
+        >
+          Chỉnh sửa
+        </button>
+        <button 
           onClick={handleViewCandidates}
           className="job-card__btn job-card__btn--secondary"
         >

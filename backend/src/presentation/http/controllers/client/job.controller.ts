@@ -3,6 +3,7 @@ import { CreateJobUseCase } from '../../../../application/use-cases/client/job/c
 import { UpdateJobUseCase } from '../../../../application/use-cases/client/job/update-job.use-case';
 import { GetAllJobUseCase } from '../../../../application/use-cases/client/job/get-all-job.use-case';
 import { DeleteJobUseCase } from '../../../../application/use-cases/client/job/delete-job.use-case';
+import { GetJobByIdUseCase } from '../../../../application/use-cases/client/job/get-job-by-id.use-case';
 import { GetCanidateByJobUseCase } from '../../../../application/use-cases/client/candidate/get-candidate-by-job.use-case';
 
 import { JobRepository } from '../../../../infrastructure/database/repositories/client/job.repository';
@@ -14,6 +15,7 @@ const createJobUseCase = new CreateJobUseCase(jobRepository);
 const updateJobUseCase = new UpdateJobUseCase(jobRepository);
 const getAllJobUseCase = new GetAllJobUseCase(jobRepository);
 const deleteJobUseCase = new DeleteJobUseCase(jobRepository);
+const getJobByIdUseCase = new GetJobByIdUseCase(jobRepository);
 const getCandidateByJobUseCase = new GetCanidateByJobUseCase(candidateRepo);
 
 // [POST] /job/create
@@ -94,6 +96,25 @@ export const getCandidateByJob = async (req: Request, res: Response): Promise<vo
     res.status(400).json({ success: false, message: e.message ?? 'Get candidate by job error ' });
   }
 }
+
+// [GET] /job/detail/:id
+export const getJobById = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const jobId = req.params['id'] as string;
+
+    const job = await getJobByIdUseCase.execute(jobId);
+
+    if (!job) {
+      res.status(404).json({ success: false, message: 'Không tìm thấy công việc!' });
+      return;
+    }
+
+    res.status(200).json({ success: true, message: 'Thành công', job: job });
+  } catch (error: unknown) {
+    const e = error as { message?: string };
+    res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi tải thông tin công việc!' });
+  }
+};
 
 // [DELETE] /job/delete/:id
 export const deleteJob = async (req: Request, res: Response): Promise<void> => {

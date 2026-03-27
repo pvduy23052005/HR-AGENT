@@ -12,12 +12,20 @@ const jobService = {
     return res;
   },
 
+  getJobById: async (id) => {
+    const res = await API.get(`/job/detail/${id}`);
+    return res;
+  },
+
+  updateJob: async (id, data) => {
+    const res = await API.patch(`/job/update/${id}`, data);
+    return res;
+  },
+
   create: async (data) => {
     const res = await API.post("/job/create", data);
     return res;
   },
-
-
 
   delete: async (id) => {
     const res = await API.delete(`/job/delete/${id}`);

@@ -26,6 +26,7 @@ import ReportStatistics from "../pages/client/Report/ReportStatistics";
 import RecruitmentBoard from "../pages/client/RecruitmentProcess";
 import JobList from "../pages/client/jobs";
 import JobCandidates from "../pages/client/jobs/JobCandidates";
+import JobDetail from "../pages/client/jobs/Detail";
 
 const routes = [
   {
@@ -62,6 +63,7 @@ const routes = [
           { path: "reports", element: <ReportStatistics /> },
           { path: "recruitment", element: <RecruitmentBoard /> },
           { path: "jobs", element: <JobList /> },
+          { path: "jobs/:id", element: <JobDetail /> },
           { path: "jobs/:id/candidates", element: <JobCandidates /> },
           {
             path: "candidates",

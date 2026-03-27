@@ -1,0 +1,359 @@
+/* jobDetail.css */
+.jd-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  font-family: inherit;
+}
+
+.jd-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+}
+
+.jd-back-btn:hover {
+  color: #0f172a;
+}
+
+.jd-header-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.jd-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.jd-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.jd-badges {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.jd-badge {
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.jd-badge--open {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.jd-badge--closed {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.jd-meta-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 24px;
+}
+
+.jd-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.jd-meta-icon {
+  color: #94a3b8;
+}
+
+.jd-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .jd-content-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.jd-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.jd-section-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.jd-section-icon {
+  width: 36px;
+  height: 36px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jd-desc-text {
+  color: #334155;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.jd-empty-text {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.jd-tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.jd-tag {
+  padding: 8px 16px;
+  background-color: #f8fafc;
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.jd-tag:hover {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.jd-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0;
+}
+
+.jd-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.jd-loading span {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.jd-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.jd-error h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+}
+
+.jd-error p {
+  margin: 0;
+  color: #991b1b;
+}
+
+.jd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  font-weight: 600;
+  border-radius: 10px;
+  color: white;
+  background-color: #2563eb;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 24px;
+  transition: background-color 0.2s;
+  text-decoration: none;
+}
+
+.jd-btn:hover {
+  background-color: #1d4ed8;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Edit Mode Styles */
+.jd-header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.jd-edit-btn {
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.jd-edit-btn:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.jd-save-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.jd-save-btn:hover {
+  background-color: #059669;
+}
+
+.jd-cancel-btn {
+  background-color: white;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.jd-cancel-btn:hover {
+  background-color: #fef2f2;
+}
+
+.jd-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  margin-top: 8px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.jd-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.jd-textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.jd-input-label {
+  display: block;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.jd-select {
+  padding: 10px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #0f172a;
+  background-color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.jd-select:focus {
+  border-color: #3b82f6;
+}

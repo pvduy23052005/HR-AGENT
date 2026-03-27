@@ -44,9 +44,21 @@ const JobList = () => {
     });
   }, [jobs, searchTerm, statusFilter]);
 
-  const handleViewDetail = (job) => {
-    setSelectedJob(job);
-    document.body.style.overflow = 'hidden';
+  const handleViewDetail = async (job) => {
+    try {
+      const res = await jobService.getJobById(job.id || job._id);
+      let fullJob = job;
+      if (res.job) fullJob = res.job;
+      else if (res.success && res.data?.job) fullJob = res.data.job;
+      else if (res.data) fullJob = res.data;
+      
+      setSelectedJob(fullJob);
+      document.body.style.overflow = 'hidden';
+    } catch (error) {
+      console.error("Lỗi khi tải chi tiết công việc:", error);
+      setSelectedJob(job);
+      document.body.style.overflow = 'hidden';
+    }
   };
 
   const handleCloseModal = () => {
@@ -115,7 +127,7 @@ const JobList = () => {
             <JobCard 
               key={job.id} 
               job={job} 
-              onViewDetail={handleViewDetail} 
+              onViewDetail={handleViewDetail}
             />
           ))}
         </div>
