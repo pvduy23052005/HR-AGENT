@@ -21,7 +21,7 @@ export class ForgotPasswordUseCase {
 
     const recentOtp = await this.otpRepo.findRecentOTP(email);
     if (recentOtp) {
-      const secondsPassed = (Date.now() - new Date(recentOtp.createdAt!).getTime()) / 1000;
+      const secondsPassed = (Date.now() - new Date(recentOtp.getCreatedAt()!).getTime()) / 1000;
       if (secondsPassed < 60) {
         throw new Error(`Vui lòng đợi ${Math.ceil(60 - secondsPassed)} giây trước khi yêu cầu mã mới!`);
       }
@@ -31,7 +31,7 @@ export class ForgotPasswordUseCase {
     const record = await this.otpRepo.createOTP(email, otp);
 
     const subject = 'Mã OTP lấy lại mật khẩu';
-    const content = htmlEmailOtp(record!.otp);
+    const content = htmlEmailOtp(record!.getOtp());
     await this.mailService.sendEmail(email, subject, content);
 
     return { email };

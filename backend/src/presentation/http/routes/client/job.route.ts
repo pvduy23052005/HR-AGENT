@@ -14,4 +14,6 @@ router.patch('/update/:id', createJobValidate, controller.updateJob);
 
 router.delete('/delete/:id', controller.deleteJob);
 
+router.get('/detail/:id', controller.getJobById);
+
 export const jobRoute: express.Router = router;

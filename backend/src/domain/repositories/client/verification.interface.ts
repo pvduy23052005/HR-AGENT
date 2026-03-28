@@ -5,5 +5,7 @@ export interface IVerificationRepository {
 
   updateIsverfiy(candidateID: string, isVerify: boolean): Promise<void>;
 
+  updateVerificationStatus(candidateID: string, isVerified: boolean): Promise<void>;
+
   getVerificationByCandidateId(candidateID: string): Promise<VerificationEntity | null>;
 }
