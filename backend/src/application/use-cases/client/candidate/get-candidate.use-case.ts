@@ -5,6 +5,9 @@ export class GetCandidatesUseCase {
   constructor(private readonly candidateRepo: ICandidateReadRepo) { }
 
   async execute(userID: string): Promise<CandidateEntity[] | null> {
-    return await this.candidateRepo.getCandidates(userID);
+
+    const candidates = await this.candidateRepo.getCandidates(userID);
+
+    return candidates;
   }
 }

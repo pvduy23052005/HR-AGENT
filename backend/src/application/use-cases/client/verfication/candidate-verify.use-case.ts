@@ -13,6 +13,8 @@ export class VerifyCandidateUseCase {
       this.candidateRepo.updateIsverfiy(candidateID, true)
     ]);
 
+    if (!result) throw new Error("Kiểm chức lỗi vui lòng thử lại!");
+
     return result;
   }
 }

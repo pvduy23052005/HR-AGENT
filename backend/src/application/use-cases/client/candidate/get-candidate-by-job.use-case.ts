@@ -8,8 +8,8 @@ export class GetCanidateByJobUseCase {
 
   async execute(jobID: string): Promise<ICanidateWithScore[]> {
 
-    const candidates = await this.candidateRepo.getCanidateByJob(jobID);
+    const candidatesWithScore = await this.candidateRepo.getCanidateByJob(jobID);
 
-    return candidates;
+    return candidatesWithScore;
   }
 }

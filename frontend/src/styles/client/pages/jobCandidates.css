@@ -272,6 +272,12 @@
   color: #dc2626;
 }
 
+.score--gray {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px dashed #cbd5e1;
+}
+
 .jc-card__actions {
   display: flex;
   gap: 12px;

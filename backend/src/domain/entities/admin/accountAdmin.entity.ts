@@ -17,13 +17,13 @@ export interface IAdminProfile {
 }
 
 export class AdminEntity {
-  id: string ;
-  fullName: string;
-  email: string;
-  password: string;
-  role: string;
-  status: string | undefined;
-  deleted: boolean | undefined;
+  private id: string ;
+  private fullName: string;
+  private email: string;
+  private password: string;
+  private role: string;
+  private status: string | undefined;
+  private deleted: boolean | undefined;
 
   constructor({
     id,
@@ -43,6 +43,27 @@ export class AdminEntity {
     this.deleted = deleted;
   }
 
+  public getId(): string { return this.id; }
+  public setId(value: string): void { this.id = value; }
+
+  public getFullName(): string { return this.fullName; }
+  public setFullName(value: string): void { this.fullName = value; }
+
+  public getEmail(): string { return this.email; }
+  public setEmail(value: string): void { this.email = value; }
+
+  public getPassword(): string { return this.password; }
+  public setPassword(value: string): void { this.password = value; }
+
+  public getRole(): string { return this.role; }
+  public setRole(value: string): void { this.role = value; }
+
+  public getStatus(): string | undefined { return this.status; }
+  public setStatus(value: string | undefined): void { this.status = value; }
+
+  public getDeleted(): boolean | undefined { return this.deleted; }
+  public setDeleted(value: boolean | undefined): void { this.deleted = value; }
+
   isActive(): boolean {
     return this.status === 'active';
   }
@@ -59,9 +80,5 @@ export class AdminEntity {
       role: this.role,
       status: this.status,
     };
-  }
-
-  getID(): string {
-    return this.id;
   }
 }

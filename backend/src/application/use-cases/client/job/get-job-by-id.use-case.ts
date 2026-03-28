@@ -6,7 +6,9 @@ export class GetJobByIdUseCase {
 
   async execute(jobID: string): Promise<IJobDetail | null> {
     const job = await this.jobRepo.getJobById(jobID);
+
     if (!job) return null;
+    
     return job.getDetailJob();
   }
 }

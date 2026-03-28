@@ -1,15 +1,15 @@
 import type { IAnalysisDetail, IAnalysisProps } from './analysis.types';
 
 export class AnalysisEntity {
-  id: string;
-  jobID: string;
-  candidateID: string;
-  summary: string;
-  matchingScore: number;
-  redFlags: string[];
-  suggestedQuestions: string[];
-  createdAt: Date | undefined;
-  updatedAt: Date | undefined;
+  private id: string;
+  private jobID: string;
+  private candidateID: string;
+  private summary: string;
+  private matchingScore: number;
+  private redFlags: string[];
+  private suggestedQuestions: string[];
+  private createdAt: Date | undefined;
+  private updatedAt: Date | undefined;
 
   constructor({
     id,
@@ -32,6 +32,33 @@ export class AnalysisEntity {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
+
+  public getId(): string { return this.id; }
+  public setId(value: string): void { this.id = value; }
+
+  public getJobID(): string { return this.jobID; }
+  public setJobID(value: string): void { this.jobID = value; }
+
+  public getCandidateID(): string { return this.candidateID; }
+  public setCandidateID(value: string): void { this.candidateID = value; }
+
+  public getSummary(): string { return this.summary; }
+  public setSummary(value: string): void { this.summary = value; }
+
+  public getMatchingScore(): number { return this.matchingScore; }
+  public setMatchingScore(value: number): void { this.matchingScore = value; }
+
+  public getRedFlags(): string[] { return this.redFlags; }
+  public setRedFlags(value: string[]): void { this.redFlags = value; }
+
+  public getSuggestedQuestions(): string[] { return this.suggestedQuestions; }
+  public setSuggestedQuestions(value: string[]): void { this.suggestedQuestions = value; }
+
+  public getCreatedAt(): Date | undefined { return this.createdAt; }
+  public setCreatedAt(value: Date | undefined): void { this.createdAt = value; }
+
+  public getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  public setUpdatedAt(value: Date | undefined): void { this.updatedAt = value; }
 
   getDetail(): IAnalysisDetail {
     return {

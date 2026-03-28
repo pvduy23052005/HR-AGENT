@@ -36,7 +36,7 @@ export class ScheduleInterviewUseCase {
   async execute(input: ScheduleInterviewInput): Promise<ScheduleInterviewResult> {
     const candidate = await this.candidateRepo.getCandidateById(input.candidateID);
     if (!candidate) throw new Error('Không tìm thấy thông tin ứng viên.');
-    if (!candidate.personal.email) throw new Error('Ứng viên chưa có email để gửi thư mời.');
+    if (!candidate.getPersonal().email) throw new Error('Ứng viên chưa có email để gửi thư mời.');
 
     const job = await this.jobRepo.getJobById(input.jobID);
     if (!job) throw new Error('Không tìm thấy thông tin công việc (Job).');
@@ -59,23 +59,23 @@ export class ScheduleInterviewUseCase {
     if (!created) throw new Error('Không thể tạo lịch phỏng vấn.');
 
     const invite = buildInterviewCalendarInvite({
-      uid: `${created.id}@hr-agent`,
+      uid: `${created.getId()}@hr-agent`,
       startTime: input.time,
       durationMinutes: input.durationMinutes,
-      summary: `Phỏng vấn - ${job.title}`,
+      summary: `Phỏng vấn - ${job.getTitle()}`,
       description: [
-        `Phỏng vấn vị trí: ${job.title}`,
+        `Phỏng vấn vị trí: ${job.getTitle()}`,
         `Ghi chú: ${input.notes ?? ''}`,
       ].filter(Boolean).join('\\n'),
       location: input.address,
       organizerEmail: process.env.MAIL_USER,
-      attendeeEmail: candidate.personal.email,
+      attendeeEmail: candidate.getPersonal().email,
     });
 
     const emailPayload = {
       candidate: {
-        fullName: candidate.personal.fullName,
-        email: candidate.personal.email,
+        fullName: candidate.getPersonal().fullName,
+        email: candidate.getPersonal().email,
       },
       job: job.getDetailJob(),
       schedule: {
@@ -88,10 +88,10 @@ export class ScheduleInterviewUseCase {
     };
 
     const generated = await this.geminiSvc.generateInterviewEmail(emailPayload);
-    const subject = generated?.subject?.trim() || `Thư mời phỏng vấn - ${job.title}`;
-    const html = generated?.html || `<p>Xin chào ${candidate.personal.fullName || 'bạn'},</p><p>Chúng tôi xin mời bạn tham gia phỏng vấn cho vị trí <b>${job.title}</b>.</p>`;
+    const subject = generated?.subject?.trim() || `Thư mời phỏng vấn - ${job.getTitle()}`;
+    const html = generated?.html || `<p>Xin chào ${candidate.getPersonal().fullName || 'bạn'},</p><p>Chúng tôi xin mời bạn tham gia phỏng vấn cho vị trí <b>${job.getTitle()}</b>.</p>`;
 
-    const emailSent = await this.mailSvc.sendEmail(candidate.personal.email, subject, html, [
+    const emailSent = await this.mailSvc.sendEmail(candidate.getPersonal().email, subject, html, [
       {
         filename: invite.filename,
         content: invite.content,

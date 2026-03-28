@@ -33,6 +33,7 @@ const JobCandidates = () => {
   }, [id]);
 
   const getScoreColor = (score) => {
+    if (score == null) return "score--gray";
     if (score >= 80) return "score--high";
     if (score >= 50) return "score--medium";
     return "score--low";
@@ -92,10 +93,18 @@ const JobCandidates = () => {
                   <div
                     className={`jc-card__score ${getScoreColor(cand.matchingScore)}`}
                   >
-                    <span className="score-value">
-                      {cand.matchingScore || 0}
-                    </span>
-                    <span className="score-label">Phù hợp</span>
+                    {cand.matchingScore != null ? (
+                      <>
+                        <span className="score-value">
+                          {cand.matchingScore}
+                        </span>
+                        <span className="score-label">Phù hợp</span>
+                      </>
+                    ) : (
+                      <span className="score-value" style={{ fontSize: '0.9rem', marginBottom: 0, padding: '0 4px', textAlign: 'center' }}>
+                        Chưa phân tích
+                      </span>
+                    )}
                   </div>
                 </div>
 
