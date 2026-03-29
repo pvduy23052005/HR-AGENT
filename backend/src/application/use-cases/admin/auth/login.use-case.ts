@@ -24,7 +24,7 @@ export class LoginUseCase {
     if (!admin.verifyPassword(password)) throw new Error('Mật khẩu không chính xác!');
 
     const payload: ITokenPayload = {
-      userID: admin.getID()
+      userID: admin.getId()
     }
 
     const token: string = await this.tokService.generateToken(payload);

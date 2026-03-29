@@ -13,9 +13,8 @@ export interface IJobDetail extends IJobSummary {
 
 export interface IJobProps {
   id?: string;
-  _id?: string | { toString(): string };
   title?: string;
-  userID?: string | { toString(): string };
+  userID: string;
   description?: string;
   requirements?: string[];
   status?: boolean;

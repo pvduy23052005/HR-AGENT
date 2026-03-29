@@ -24,7 +24,7 @@ export const getCandidates = async (req: Request, res: Response): Promise<void> 
     const listSummaryProfile = candidates.map((c) => ({
       ...c.getSummaryProfile(),
       allSkills: c.getAllTechStacks(),
-      personal: c.personal, 
+      personal: c.getPersonal(),
     }));
 
     res.status(200).json({ success: true, message: 'Thành công', candidates: listSummaryProfile });
@@ -45,9 +45,9 @@ export const getCandidateDetail = async (req: Request, res: Response): Promise<v
     }
 
     const getCandidateDetailUseCase = new GetCandidateDetailUseCase(candidateRepository);
-    const candidate = await getCandidateDetailUseCase.execute(candidateID);
+    const candidateDetail = await getCandidateDetailUseCase.execute(candidateID);
 
-    if (!candidate) {
+    if (!candidateDetail) {
       res.status(404).json({
         success: false,
         message: 'Không tìm thấy ứng viên!'
@@ -59,7 +59,7 @@ export const getCandidateDetail = async (req: Request, res: Response): Promise<v
     res.status(200).json({
       success: true,
       message: 'Thành công',
-      candidate: candidate.getDetailProfile()
+      candidate: candidateDetail
     });
   } catch (error: unknown) {
     const e = error as { message?: string };

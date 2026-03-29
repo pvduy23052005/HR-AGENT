@@ -8,9 +8,9 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
     if (!doc) return null;
     const d = doc.toObject ? doc.toObject() : doc;
     return new JobEntity({
-      id: (d._id as { toString(): string }).toString(),
+      id: d._id?.toString() || '',
       title: d.title,
-      userID: d.userID?.toString(),
+      userID: d.userID?.toString() || '',
       description: d.description,
       requirements: d.requirements,
       status: d.status,

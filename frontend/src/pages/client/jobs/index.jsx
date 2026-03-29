@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import JobCard from './JobCard';
 import JobDetailModal from './JobDetailModal';
+import JobCreateModal from './JobCreateModal';
 import jobService from '../../../services/client/jobService';
 // Import CSS mình vừa tạo
 import '../../../styles/client/pages/jobList.css';
@@ -15,6 +16,7 @@ const JobList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState(FILTER_ALL);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
     fetchJobs();
@@ -66,11 +68,32 @@ const JobList = () => {
     document.body.style.overflow = 'auto';
   };
 
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  const handleOpenCreateModal = () => {
+    setIsCreateModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
   return (
     <div className="job-list-page">
       <div className="job-list__header">
-        <h1 className="job-list__title">Danh Sách Công Việc</h1>
-        <p className="job-list__subtitle">Quản lý và theo dõi các vị trí tuyển dụng chuyên nghiệp</p>
+        <div>
+          <h1 className="job-list__title">Danh Sách Công Việc</h1>
+          <p className="job-list__subtitle">Quản lý và theo dõi các vị trí tuyển dụng chuyên nghiệp</p>
+        </div>
+        <button 
+          className="job-list__btn-create" 
+          onClick={handleOpenCreateModal}
+        >
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+          Tạo Job mới
+        </button>
       </div>
 
       <div className="job-list__controls">
@@ -153,6 +176,13 @@ const JobList = () => {
         <JobDetailModal 
           job={selectedJob} 
           onClose={handleCloseModal} 
+        />
+      )}
+
+      {isCreateModalOpen && (
+        <JobCreateModal 
+          onClose={handleCloseCreateModal} 
+          onJobCreated={fetchJobs}
         />
       )}
     </div>

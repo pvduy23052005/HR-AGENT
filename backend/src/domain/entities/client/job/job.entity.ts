@@ -12,7 +12,6 @@ export class JobEntity {
 
   constructor({
     id,
-    _id,
     title = '',
     userID,
     description = '',
@@ -21,9 +20,8 @@ export class JobEntity {
     createdAt,
     updatedAt,
   }: IJobProps) {
-    const entityId = id ?? _id;
-    this.id = entityId ? entityId.toString() : '';
-    this.userID = userID ? userID.toString() : '';
+    this.id = id ?? '';
+    this.userID = userID;
     this.title = title ? title.trim() : '';
     this.description = description ? description.trim() : '';
     this.requirements = Array.isArray(requirements) ? requirements : [];
