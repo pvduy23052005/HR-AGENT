@@ -5,11 +5,8 @@ import InterviewSchedule from '../../../../infrastructure/database/models/interv
 import User from '../../../../infrastructure/database/models/user.model';
 import mongoose from 'mongoose';
 
-/**
- * [GET] /admin/report/statistics
- * Lấy thống kê hệ thống (tổng hợp từ tất cả tài khoản HR hoặc 1 HR cụ thể)
- * Query params: filterCriteria, filterDate, hrId (optional)
- */
+
+// [GET] /admin/report/statistics
 export const getSystemStatistics = async (req: Request, res: Response): Promise<void> => {
   try {
     const { filterCriteria = 'Theo tháng', filterDate = '', hrId = null } = req.query;
@@ -169,34 +166,34 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       },
       filterCriteria === 'Theo tháng'
         ? {
-            $group: {
-              _id: {
-                $min: [
-                  {
-                    $add: [
-                      {
-                        $floor: {
-                          $divide: [
-                            { $subtract: [{ $dayOfMonth: '$createdAt' }, 1] },
-                            7
-                          ]
-                        }
-                      },
-                      1
-                    ]
-                  },
-                  4
-                ]
-              },
-              interviewScheduled: { $sum: 1 }
-            }
+          $group: {
+            _id: {
+              $min: [
+                {
+                  $add: [
+                    {
+                      $floor: {
+                        $divide: [
+                          { $subtract: [{ $dayOfMonth: '$createdAt' }, 1] },
+                          7
+                        ]
+                      }
+                    },
+                    1
+                  ]
+                },
+                4
+              ]
+            },
+            interviewScheduled: { $sum: 1 }
           }
+        }
         : {
-            $group: {
-              _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
-              interviewScheduled: { $sum: 1 }
-            }
-          },
+          $group: {
+            _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+            interviewScheduled: { $sum: 1 }
+          }
+        },
       { $sort: { _id: 1 } }
     ]);
 
@@ -211,34 +208,34 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       },
       filterCriteria === 'Theo tháng'
         ? {
-            $group: {
-              _id: {
-                $min: [
-                  {
-                    $add: [
-                      {
-                        $floor: {
-                          $divide: [
-                            { $subtract: [{ $dayOfMonth: '$createdAt' }, 1] },
-                            7
-                          ]
-                        }
-                      },
-                      1
-                    ]
-                  },
-                  4
-                ]
-              },
-              completed: { $sum: 1 }
-            }
+          $group: {
+            _id: {
+              $min: [
+                {
+                  $add: [
+                    {
+                      $floor: {
+                        $divide: [
+                          { $subtract: [{ $dayOfMonth: '$createdAt' }, 1] },
+                          7
+                        ]
+                      }
+                    },
+                    1
+                  ]
+                },
+                4
+              ]
+            },
+            completed: { $sum: 1 }
           }
+        }
         : {
-            $group: {
-              _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
-              completed: { $sum: 1 }
-            }
-          },
+          $group: {
+            _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+            completed: { $sum: 1 }
+          }
+        },
       { $sort: { _id: 1 } }
     ]);
 
@@ -285,10 +282,8 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
   }
 };
 
-/**
- * [GET] /admin/report/users
- * Lấy danh sách tất cả tài khoản HR từ database
- */
+
+// [GET] /admin/report/users
 export const getAllHRs = async (req: Request, res: Response): Promise<void> => {
   try {
     // Lấy tất cả users active từ database
@@ -322,11 +317,8 @@ export const getAllHRs = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-/**
- * [GET] /admin/report/export
- * Xuất dữ liệu thống kê (PDF hoặc Excel)
- * Query params: filterCriteria, filterDate, format (pdf|excel)
- */
+
+// [GET] /admin/report/export
 export const exportStatistics = async (req: Request, res: Response): Promise<void> => {
   try {
     const { filterCriteria = 'Theo tháng', filterDate = '', format = 'pdf' } = req.query;
