@@ -1,0 +1,25 @@
+import { IPasswordService } from "../../../application/ports/services/password.service";
+import type { IUserReadRepo, IUserWriteRepo } from "../../../application/ports/repositories/user.interface";
+
+export class ResetPassNotOTPUseCase {
+  constructor(
+    private readonly userRepo: IUserReadRepo & IUserWriteRepo,
+    private readonly passwordService: IPasswordService
+  ) { }
+
+  async execute(email: string, password: string, confirmPasswrod: string): Promise<void> {
+
+    if (password != confirmPasswrod) {
+      throw new Error("Mật khẩu không khớp!");
+    }
+
+    const existUser = await this.userRepo.findUserByEmail(email);
+    if (!existUser) {
+      throw new Error("Email không tồn tại!");
+    }
+
+    const passwordedHash = await this.passwordService.hash(password);
+
+    await this.userRepo.updateUserPassword(email, passwordedHash)
+  }
+}
