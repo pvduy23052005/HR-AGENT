@@ -26,17 +26,23 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
     });
   }
 
-  public async createCandidate(data: ICandidateData): Promise<CandidateEntity | null> {
+  public async create(candidate: CandidateEntity): Promise<CandidateEntity | null> {
+    const { id, ...data } = candidate.getDetailProfile();
     const newCandidate = new Candidate(data);
     const savedCandidate = await newCandidate.save();
     return this.mapToEntity(savedCandidate);
   }
 
-  public async getCandidateById(id: string): Promise<CandidateEntity | null> {
+  public async getById(id: string): Promise<CandidateEntity | null> {
     const objectId = new mongoose.Types.ObjectId(id);
     const candidate = await Candidate.findOne({
       _id: objectId
     }).lean();
+    return this.mapToEntity(candidate);
+  }
+
+  public async findByEmail(email: string): Promise<CandidateEntity | null> {
+    const candidate = await Candidate.findOne({ "personal.email": email }).lean();
     return this.mapToEntity(candidate);
   }
 
@@ -85,13 +91,13 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
       }
     ]);
 
-    const listCandidate: ICanidateWithScore[] = 
-    candidates.filter((c) => c !== null)
-      .map(c => ({
-        id: c._id,
-        personal: c.personal,
-        matchingScore: c.matchingScore ? c.matchingScore : null
-      }))
+    const listCandidate: ICanidateWithScore[] =
+      candidates.filter((c) => c !== null)
+        .map(c => ({
+          id: c._id,
+          personal: c.personal,
+          matchingScore: c.matchingScore ? c.matchingScore : null
+        }))
 
     return listCandidate;
   }
@@ -129,15 +135,16 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
     return candidate !== null;
   }
 
-  public async updateCandidate(email: string, data: ICandidateData): Promise<CandidateEntity | null> {
-    const candidate = await Candidate.findOneAndUpdate(
-      { "personal.email": email },
+  public async update(candidate: CandidateEntity): Promise<CandidateEntity | null> {
+    const { id, ...data } = candidate.getDetailProfile();
+    const updatedCandidate = await Candidate.findByIdAndUpdate(
+      id,
       { $set: data },
       {
         new: true,
         runValidators: true
       });
-    return this.mapToEntity(candidate);
+    return this.mapToEntity(updatedCandidate);
   }
 
   public async countForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<number> {

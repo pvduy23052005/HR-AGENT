@@ -34,11 +34,11 @@ export class ScheduleInterviewUseCase {
   ) { }
 
   async execute(input: ScheduleInterviewInput): Promise<ScheduleInterviewResult> {
-    const candidate = await this.candidateRepo.getCandidateById(input.candidateID);
+    const candidate = await this.candidateRepo.getById(input.candidateID);
     if (!candidate) throw new Error('Không tìm thấy thông tin ứng viên.');
     if (!candidate.getPersonal().email) throw new Error('Ứng viên chưa có email để gửi thư mời.');
 
-    const job = await this.jobRepo.getJobById(input.jobID);
+    const job = await this.jobRepo.getById(input.jobID);
     if (!job) throw new Error('Không tìm thấy thông tin công việc (Job).');
 
     const analysis = await this.aiAnalysisRepo.getAnalysisByCandidateId(input.candidateID);

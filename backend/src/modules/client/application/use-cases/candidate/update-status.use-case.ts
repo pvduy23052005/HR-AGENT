@@ -8,7 +8,7 @@ export class UpdateStatusUseCase {
 
   async execute(candidateID: string, status: IStatus): Promise<void> {
 
-    const candidate = await this.candidateRepo.getCandidateById(candidateID);
+    const candidate = await this.candidateRepo.getById(candidateID);
 
     if (!candidate) {
       throw new Error("Ứng viên không tồn tại");

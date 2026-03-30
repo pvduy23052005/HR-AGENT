@@ -7,6 +7,7 @@ export class JobEntity {
   private description: string;
   private requirements: string[];
   private status: boolean;
+  private deleted: boolean;
   private createdAt: Date | undefined;
   private updatedAt: Date | undefined;
 
@@ -17,6 +18,7 @@ export class JobEntity {
     this.description = props.description ? props.description.trim() : '';
     this.requirements = Array.isArray(props.requirements) ? props.requirements : [];
     this.status = props.status ?? false;
+    this.deleted = props.deleted;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
   }
@@ -36,6 +38,7 @@ export class JobEntity {
       description,
       requirements,
       status: false,
+      deleted: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -44,7 +47,16 @@ export class JobEntity {
   public static restore(props: IJobProps): JobEntity {
     return new JobEntity(props);
   }
-  public updateDetails(title: string, description: string, requirements: string[]): void {
+
+  public isOwner(currentUserID: string): boolean {
+    return currentUserID === this.userID;
+  }
+
+  public delete(status: boolean): void {
+    this.deleted = status;
+  }
+
+  public update(title: string, description: string, requirements: string[]): void {
     if (!title.trim()) throw new Error('Domain Error: Thiếu tiêu đề.');
     this.title = title.trim();
     this.description = description.trim();
@@ -67,8 +79,10 @@ export class JobEntity {
       id: this.id,
       title: this.title,
       status: this.status,
+      userID: this.userID,
       description: this.description,
       requirements: [...this.requirements],
+      deleted: this.deleted,
       createdAt: this.createdAt,
     };
   }

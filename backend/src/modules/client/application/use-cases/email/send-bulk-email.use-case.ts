@@ -79,7 +79,7 @@ export class SendBulkEmailUseCase {
     let totalSent = 0;
 
     const candidatePromises = input.candidateIds.map(id =>
-      this.candidateRepo.getCandidateById(id)
+      this.candidateRepo.getById(id)
     );
     const candidates = await Promise.all(candidatePromises);
 
@@ -110,7 +110,7 @@ export class SendBulkEmailUseCase {
         const jobID = candidate.getJobID();
         if (jobID) {
           try {
-            const job = await this.jobRepo.getJobById(jobID.toString());
+            const job = await this.jobRepo.getById(jobID.toString());
             jobTitle = job?.getTitle();
           } catch (e) {
             console.warn(`Could not fetch job for candidate ${candidateId}`);

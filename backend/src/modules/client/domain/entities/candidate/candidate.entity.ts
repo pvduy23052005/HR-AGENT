@@ -10,7 +10,7 @@ import type {
 import { CandidateStatus, VerificationStatus } from './candidate.types';
 
 export class CandidateEntity {
-  private id: string | null;
+  private id?: string | null;
   private jobID: string | null;
   private jobTitle: string;
   private addedBy: string | null;
@@ -89,51 +89,6 @@ export class CandidateEntity {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
-
-  public getId(): string | null { return this.id; }
-  public setId(value: string | null): void { this.id = value; }
-
-  public getJobID(): string | null { return this.jobID; }
-  public setJobID(value: string | null): void { this.jobID = value; }
-
-  public getJobTitle(): string { return this.jobTitle; }
-  public setJobTitle(value: string): void { this.jobTitle = value; }
-
-  public getAddedBy(): string | null { return this.addedBy; }
-  public setAddedBy(value: string | null): void { this.addedBy = value; }
-
-  public getStatus(): CandidateStatus { return this.status; }
-  public setStatus(value: CandidateStatus): void { this.status = value; }
-
-  public getVerificationStatus(): VerificationStatus { return this.verificationStatus; }
-  public setVerificationStatus(value: VerificationStatus): void { this.verificationStatus = value; }
-
-  public getObjective(): string { return this.objective; }
-  public setObjective(value: string): void { this.objective = value; }
-
-  public getIsVerify(): boolean | undefined { return this.isVerify; }
-  public setIsVerify(value: boolean | undefined): void { this.isVerify = value; }
-
-  public getFullTextContent(): string { return this.fullTextContent; }
-  public setFullTextContent(value: string): void { this.fullTextContent = value; }
-
-  public getPersonal(): IPersonal { return this.personal; }
-  public setPersonal(value: IPersonal): void { this.personal = value; }
-
-  public getEducations(): IEducation[] { return this.educations; }
-  public setEducations(value: IEducation[]): void { this.educations = value; }
-
-  public getExperiences(): IExperience[] { return this.experiences; }
-  public setExperiences(value: IExperience[]): void { this.experiences = value; }
-
-  public getProjects(): IProject[] { return this.projects; }
-  public setProjects(value: IProject[]): void { this.projects = value; }
-
-  public getCreatedAt(): Date | undefined { return this.createdAt; }
-  public setCreatedAt(value: Date | undefined): void { this.createdAt = value; }
-
-  public getUpdatedAt(): Date | undefined { return this.updatedAt; }
-  public setUpdatedAt(value: Date | undefined): void { this.updatedAt = value; }
 
   getAllTechStacks(): string[] {
     const expTechs = this.experiences.flatMap((exp) => exp.techStack ?? []);
@@ -232,5 +187,119 @@ export class CandidateEntity {
   getFulltextContent(): string {
     return this.fullTextContent;
   }
+
+  public static create(props: ICandidateProps) {
+    if (!props.personal?.email) {
+      throw new Error('Domain Error: Không thể tạo ứng viên nếu thiếu Email định danh.');
+    }
+    if (!props.addedBy) {
+      throw new Error('Domain Error: Bắt buộc phải có thông tin người thêm (addedBy).');
+    }
+
+    return new CandidateEntity({
+      ...props,
+      id: null,
+      status: CandidateStatus.APPLIED,
+      verificationStatus: VerificationStatus.UNVERIFIED,
+      isVerify: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  }
+
+  public static restore(props: ICandidateProps): CandidateEntity {
+    return new CandidateEntity(props);
+  }
+
+
+  public update(data: ICandidateProps, cvLink?: unknown, avatarLink?: unknown): void {
+    if (data.objective) this.objective = data.objective;
+    if (data.fullTextContent) this.fullTextContent = data.fullTextContent;
+
+    if (data.personal) {
+      this.personal.fullName = data.personal.fullName ?? this.personal.fullName;
+      this.personal.phone = data.personal.phone ?? this.personal.phone;
+      this.personal.githubLink = data.personal.githubLink ?? this.personal.githubLink;
+    }
+
+    if (cvLink) this.personal.cvLink = cvLink as string;
+    if (avatarLink) this.personal.avatar = avatarLink as string;
+
+    if (data.educations && data.educations.length > 0) {
+      this.educations = data.educations.map((edu) => ({
+        school: edu.school ?? '',
+        degree: edu.degree ?? '',
+        major: edu.major ?? '',
+        gpa: edu.gpa ?? '',
+        period: edu.period ?? '',
+      }));
+    }
+
+    if (data.experiences && data.experiences.length > 0) {
+      this.experiences = data.experiences.map((exp) => ({
+        company: exp.company ?? '',
+        position: exp.position ?? '',
+        duration: exp.duration ?? '',
+        description: exp.description ?? '',
+        techStack: exp.techStack ?? [],
+      }));
+    }
+
+    if (data.projects && data.projects.length > 0) {
+      this.projects = data.projects.map((proj) => ({
+        title: proj.title ?? '',
+        description: proj.description ?? '',
+        techStack: proj.techStack ?? [],
+        projectLink: proj.projectLink ?? '',
+      }));
+    }
+
+    this.updatedAt = new Date();
+  }
+
+  public getId(): string | null | undefined { return this.id }
+  public setId(value: string | null): void { this.id = value; }
+
+  public getJobID(): string | null { return this.jobID; }
+  public setJobID(value: string | null): void { this.jobID = value; }
+
+  public getJobTitle(): string { return this.jobTitle; }
+  public setJobTitle(value: string): void { this.jobTitle = value; }
+
+  public getAddedBy(): string | null { return this.addedBy; }
+  public setAddedBy(value: string | null): void { this.addedBy = value; }
+
+  public getStatus(): CandidateStatus { return this.status; }
+  public setStatus(value: CandidateStatus): void { this.status = value; }
+
+  public getVerificationStatus(): VerificationStatus { return this.verificationStatus; }
+  public setVerificationStatus(value: VerificationStatus): void { this.verificationStatus = value; }
+
+  public getObjective(): string { return this.objective; }
+  public setObjective(value: string): void { this.objective = value; }
+
+  public getIsVerify(): boolean | undefined { return this.isVerify; }
+  public setIsVerify(value: boolean | undefined): void { this.isVerify = value; }
+
+  public getFullTextContent(): string { return this.fullTextContent; }
+  public setFullTextContent(value: string): void { this.fullTextContent = value; }
+
+  public getPersonal(): IPersonal { return this.personal; }
+  public setPersonal(value: IPersonal): void { this.personal = value; }
+
+  public getEducations(): IEducation[] { return this.educations; }
+  public setEducations(value: IEducation[]): void { this.educations = value; }
+
+  public getExperiences(): IExperience[] { return this.experiences; }
+  public setExperiences(value: IExperience[]): void { this.experiences = value; }
+
+  public getProjects(): IProject[] { return this.projects; }
+  public setProjects(value: IProject[]): void { this.projects = value; }
+
+  public getCreatedAt(): Date | undefined { return this.createdAt; }
+  public setCreatedAt(value: Date | undefined): void { this.createdAt = value; }
+
+  public getUpdatedAt(): Date | undefined { return this.updatedAt; }
+  public setUpdatedAt(value: Date | undefined): void { this.updatedAt = value; }
 }
 

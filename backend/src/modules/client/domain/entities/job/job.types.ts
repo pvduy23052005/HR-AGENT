@@ -9,6 +9,8 @@ export interface IJobSummary {
 export interface IJobDetail extends IJobSummary {
   description: string;
   requirements: string[];
+  userID: string;
+  deleted: boolean;
 }
 
 export interface IJobProps {
@@ -18,6 +20,7 @@ export interface IJobProps {
   description?: string;
   requirements?: string[];
   status?: boolean;
+  deleted: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }

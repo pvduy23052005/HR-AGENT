@@ -5,7 +5,7 @@ export class GetCandidateDetailUseCase {
   constructor(private readonly candidateRepo: ICandidateReadRepo) { }
 
   async execute(candidateID: string): Promise<ICandidateDetailProfile | null> {
-    const candidate = await this.candidateRepo.getCandidateById(candidateID);
+    const candidate = await this.candidateRepo.getById(candidateID);
 
     if (!candidate) {
       throw new Error("Ứng viên không tồn tại");

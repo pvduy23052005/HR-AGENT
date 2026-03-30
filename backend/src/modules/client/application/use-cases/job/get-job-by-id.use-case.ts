@@ -5,10 +5,10 @@ export class GetJobByIdUseCase {
   constructor(private readonly jobRepo: IJobReadRepo) { }
 
   async execute(jobID: string): Promise<IJobDetail | null> {
-    const job = await this.jobRepo.getJobById(jobID);
+    const job = await this.jobRepo.getById(jobID);
 
     if (!job) return null;
-    
+
     return job.getDetailJob();
   }
 }

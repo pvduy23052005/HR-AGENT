@@ -5,7 +5,7 @@ import { ITokenPayload } from "../../application/ports/services/token.service";
 
 export class TokenService implements ITokenService {
   public async generateToken(payload: ITokenPayload): Promise<string> {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "1d" });
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "5d" });
   }
 
   public async verifyToken(token: string): Promise<any> {

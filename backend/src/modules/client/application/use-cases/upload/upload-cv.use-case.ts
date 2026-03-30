@@ -1,14 +1,12 @@
-import type { ICandidateWriteRepo, ICandidateData, ICandidateReadRepo } from '../../../application/ports/repositories/candidate.interface';
+import type { ICandidateWriteRepo, ICandidateReadRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
 import type { IUploadService } from '../../../application/ports/services/upload.service';
 import type { IAIService } from '../../../application/ports/services/ai.service';
-import type { CandidateEntity } from '../../../domain/entities/candidate/candidate.entity';
+import { CandidateEntity } from '../../../domain/entities/candidate/candidate.entity';
+import type { ICandidateDetailProfile, ICandidateProps } from '../../../domain/entities/candidate';
 
-export interface IUploadCVResult {
-  cvLink: unknown;
-  avatarLink?: unknown;
-  newCandidate: CandidateEntity | null;
-  dataCV: ICandidateData;
+export interface IOutputDTO {
+  candidate: ICandidateDetailProfile
 }
 
 export class UploadCVUseCase {
@@ -24,13 +22,12 @@ export class UploadCVUseCase {
     jobID: string,
     cvFile: Express.Multer.File,
     avatarFile?: Express.Multer.File,
-  ): Promise<IUploadCVResult> {
+  ): Promise<IOutputDTO> {
     if (!cvFile) throw new Error('No file uploaded');
 
-    const job = await this.jobRepo.getJobById(jobID);
+    const job = await this.jobRepo.getById(jobID);
     if (!job) throw new Error('Công việc không đúng');
 
-    // Upload both files
     const filesToUpload = [cvFile];
     if (avatarFile) {
       filesToUpload.push(avatarFile);
@@ -42,42 +39,45 @@ export class UploadCVUseCase {
     const cvLink = fileUrls[0];
     const avatarLink = avatarFile && fileUrls[1] ? fileUrls[1] : undefined;
 
-    let dataCV: ICandidateData = {
-      jobID,
-      addedBy: userID,
-      personal: { cvLink, ...(avatarLink ? { avatar: avatarLink } : {}) },
-    };
+    let extractedData: any = {};
 
     if (cvFile.mimetype === 'application/pdf' || cvFile.mimetype.startsWith('image/')) {
       console.log('Đang ném file cho Gemini làm OCR...');
-      const extractedData = await this.geminiSvc.extractCV(cvFile.buffer, cvFile.mimetype);
-      if (extractedData) {
-        const personal = (extractedData['personal'] as Record<string, unknown>) ?? {};
-        dataCV = {
-          ...extractedData,
-          jobID,
-          addedBy: userID,
-          personal: { ...personal, cvLink, ...(avatarLink ? { avatar: avatarLink } : {}) },
-        };
-      }
+      extractedData = await this.geminiSvc.extractCV(cvFile.buffer, cvFile.mimetype);
     }
 
-    const personalData = dataCV.personal as Record<string, any>;
+    const personalData = extractedData.personal as Record<string, any>;
     const email = personalData?.email;
 
     if (!email) {
       throw new Error('không thể trích xuất được Email từ CV ');
     }
 
-    const isExist = await this.candidateRepo.checkExistsCandidate(email);
-    let newCandidate: CandidateEntity | null;
+    let newCandidate: CandidateEntity | null = null;
+    let candidate = await this.candidateRepo.findByEmail(email);
 
-    if (isExist) {
-      newCandidate = await this.candidateRepo.updateCandidate(email, dataCV);
+    if (candidate) {
+      candidate.update(extractedData, cvLink, avatarLink);
+      newCandidate = await this.candidateRepo.update(candidate);
     } else {
-      newCandidate = await this.candidateRepo.createCandidate(dataCV);
+      const candidateProps: ICandidateProps = {
+        ...extractedData,
+        addedBy: userID,
+        jobID: jobID,
+        personal: {
+          ...extractedData.personal,
+          cvLink: cvLink,
+          avatar: avatarLink
+        }
+      };
+      const candidate = CandidateEntity.create(candidateProps);
+      newCandidate = await this.candidateRepo.create(candidate);
     }
 
-    return { cvLink, avatarLink, newCandidate, dataCV };
+    if (!newCandidate) throw new Error('Lưu hồ sơ ứng viên thất bại!');
+
+    return {
+      candidate: newCandidate.getDetailProfile()
+    };
   }
 }

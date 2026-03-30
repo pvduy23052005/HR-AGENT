@@ -25,11 +25,13 @@ export interface ICanidateWithScore {
 }
 
 export interface ICandidateReadRepo {
-  getCandidateById(id: string): Promise<CandidateEntity | null>;
+  getById(id: string): Promise<CandidateEntity | null>;
 
   getCandidates(userID: string): Promise<CandidateEntity[]>;
 
   checkExistsCandidate(email: string): Promise<boolean>;
+
+  findByEmail(email: string): Promise<CandidateEntity | null>;
 
   countForStatistics(userId: string, startDate?: Date, endDate?: Date, status?: string): Promise<number>;
 
@@ -39,9 +41,9 @@ export interface ICandidateReadRepo {
 }
 
 export interface ICandidateWriteRepo {
-  createCandidate(data: ICandidateData): Promise<CandidateEntity | null>;
+  create(candidate: CandidateEntity): Promise<CandidateEntity | null>;
 
   updateStatus(candidateID: string, status: IStatus): Promise<void>;
 
-  updateCandidate(email: string, data: ICandidateData): Promise<CandidateEntity | null>;
+  update(candidate: CandidateEntity): Promise<CandidateEntity | null>;
 }

@@ -6,7 +6,7 @@ export class GetAllJobUseCase {
 
   async execute(userID: string): Promise<IJobSummary[]> {
 
-    const jobs = await this.jobRepo.getAllJob(userID);
+    const jobs = await this.jobRepo.getAll(userID);
 
     return jobs.map(job => job.getSummary());
   }

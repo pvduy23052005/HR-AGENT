@@ -19,14 +19,14 @@ export const uploadCV = async (req: Request, res: Response): Promise<void> => {
     const avatarFile = files?.avatar?.[0];
     const { jobID } = req.body as { jobID: string };
 
-    const { cvLink, avatarLink, newCandidate, dataCV } = await uploadCVUseCase.execute(
+    const { candidate } = await uploadCVUseCase.execute(
       userID,
       jobID,
       cvFile,
       avatarFile,
     );
 
-    res.status(200).json({ message: 'CV processed successfully', cvLink, avatarLink, newCandidate, dataCV });
+    res.status(200).json({ message: 'CV processed successfully', candidate });
   } catch (error: unknown) {
     const e = error as { message?: string };
     const statusCode = e.message?.includes('Vui lòng') ? 400 : 500;

@@ -16,7 +16,7 @@ export class ConfirmVerifyUseCase {
 
     await this.verificationRepo.updateVerificationStatus(candidateID, status === 'verified');
 
-    const candidate = await this.candidateReadRepo.getCandidateById(candidateID);
+    const candidate = await this.candidateReadRepo.getById(candidateID);
     if (!candidate) {
       throw new Error('Ứng viên không tìm thấy');
     }

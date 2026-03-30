@@ -9,15 +9,13 @@ export interface IJobData {
 }
 
 export interface IJobReadRepo {
-  getAllJob(userID: string): Promise<(JobEntity[])>;
+  getAll(userID: string): Promise<(JobEntity[])>;
 
-  getJobById(id: string): Promise<JobEntity | null>;
+  getById(id: string): Promise<JobEntity | null>;
 }
 
 export interface IJobWriteRepo {
-  createJob(data: IJobData): Promise<JobEntity | null>;
+  create(job: JobEntity): Promise<JobEntity | null>;
 
-  updateJobById(id: string, data: Partial<IJobData>): Promise<JobEntity | null>;
-
-  deleteJobById(id: string): Promise<JobEntity | null>;
+  update(job: JobEntity): Promise<JobEntity | null>;
 }

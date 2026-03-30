@@ -28,10 +28,10 @@ export class AnalysisUseCase {
       };
     }
 
-    const candidate = await this.candidateRepo.getCandidateById(candidateID);
+    const candidate = await this.candidateRepo.getById(candidateID);
     if (!candidate) throw new Error('Không tìm thấy thông tin ứng viên.');
 
-    const job = await this.jobRepo.getJobById(jobID);
+    const job = await this.jobRepo.getById(jobID);
     if (!job) throw new Error('Không tìm thấy thông tin công việc (Job).');
 
     const analysisResult = await this.geminiService.analyzeCandidateWithJob(

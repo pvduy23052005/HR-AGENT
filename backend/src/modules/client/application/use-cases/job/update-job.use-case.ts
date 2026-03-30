@@ -9,12 +9,20 @@ export class UpdateJobUseCase {
     userID: string,
     jobData: Partial<IJobData>,
   ): Promise<IJobSummary | null> {
-    const job = await this.jobRepo.getJobById(jobId);
+    const job = await this.jobRepo.getById(jobId);
     if (!job) throw new Error('Công việc không tồn tại!');
 
-    if (job.getUserID() !== userID.toString()) throw new Error('Bạn không có quyền chỉnh sửa công việc này!');
+    const isOwner = job.isOwner(userID);
 
-    const jobUpdated = await this.jobRepo.updateJobById(jobId, jobData);
+    if (!isOwner) throw new Error("Bạn không có quyền!");
+
+    job.update(
+      jobData.title ?? job.getTitle(),
+      jobData.description ?? job.getDescription(),
+      jobData.requirements ?? job.getRequirements()
+    )
+
+    const jobUpdated = await this.jobRepo.update(job);
 
     if (!jobUpdated) throw new Error("Cập nhật thất bại!");
 
