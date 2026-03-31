@@ -1,11 +1,10 @@
 import User from '../../../client/infrastructure/database/models/user.model';
-import { UserEntity, IAdminUserProps } from '../../domain/entities/user.entity';
+import { UserEntity } from '../../domain/entities/user.entity';
 import { IReadUserRepository, IWriteUserRepository } from '../../application/ports/user.interface';
-import type { ICreateUserData } from '../../application/ports/user.interface';
 
 const mapToEntity = (doc: any | null): UserEntity | null => {
   if (!doc) return null;
-  return new UserEntity({
+  return UserEntity.restore({
     id: doc._id.toString(),
     fullName: doc.fullName,
     email: doc.email,
@@ -35,19 +34,16 @@ export class UserRepository implements IReadUserRepository, IWriteUserRepository
     return docs.map((doc) => mapToEntity(doc));
   }
 
-  async createUser(data: ICreateUserData): Promise<UserEntity | null> {
+  async create(user: UserEntity): Promise<UserEntity | null> {
+    const data = user.getDetail();
     const newUser = new User(data);
     const savedDoc = await newUser.save();
     return mapToEntity(savedDoc);
   }
 
-  async updateStatus(id: string, status: string): Promise<UserEntity | null> {
-    const updatedDoc = await User.findOneAndUpdate({ _id: id }, { status }, { new: true });
-    return mapToEntity(updatedDoc);
-  }
-
-  async updateUser(id: string, data: Partial<IAdminUserProps>): Promise<UserEntity | null> {
-    const updatedDoc = await User.findOneAndUpdate({ _id: id, deleted: false }, data, { new: true }).lean();
+  async update(user: UserEntity): Promise<UserEntity | null> {
+    const data = user.getDetail();
+    const updatedDoc = await User.findOneAndUpdate({ _id: user.getId(), deleted: false }, data, { new: true }).lean();
     return mapToEntity(updatedDoc);
   }
 }

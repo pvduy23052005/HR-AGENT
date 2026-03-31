@@ -1,12 +1,4 @@
-import { UserEntity, IAdminUserProps } from '../../domain/entities/user.entity';
-
-export interface ICreateUserData {
-  fullName: string;
-  email: string;
-  password: string;
-  avatar?: string;
-  status?: string;
-}
+import { UserEntity } from '../../domain/entities/user.entity';
 
 export interface IReadUserRepository {
   findByEmail(email: string): Promise<UserEntity | null>;
@@ -15,8 +7,6 @@ export interface IReadUserRepository {
 }
 
 export interface IWriteUserRepository {
-  createUser(data: ICreateUserData): Promise<UserEntity | null>;
-  updateStatus(id: string, status: string): Promise<UserEntity | null>;
-  updateUser(id: string, data: Partial<IAdminUserProps>): Promise<UserEntity | null>;
+  create(user: UserEntity): Promise<UserEntity | null>;
+  update(user: UserEntity): Promise<UserEntity | null>;
 }
-

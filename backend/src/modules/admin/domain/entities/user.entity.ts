@@ -1,29 +1,9 @@
 import type { IPasswordService } from '../../../client/application/ports/services/password.service';
-
-export interface IAdminUserProfile {
-  id: string;
-  fullName: string;
-  email: string;
-  avatar: string;
-  status: string;
-  createdAt: Date | undefined;
-}
-
-export interface IAdminUserProps {
-  id?: string;
-  fullName: string;
-  email: string;
-  password: string;
-  avatar?: string;
-  status?: string;
-  deleted?: boolean;
-  deletedAt?: Date | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import type { IAdminUserProfile, IAdminUserProps } from './user.type';
+export type { IAdminUserProfile, IAdminUserProps };
 
 export class UserEntity {
-  private id: string;
+  private id?: string;
   private fullName: string;
   private email: string;
   private password: string;
@@ -34,7 +14,7 @@ export class UserEntity {
   private createdAt: Date | undefined;
   private updatedAt: Date | undefined;
 
-  constructor({
+  private constructor({
     id,
     fullName,
     email,
@@ -58,35 +38,56 @@ export class UserEntity {
     this.updatedAt = updatedAt;
   }
 
-  public getId(): string { return this.id; }
-  public setId(value: string): void { this.id = value; }
+  public static create(data: IAdminUserProps): UserEntity {
+    if (!data.email || !data.email.trim()) {
+      throw new Error('Domain Error: Email không hợp lệ.');
+    }
+    if (!data.fullName || !data.fullName.trim()) {
+      throw new Error('Domain Error: Tên không hợp lệ.');
+    }
 
-  public getFullName(): string { return this.fullName; }
-  public setFullName(value: string): void { this.fullName = value; }
+    return new UserEntity({
+      ...data,
+      status: data.status || 'active',
+      deleted: false,
+      deletedAt: null,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+  }
 
-  public getEmail(): string { return this.email; }
-  public setEmail(value: string): void { this.email = value; }
+  public static restore(data: IAdminUserProps): UserEntity {
+    return new UserEntity(data);
+  }
 
-  public getPassword(): string { return this.password; }
-  public setPassword(value: string): void { this.password = value; }
+  public getDetail(): IAdminUserProps {
+    return {
+      id: this.id,
+      fullName: this.fullName,
+      email: this.email,
+      password: this.password,
+      avatar: this.avatar,
+      status: this.status,
+      deleted: this.deleted,
+      deletedAt: this.deletedAt,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    };
+  }
 
-  public getAvatar(): string { return this.avatar; }
-  public setAvatar(value: string): void { this.avatar = value; }
+  public update(data: Partial<IAdminUserProps>): void {
+    if (data.fullName) this.fullName = data.fullName;
+    if (data.email) this.email = data.email;
+    if (data.password) this.password = data.password;
+    if (data.avatar !== undefined) this.avatar = data.avatar;
+    if (data.status) this.status = data.status;
+    if (data.deleted !== undefined) this.deleted = data.deleted;
+    if (data.deletedAt !== undefined) this.deletedAt = data.deletedAt;
 
-  public getStatus(): string { return this.status; }
-  public setStatus(value: string): void { this.status = value; }
+    this.updatedAt = new Date();
+  }
 
-  public getDeleted(): boolean { return this.deleted; }
-  public setDeleted(value: boolean): void { this.deleted = value; }
-
-  public getDeletedAt(): Date | null { return this.deletedAt; }
-  public setDeletedAt(value: Date | null): void { this.deletedAt = value; }
-
-  public getCreatedAt(): Date | undefined { return this.createdAt; }
-  public setCreatedAt(value: Date | undefined): void { this.createdAt = value; }
-
-  public getUpdatedAt(): Date | undefined { return this.updatedAt; }
-  public setUpdatedAt(value: Date | undefined): void { this.updatedAt = value; }
+  public getId(): string | undefined { return this.id; }
 
   isActive(): boolean {
     return this.status === 'active' && this.deleted === false;

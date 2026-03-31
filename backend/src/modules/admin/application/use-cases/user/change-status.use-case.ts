@@ -7,7 +7,9 @@ export class ChangeStatusUseCase {
   async execute(id: string, status: string): Promise<IAdminUserProfile> {
     const user = await this.userRepo.findById(id);
     if (!user) throw new Error('Người dùng không tồn tại!');
-    const updatedUser = await this.userRepo.updateStatus(id, status);
+
+    user.update({ status });
+    const updatedUser = await this.userRepo.update(user);
     return updatedUser!.getProfile();
   }
 }

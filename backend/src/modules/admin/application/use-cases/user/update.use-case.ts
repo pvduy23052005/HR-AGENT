@@ -18,28 +18,17 @@ export class UpdateUserUseCase {
   async execute(id: string, data: IUpdateUserInput): Promise<IAdminUserProfile> {
     const user = await this.userRepo.findById(id);
     if (!user) {
-      const error = new Error('Người dùng không tồn tại!') as Error & { statusCode: number };
-      error.statusCode = 404;
-      throw error;
+      throw new Error('Người dùng không tồn tại!');
     }
 
-    if (data.email && data.email !== user.getEmail()) {
-      const emailExist = await this.userRepo.findByEmail(data.email);
-      if (emailExist) {
-        const error = new Error('Email này đã tồn tại trong hệ thống!') as Error & { statusCode: number };
-        error.statusCode = 400;
-        throw error;
-      }
+    const updateData: any = { ...data };
+    if (data.password) {
+      updateData.password = await this.passSvc.hash(data.password);
     }
 
-    // Hash password nếu có thay đổi
-    const updateData: Record<string, string> = {};
-    if (data.fullName) updateData.fullName = data.fullName;
-    if (data.email) updateData.email = data.email;
-    if (data.status) updateData.status = data.status;
-    if (data.password) updateData.password = await this.passSvc.hash(data.password);
+    user.update(updateData);
 
-    const updatedUser = await this.userRepo.updateUser(id, updateData);
+    const updatedUser = await this.userRepo.update(user);
     return updatedUser!.getProfile();
   }
 }

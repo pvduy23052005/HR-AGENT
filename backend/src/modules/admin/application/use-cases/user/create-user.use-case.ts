@@ -1,3 +1,4 @@
+import { UserEntity } from '../../../domain/entities/user.entity';
 import { IReadUserRepository, IWriteUserRepository } from '../../ports/user.interface';
 import type { IPasswordService } from '../../../../client/application/ports/services/password.service';
 import type { IAdminUserProfile } from '../../../domain/entities/user.entity';
@@ -20,7 +21,9 @@ export class CreateUserUseCase {
     if (emailExist) throw new Error('Email này đã tồn tại trong hệ thống!');
 
     const hashedPassword = await this.passSvc.hash(password);
-    const newUser = await this.userRepo.createUser({ fullName, email, password: hashedPassword, status: 'active' });
+    const userEntity = UserEntity.create({ fullName, email, password: hashedPassword });
+    const newUser = await this.userRepo.create(userEntity);
+    
     return newUser!.getProfile();
   }
 }
