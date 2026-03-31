@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { VerificationEntity } from '../../../domain/entities/verifycation/verifycation.entity';
+import { VerificationEntity } from '../../../domain/entities/verifycation/verification.entity';
 import type { IVerificationRepository } from '../../../application/ports/repositories/verification.interface';
 import Verification from '../models/verification.model';
 import Candidate from '../models/candidate.model';
@@ -7,7 +7,7 @@ import Candidate from '../models/candidate.model';
 export class VerificationRepository implements IVerificationRepository {
   private mapToEntity(doc: any | null): VerificationEntity | null {
     if (!doc) return null;
-    return new VerificationEntity({
+    return VerificationEntity.restore({
       id: doc._id?.toString(),
       candidateId: doc.candidateId?.toString(),
       isVerified: doc.isVerified,
@@ -24,9 +24,9 @@ export class VerificationRepository implements IVerificationRepository {
     });
   }
 
-  public async createVerification(candidateID: string, data: any): Promise<VerificationEntity | null> {
-
-    const objectId = new mongoose.Types.ObjectId(candidateID);
+  public async create(verification: VerificationEntity): Promise<VerificationEntity | null> {
+    const { id, candidateId, ...data } = verification.getDetail();
+    const objectId = new mongoose.Types.ObjectId(candidateId);
 
     const saved = await Verification.findOneAndUpdate(
       { candidateId: objectId },
@@ -37,8 +37,8 @@ export class VerificationRepository implements IVerificationRepository {
     return this.mapToEntity(saved);
   }
 
-  public async updateIsverfiy(candidateID: string, isVerify: boolean): Promise<void> {
-    const objectId = new mongoose.Types.ObjectId(candidateID);
+  public async updateIsVerify(candidateId: string, isVerify: boolean): Promise<void> {
+    const objectId = new mongoose.Types.ObjectId(candidateId);
     await Candidate.updateOne({
       _id: objectId
     }, {
@@ -46,15 +46,15 @@ export class VerificationRepository implements IVerificationRepository {
     });
   }
 
-  public async getVerificationByCandidateId(candidateID: string): Promise<VerificationEntity | null> {
-    const objectId = new mongoose.Types.ObjectId(candidateID);
+  public async getByCandidateId(candidateId: string): Promise<VerificationEntity | null> {
+    const objectId = new mongoose.Types.ObjectId(candidateId);
     const doc = await Verification.findOne({ candidateId: objectId }).lean();
     return this.mapToEntity(doc);
   }
 
-  public async updateVerificationStatus(candidateID: string, isVerified: boolean): Promise<void> {
+  public async updateVerificationStatus(candidateId: string, isVerified: boolean): Promise<void> {
     try {
-      const objectId = new mongoose.Types.ObjectId(candidateID);
+      const objectId = new mongoose.Types.ObjectId(candidateId);
       await Verification.updateOne(
         { candidateId: objectId },
         { isVerified: isVerified }

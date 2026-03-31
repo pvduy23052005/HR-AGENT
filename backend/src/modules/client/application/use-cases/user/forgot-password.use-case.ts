@@ -3,6 +3,7 @@ import { htmlEmailOtp } from '../../../../../shared/templates/email/otp';
 import type { IUserReadRepo } from '../../../application/ports/repositories/user.interface';
 import type { IOTPReadRepo, IOTPWriteRepo } from '../../../application/ports/repositories/otp.interface';
 import type { IMailService } from '../../../application/ports/services/mail.service';
+import { OTPEntity } from '../../../domain/entities/otp/otp.entity';
 
 export class ForgotPasswordUseCase {
   constructor(
@@ -27,11 +28,14 @@ export class ForgotPasswordUseCase {
       }
     }
 
-    const otp = randomNumber(6);
-    const record = await this.otpRepo.createOTP(email, otp);
+    const otpCode = randomNumber(6);
+    const otpEntity = OTPEntity.create({ email, otp: otpCode, expiresInMinutes: 5 });
+    const savedOtp = await this.otpRepo.create(otpEntity);
+
+    if (!savedOtp) throw new Error('Không thể tạo mã OTP!');
 
     const subject = 'Mã OTP lấy lại mật khẩu';
-    const content = htmlEmailOtp(record!.getOtp());
+    const content = htmlEmailOtp(savedOtp.getOtp());
     await this.mailService.sendEmail(email, subject, content);
 
     return { email };

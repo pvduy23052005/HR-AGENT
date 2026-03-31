@@ -1,4 +1,4 @@
-import { VerificationEntity } from "../../../domain/entities/verifycation";
+import { VerificationEntity, IVerificationProps } from "../../../domain/entities/verifycation";
 import { IVerificationRepository } from "../../../application/ports/repositories/verification.interface";
 
 export class VerifyCandidateUseCase {
@@ -6,15 +6,19 @@ export class VerifyCandidateUseCase {
     private readonly candidateRepo: IVerificationRepository,
   ) { }
 
-  async execute(candidateID: string, dataVerification: any): Promise<VerificationEntity | null> {
+  async execute(candidateID: string, dataVerification: any): Promise<IVerificationProps> {
+    const verification = VerificationEntity.create({
+      ...dataVerification,
+      candidateId: candidateID,
+    });
 
     const [result] = await Promise.all([
-      this.candidateRepo.createVerification(candidateID, dataVerification),
-      this.candidateRepo.updateIsverfiy(candidateID, true)
+      this.candidateRepo.create(verification),
+      this.candidateRepo.updateIsVerify(candidateID, true)
     ]);
 
-    if (!result) throw new Error("Kiểm chức lỗi vui lòng thử lại!");
+    if (!result) throw new Error("Kiểm chứng lỗi vui lòng thử lại!");
 
-    return result;
+    return result.getDetail();
   }
 }

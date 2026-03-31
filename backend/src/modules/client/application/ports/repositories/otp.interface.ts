@@ -9,7 +9,7 @@ export interface IOTPReadRepo {
 }
 
 export interface IOTPWriteRepo {
-  createOTP(email: string, otp: string): Promise<OTPEntity | null>;
+  create(otp: OTPEntity): Promise<OTPEntity | null>;
 
   deleteOTP(email: string): Promise<{ deletedCount?: number }>;
 }

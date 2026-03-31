@@ -1,11 +1,11 @@
-import type { VerificationEntity } from '../../../domain/entities/verifycation/verifycation.entity';
+import type { VerificationEntity } from '../../../domain/entities/verifycation/verification.entity';
 
 export interface IVerificationRepository {
-  createVerification(candidateID: string, data: any): Promise<VerificationEntity | null>;
+  create(verification: VerificationEntity): Promise<VerificationEntity | null>;
 
-  updateIsverfiy(candidateID: string, isVerify: boolean): Promise<void>;
+  updateIsVerify(candidateId: string, isVerify: boolean): Promise<void>;
 
-  updateVerificationStatus(candidateID: string, isVerified: boolean): Promise<void>;
+  updateVerificationStatus(candidateId: string, isVerified: boolean): Promise<void>;
 
-  getVerificationByCandidateId(candidateID: string): Promise<VerificationEntity | null>;
+  getByCandidateId(candidateId: string): Promise<VerificationEntity | null>;
 }

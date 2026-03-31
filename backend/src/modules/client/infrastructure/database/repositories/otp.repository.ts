@@ -5,7 +5,7 @@ import type { IOTPReadRepo, IOTPWriteRepo } from '../../../application/ports/rep
 export class OtpRepository implements IOTPReadRepo, IOTPWriteRepo {
   private mapToEntity(doc: any | null): OTPEntity | null {
     if (!doc) return null;
-    return new OTPEntity({
+    return OTPEntity.restore({
       id: doc._id.toString(),
       email: doc.email,
       otp: doc.otp,
@@ -20,8 +20,9 @@ export class OtpRepository implements IOTPReadRepo, IOTPWriteRepo {
     return this.mapToEntity(doc);
   }
 
-  public async createOTP(email: string, otp: string): Promise<OTPEntity | null> {
-    const record = new OTP({ email, otp });
+  public async create(otp: OTPEntity): Promise<OTPEntity | null> {
+    const { id, ...data } = otp.getDetail();
+    const record = new OTP(data);
     const savedDoc = await record.save();
     return this.mapToEntity(savedDoc);
   }

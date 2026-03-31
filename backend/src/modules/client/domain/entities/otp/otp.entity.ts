@@ -1,7 +1,7 @@
 import type { IOTPProps } from './otp.types';
 
 export class OTPEntity {
-  private id: string | undefined;
+  private id?: string | undefined;
   private email: string;
   private otp: string;
   private expireAt: Date | string;
@@ -15,6 +15,42 @@ export class OTPEntity {
     this.expireAt = expireAt;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  public static create(data: { email: string; otp: string; expiresInMinutes?: number }): OTPEntity {
+    if (!data.email || !data.email.trim()) {
+      throw new Error('Domain Error: Không thể tạo OTP vì thiếu Email.');
+    }
+    if (!data.otp || !data.otp.trim()) {
+      throw new Error('Domain Error: Không thể tạo OTP vì thiếu mã xác nhận.');
+    }
+
+    const minutes = data.expiresInMinutes || 1;
+    const expireTime = new Date();
+    expireTime.setMinutes(expireTime.getMinutes() + minutes);
+
+    return new OTPEntity({
+      email: data.email.trim().toLowerCase(),
+      otp: data.otp.trim(),
+      expireAt: expireTime,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
+
+  public static restore(data: IOTPProps): OTPEntity {
+    return new OTPEntity(data);
+  }
+
+  public getDetail(): IOTPProps {
+    return {
+      id: this.id,
+      email: this.email,
+      otp: this.otp,
+      expireAt: this.expireAt,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 
   public getId(): string | undefined { return this.id; }

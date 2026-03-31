@@ -1,20 +1,18 @@
-import { VerificationEntity } from '../../../domain/entities/verifycation';
+import { IVerificationProps } from '../../../domain/entities/verifycation';
 import { IVerificationRepository } from '../../../application/ports/repositories/verification.interface';
 
 export class GetVerificationUseCase {
   constructor(private readonly candidateRepo: IVerificationRepository) { }
 
-  async execute(candidateID: string): Promise<VerificationEntity | null> {
-
+  async execute(candidateID: string): Promise<IVerificationProps | null> {
     if (!candidateID) throw new Error("Thiếu candidateID!");
 
-    const verifyCandiate = await this.candidateRepo.getVerificationByCandidateId(candidateID);
+    const verifyCandidate = await this.candidateRepo.getByCandidateId(candidateID);
 
-
-    if (!verifyCandiate) {
-      throw new Error("Not found!");
+    if (!verifyCandidate) {
+      throw new Error("Không tìm thấy dữ liệu kiểm chứng!");
     }
 
-    return verifyCandiate;
+    return verifyCandidate.getDetail();
   }
 }
