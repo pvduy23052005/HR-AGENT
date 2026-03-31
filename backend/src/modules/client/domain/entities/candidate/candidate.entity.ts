@@ -211,7 +211,6 @@ export class CandidateEntity {
     return new CandidateEntity(props);
   }
 
-
   public update(data: ICandidateProps, cvLink?: unknown, avatarLink?: unknown): void {
     if (data.objective) this.objective = data.objective;
     if (data.fullTextContent) this.fullTextContent = data.fullTextContent;

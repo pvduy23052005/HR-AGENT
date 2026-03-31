@@ -4,9 +4,9 @@ import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../application
 import type { IAIService } from '../../../application/ports/services/ai.service';
 import type { IAnalysisDetail } from '../../../domain/entities/analysis';
 import { CandidateStatus } from '../../../domain/entities/candidate';
+import { AnalysisEntity } from '../../../domain/entities/analysis';
 
 export interface IAnalysisResult {
-  message: string;
   data: IAnalysisDetail;
 }
 
@@ -23,7 +23,6 @@ export class AnalysisUseCase {
     const existingAnalysis = await this.aiAnalyzeRepo.getAnalysisByCandidateIdAndJobId(candidateID, jobID);
     if (existingAnalysis) {
       return {
-        message: 'Hồ sơ ứng viên này đã được phân tích.',
         data: existingAnalysis.getDetail(),
       };
     }
@@ -40,20 +39,21 @@ export class AnalysisUseCase {
     );
     if (!analysisResult) throw new Error('Lỗi khi gọi AI phân tích dữ liệu.');
 
-    const savedAnalysis = await this.aiAnalyzeRepo.createAiAnalysis({
+    const analysis = AnalysisEntity.create({
       jobID,
       candidateID,
       summary: analysisResult['summary'] as string | undefined,
       matchingScore: analysisResult['matchingScore'] as number | undefined,
       redFlags: analysisResult['redFlags'] as string[] | undefined,
-      suggestedQuestions: analysisResult['suggestedQuestions'] as string[] | undefined,
+      suggestedQuestions: analysisResult['suggestedQuestions'] as string[] | undefined
     });
+
+    const savedAnalysis = await this.aiAnalyzeRepo.create(analysis);
 
     if (!savedAnalysis) throw new Error('Lỗi khi lưu kết quả phân tích.');
 
     await this.candidateRepo.updateStatus(candidateID, { status: CandidateStatus.SCREENING });
     return {
-      message: 'Phân tích AI hoàn tất thành công.',
       data: savedAnalysis.getDetail(),
     };
   }

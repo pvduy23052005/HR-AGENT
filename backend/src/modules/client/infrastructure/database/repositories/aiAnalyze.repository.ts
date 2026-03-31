@@ -1,7 +1,6 @@
 import AiAnalysis from '../models/AiAnalysis.model';
 import { AnalysisEntity } from '../../../domain/entities/analysis';
 import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../application/ports/repositories/analysis.interface';
-import type { IAnalysisData } from '../../../application/ports/repositories/analysis.interface';
 
 export class AiAnalysisRepository implements IAnalysisReadRepo, IAnalysisWriteRepo {
   private mapToEntity(doc: any | null): AnalysisEntity | null {
@@ -21,7 +20,8 @@ export class AiAnalysisRepository implements IAnalysisReadRepo, IAnalysisWriteRe
     });
   }
 
-  public async createAiAnalysis(data: IAnalysisData): Promise<AnalysisEntity | null> {
+  public async create(analysis: AnalysisEntity): Promise<AnalysisEntity | null> {
+    const { id, ...data } = analysis.getDetail();
     const newAnalysis = new AiAnalysis(data);
     const savedAnalysis = await newAnalysis.save();
     return this.mapToEntity(savedAnalysis);

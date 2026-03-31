@@ -21,13 +21,7 @@ export const getCandidates = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    const listSummaryProfile = candidates.map((c) => ({
-      ...c.getSummaryProfile(),
-      allSkills: c.getAllTechStacks(),
-      personal: c.getPersonal(),
-    }));
-
-    res.status(200).json({ success: true, message: 'Thành công', candidates: listSummaryProfile });
+    res.status(200).json({ success: true, message: 'Thành công', candidates: candidates });
   } catch (error: unknown) {
     const e = error as { message?: string };
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi lấy danh sách ứng viên!' });

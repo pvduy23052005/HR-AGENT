@@ -22,8 +22,12 @@ export const analyzeCandidate = async (req: Request, res: Response): Promise<voi
       geminiService,
     );
     const result = await analyzeUseCase.execute(candidateID, jobID);
-    
-    res.status(200).json({ success: true, aiAnalyze: result.data, message: result.message });
+
+    res.status(200).json({
+      success: true,
+      aiAnalyze: result.data,
+      message: 'Phân tích AI thành công!'
+    });
   } catch (error: unknown) {
     const e = error as { message?: string };
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi hệ thống khi phân tích AI.' });

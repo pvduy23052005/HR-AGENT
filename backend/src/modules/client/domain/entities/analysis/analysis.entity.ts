@@ -1,7 +1,7 @@
 import type { IAnalysisDetail, IAnalysisProps } from './analysis.types';
 
 export class AnalysisEntity {
-  private id: string;
+  private id?: string;
   private jobID: string;
   private candidateID: string;
   private summary: string;
@@ -33,7 +33,49 @@ export class AnalysisEntity {
     this.updatedAt = updatedAt;
   }
 
-  public getId(): string { return this.id; }
+
+  getDetail(): IAnalysisDetail {
+    return {
+      id: this.id,
+      jobID: this.jobID,
+      candidateID: this.candidateID,
+      summary: this.summary,
+      matchingScore: this.matchingScore,
+      redFlags: this.redFlags,
+      suggestedQuestions: this.suggestedQuestions,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
+
+  public static create(data: IAnalysisProps): AnalysisEntity {
+    if (!data.jobID || !data.jobID.toString().trim()) {
+      throw new Error('Domain Error: Không thể tạo bản phân tích do thiếu JobID.');
+    }
+    
+    if (!data.candidateID || !data.candidateID.toString().trim()) {
+      throw new Error('Domain Error: Không thể tạo bản phân tích do thiếu CandidateID.');
+    }
+
+    const score = data.matchingScore !== undefined ? Number(data.matchingScore) : 0;
+    if (score < 0 || score > 100) {
+      throw new Error('Domain Error: Điểm số phù hợp (matchingScore) phải nằm trong khoảng từ 0 đến 100.');
+    }
+
+    return new AnalysisEntity({
+      ...data,
+      id: undefined,
+      matchingScore: score,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
+
+  public static restore(data: IAnalysisProps): AnalysisEntity {
+    return new AnalysisEntity(data);
+  }
+
+  public getId(): string | undefined { return this.id; }
   public setId(value: string): void { this.id = value; }
 
   public getJobID(): string { return this.jobID; }
@@ -60,17 +102,4 @@ export class AnalysisEntity {
   public getUpdatedAt(): Date | undefined { return this.updatedAt; }
   public setUpdatedAt(value: Date | undefined): void { this.updatedAt = value; }
 
-  getDetail(): IAnalysisDetail {
-    return {
-      id: this.id,
-      jobID: this.jobID,
-      candidateID: this.candidateID,
-      summary: this.summary,
-      matchingScore: this.matchingScore,
-      redFlags: this.redFlags,
-      suggestedQuestions: this.suggestedQuestions,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-    };
-  }
 }

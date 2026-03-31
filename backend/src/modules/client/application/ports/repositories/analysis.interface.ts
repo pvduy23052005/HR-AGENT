@@ -1,14 +1,5 @@
 import { AnalysisEntity } from "../../../domain/entities/analysis";
 
-export interface IAnalysisData {
-  jobID: string;
-  candidateID: string;
-  summary?: string;
-  matchingScore?: number;
-  redFlags?: string[];
-  suggestedQuestions?: string[];
-}
-
 export interface IAnalysisReadRepo {
   getAnalysisByCandidateId(candidateID: string): Promise<AnalysisEntity | null>;
 
@@ -16,5 +7,5 @@ export interface IAnalysisReadRepo {
 }
 
 export interface IAnalysisWriteRepo {
-  createAiAnalysis(data: IAnalysisData): Promise<AnalysisEntity | null>;
+  create(analysis: AnalysisEntity): Promise<AnalysisEntity | null>;
 }

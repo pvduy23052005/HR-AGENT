@@ -1,5 +1,5 @@
 export interface IAnalysisDetail {
-  id: string;
+  id?: string;
   jobID: string;
   candidateID: string;
   summary: string;
