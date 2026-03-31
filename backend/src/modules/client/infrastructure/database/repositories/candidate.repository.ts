@@ -3,7 +3,7 @@ import Candidate from '../models/candidate.model';
 import { CandidateEntity } from '../../../domain/entities/candidate/candidate.entity';
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IStatus } from '../../../application/ports/repositories/candidate.interface';
-import type { ICandidateData, ICanidateWithScore } from '../../../application/ports/repositories/candidate.interface';
+import type { ICanidateWithScore } from '../../../application/ports/repositories/candidate.interface';
 
 export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteRepo {
   private mapToEntity(doc: any | null): CandidateEntity | null {
