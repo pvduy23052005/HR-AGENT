@@ -323,7 +323,7 @@ pm.sendRequest(loginRequest, (err, res) => {
 
 | Variable   | Giá trị mặc định           |
 |------------|-----------------------------|
-| `base_url` | `http://localhost:3000`      |
+| `base_url` | `http://localhost:5050`      |
 | `email`    | `hr@example.com`            |
 | `password` | `123456`                     |
 
@@ -334,7 +334,3 @@ pm.sendRequest(loginRequest, (err, res) => {
 - Đảm bảo backend đã chạy (`pnpm dev`) và kết nối đúng MongoDB.
 - Sử dụng Postman Collection để lưu và tổ chức các request.
 - Xem thêm file `README.md` và `.env.example` để biết cấu hình môi trường.
-
----
-
-_Last updated: March 2026_

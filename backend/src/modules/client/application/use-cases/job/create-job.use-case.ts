@@ -15,8 +15,6 @@ export class CreateJobUseCase {
       jobData.requirements
     )
 
-    console.log(job);
-
     const savedJob = await this.jobRepo.create(job);
     
     if (!savedJob) throw new Error("Tạo mới không thành công!")
