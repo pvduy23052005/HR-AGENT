@@ -10,7 +10,7 @@ import routeClientAuth from "./client/routeClientAuth";
 
 import ProtectedRoute from "./ProtectedRoute";
 import ClientProtectedRoute from "./ClientProtectedRoute";
-import Dashbroad from "../pages/client/dashbroad/dashbroad";
+import Dashboard from "../pages/client/dashboard/Dashboard";
 import CandidateManagement from "../pages/client/CandidateManagement/CandidateManagement";
 import UserManagement from "../pages/client/UserManagement/UserManagement";
 import UploadCV from "../pages/client/UploadCV/UploadCV";
@@ -42,7 +42,7 @@ const routes = [
         path: "/",
         element: <LayoutClientDefault />,
         children: [
-          { path: "dashboard", element: <Dashbroad /> },
+          { path: "dashboard", element: <Dashboard /> },
 
           { path: "candidates", element: <CandidateManagement /> },
           { path: "users", element: <UserManagement /> },
