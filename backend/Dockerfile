@@ -1,5 +1,5 @@
 # Use Node 20 as the base for 2026 standards
-FROM node:20-slim
+FROM node:22-slim
 
 WORKDIR /app
 

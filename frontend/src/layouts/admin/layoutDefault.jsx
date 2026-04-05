@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Sider from "../../components/admin/ui/sider";
+import Sider from "../../components/admin/ui/Sider";
 import Header from "../../components/admin/ui/Header";
 import "../../styles/admin/layout.css";
 
