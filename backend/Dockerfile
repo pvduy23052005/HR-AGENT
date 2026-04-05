@@ -3,19 +3,22 @@ FROM node:20-slim
 
 WORKDIR /app
 
-# Copy package files first to leverage Docker caching
-COPY package*.json ./
+# Enable corepack to use pnpm version from package.json
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Install all dependencies so we can build TS to JS
-RUN npm install
+# Copy package files first to leverage Docker caching
+COPY package.json pnpm-lock.yaml* ./
+
+# Install dependencies using pnpm
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of your backend source code
 COPY . .
 
 # Build TypeScript -> JavaScript
-RUN npm run build
+RUN pnpm run build
 
 EXPOSE 5050
 
 # Run the compiled JS output
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]

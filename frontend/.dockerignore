@@ -1,7 +1,13 @@
 node_modules
-dist
+npm-debug.log
+pnpm-debug.log
+yarn-debug.log
+yarn-error.log
 .env
-.DS_Store
-*.log
+dist
+build
 .git
-.vscode
+.DS_Store
+Dockerfile
+docker-compose.yml
+nginx.conf

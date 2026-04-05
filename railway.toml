@@ -1,0 +1,11 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "backend/Dockerfile"
+rootDirectory = "backend"
+
+[deploy]
+startCommand = "pnpm start"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "on-failure"
+maxRestartCount = 3
