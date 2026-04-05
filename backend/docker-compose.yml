@@ -1,0 +1,11 @@
+services:
+  backend:
+    build: .
+    container_name: hr_agent_backend
+    ports:
+      - "5050:5050"
+    env_file:
+      - .env
+    environment:
+      - PORT=5050
+    restart: always

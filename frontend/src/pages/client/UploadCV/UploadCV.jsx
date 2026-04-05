@@ -232,8 +232,7 @@ const UploadCV = () => {
       }
       formData.append("jobID", jobId.trim());
 
-      const baseURL =
-        import.meta.env.VITE_API_BASE_URL || "http://localhost:5050";
+      const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5050";
 
       // call api upload .
       const uploadRes = await axios.post(`${baseURL}/upload/cv`, formData, {

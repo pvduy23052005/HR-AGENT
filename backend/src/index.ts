@@ -16,7 +16,9 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowedOrigins = ['http://localhost:5173'];
+      const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS ?? 'http://localhost:5173')
+        .split(',')
+        .map((o) => o.trim());
 
       if (!origin || allowedOrigins.includes(origin) || origin.startsWith('chrome-extension://')) {
         callback(null, true);

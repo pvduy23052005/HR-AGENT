@@ -15,7 +15,7 @@ COPY . .
 # Build TypeScript -> JavaScript
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 5050
 
 # Run the compiled JS output
 CMD ["npm", "start"]
