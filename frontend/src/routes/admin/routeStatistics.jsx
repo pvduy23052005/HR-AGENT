@@ -1,4 +1,4 @@
-import Statistics from "../../pages/admin/statistics";
+import Statistics from "../../pages/admin/Statistics";
 
 const routeStatistics = {
   path: "statistics",
