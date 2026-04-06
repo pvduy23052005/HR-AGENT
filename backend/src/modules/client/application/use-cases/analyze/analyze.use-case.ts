@@ -6,7 +6,6 @@ import { CandidateStatus } from '../../../domain/candidate';
 import { AnalysisEntity } from '../../../domain/analysis';
 import { AnalysisInputDto, AnalysisOutputDto } from '../../dtos/analysis/analysis.dto';
 
-
 export class AnalysisUseCase {
   constructor(
     private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo,

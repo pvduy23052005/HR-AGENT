@@ -64,7 +64,7 @@ export const getCandidateDetail = async (req: Request, res: Response): Promise<v
 // [PATCH] /candidates/change-status/:id
 export const updateStatus = async (req: Request, res: Response): Promise<void> => {
   try {
-    const id = req.params.id.toString() || '';
+    const id: string = req.params.id?.toString() || '';
     const { status } = req.body;
 
     if (!id) throw new Error('ID ứng viên không hợp lệ.');

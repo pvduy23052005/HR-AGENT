@@ -1,5 +1,6 @@
-import type { IJobSummary } from '../../../domain/job';
-import type { IJobReadRepo, IJobWriteRepo, IJobData } from '../../../application/ports/repositories/job.interface';
+import type { IJobReadRepo, IJobWriteRepo } from '../../../application/ports/repositories/job.interface';
+import { IUpdateJobInputDto } from '../../dtos/job/create.dto';
+import { IJobOutputDto } from '../../dtos/job/get.dto';
 
 export class UpdateJobUseCase {
   constructor(private readonly jobRepo: IJobReadRepo & IJobWriteRepo) { }
@@ -7,8 +8,8 @@ export class UpdateJobUseCase {
   async execute(
     jobId: string,
     userID: string,
-    jobData: Partial<IJobData>,
-  ): Promise<IJobSummary | null> {
+    jobData: IUpdateJobInputDto,
+  ): Promise<IJobOutputDto | null> {
     const job = await this.jobRepo.getById(jobId);
     if (!job) throw new Error('Công việc không tồn tại!');
 
@@ -26,6 +27,6 @@ export class UpdateJobUseCase {
 
     if (!jobUpdated) throw new Error("Cập nhật thất bại!");
 
-    return jobUpdated?.getSummary();
+    return jobUpdated?.getDetailJob();
   }
 }

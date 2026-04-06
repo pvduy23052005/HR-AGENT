@@ -1,12 +1,12 @@
 export interface IInterviewScheduleProps {
   id: string;
   time: Date;
-  status?: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled';
+  status?: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled' | undefined;
   address: string;
   candidateId: string;
   userId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
 }
 
 export interface IInterviewScheduleDetail {
@@ -16,6 +16,6 @@ export interface IInterviewScheduleDetail {
   address: string;
   candidateId: string;
   userId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | undefined;
+  updatedAt?: Date | undefined;
 }

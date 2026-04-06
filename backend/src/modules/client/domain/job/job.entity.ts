@@ -8,8 +8,8 @@ export class JobEntity {
   private requirements: string[];
   private status: boolean;
   private deleted: boolean;
-  private createdAt: Date | undefined;
-  private updatedAt: Date | undefined;
+  private createdAt?: Date;
+  private updatedAt?: Date;
 
   private constructor(props: IJobProps) {
     this.id = props.id ? props.id.toString() : undefined;

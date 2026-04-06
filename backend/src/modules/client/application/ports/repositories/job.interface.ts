@@ -1,15 +1,8 @@
 import type { JobEntity } from '../../../domain/job/job.entity';
-
-export interface IJobData {
-  title: string;
-  userID: string;
-  description: string;
-  requirements: string[];
-  status?: boolean;
-}
+import type { IJobSummary } from '../../../domain/job/job.types';
 
 export interface IJobReadRepo {
-  getAll(userID: string): Promise<(JobEntity[])>;
+  getAll(userID: string): Promise<IJobSummary[]>;
 
   getById(id: string): Promise<JobEntity | null>;
 }

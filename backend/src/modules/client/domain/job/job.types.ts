@@ -3,7 +3,7 @@ export interface IJobSummary {
   title: string;
   status: boolean;
   requirements: string[];
-  createdAt: Date | undefined;
+  createdAt?: Date;
 }
 
 export interface IJobDetail extends IJobSummary {
@@ -15,11 +15,11 @@ export interface IJobDetail extends IJobSummary {
 
 export interface IJobProps {
   id?: string;
-  title?: string;
+  title: string;
   userID: string;
-  description?: string;
-  requirements?: string[];
-  status?: boolean;
+  description: string;
+  requirements: string[];
+  status: boolean;
   deleted: boolean;
   createdAt?: Date;
   updatedAt?: Date;

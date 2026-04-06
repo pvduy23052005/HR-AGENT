@@ -1,4 +1,4 @@
-import type { IAnalysisProps } from './analysis.types';
+import type { IAnalysisProps, IAnalysisDetail } from './analysis.types';
 
 export class AnalysisEntity {
   private id?: string;
@@ -8,8 +8,8 @@ export class AnalysisEntity {
   private matchingScore: number;
   private redFlags: string[];
   private suggestedQuestions: string[];
-  private createdAt: Date | undefined;
-  private updatedAt: Date | undefined;
+  private createdAt?: Date;
+  private updatedAt?: Date;
 
   constructor({
     id,
@@ -82,9 +82,22 @@ export class AnalysisEntity {
   public setSuggestedQuestions(value: string[]): void { this.suggestedQuestions = value; }
 
   public getCreatedAt(): Date | undefined { return this.createdAt; }
-  public setCreatedAt(value: Date | undefined): void { this.createdAt = value; }
+  public setCreatedAt(value: Date): void { this.createdAt = value; }
 
   public getUpdatedAt(): Date | undefined { return this.updatedAt; }
-  public setUpdatedAt(value: Date | undefined): void { this.updatedAt = value; }
+  public setUpdatedAt(value: Date): void { this.updatedAt = value; }
 
+  public getDetail(): IAnalysisDetail {
+    return {
+      id: this.id,
+      jobID: this.jobID,
+      candidateID: this.candidateID,
+      summary: this.summary,
+      matchingScore: this.matchingScore,
+      redFlags: this.redFlags,
+      suggestedQuestions: this.suggestedQuestions,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    };
+  }
 }

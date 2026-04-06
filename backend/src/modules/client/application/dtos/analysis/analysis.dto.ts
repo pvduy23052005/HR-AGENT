@@ -1,12 +1,10 @@
-import { IAnalysisDetail } from "../../../domain/analysis";
-
 export interface AnalysisInputDto {
   candidateID: string;
   jobID: string;
 }
 
 export interface AnalysisOutputDto {
-  id?: string;
+  id?: string | undefined;
   jobID: string;
   candidateID: string;
   summary: string;

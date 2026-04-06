@@ -1,10 +1,10 @@
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
-import type { IJobDetail } from '../../../domain/job/job.types';
+import { IJobOutputDto } from '../../dtos/job/get.dto';
 
 export class GetJobByIdUseCase {
   constructor(private readonly jobRepo: IJobReadRepo) { }
 
-  async execute(jobID: string): Promise<IJobDetail | null> {
+  async execute(jobID: string): Promise<IJobOutputDto | null> {
     const job = await this.jobRepo.getById(jobID);
 
     if (!job) return null;

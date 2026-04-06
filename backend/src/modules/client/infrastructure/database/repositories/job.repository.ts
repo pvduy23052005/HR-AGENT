@@ -1,6 +1,7 @@
 import Job from '../models/job.model';
 import { JobEntity } from '../../../domain/job/job.entity';
 import type { IJobReadRepo, IJobWriteRepo } from '../../../application/ports/repositories/job.interface';
+import type { IJobSummary } from '../../../domain/job/job.types';
 
 export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   private mapToEntity(doc: any | null): JobEntity | null {
@@ -26,10 +27,10 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
     return this.mapToEntity(savedJob);
   }
 
-  public async getAll(userID: string): Promise<JobEntity[]> {
+  public async getAll(userID: string): Promise<IJobSummary[]> {
     const data = await Job.find({ userID, deleted: false }).lean();
 
-    const jobs = data.map(job => this.mapToEntity(job)).filter(job => job !== null);
+    const jobs = data.map(job => this.mapToEntity(job)?.getSummary()).filter(job => job !== undefined) as IJobSummary[];
     return jobs;
   }
 

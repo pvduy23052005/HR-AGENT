@@ -5,6 +5,7 @@ import { GetAllJobUseCase } from '../../../application/use-cases/job/get-all-job
 import { DeleteJobUseCase } from '../../../application/use-cases/job/delete-job.use-case';
 import { GetJobByIdUseCase } from '../../../application/use-cases/job/get-job-by-id.use-case';
 import { GetCanidateByJobUseCase } from '../../../application/use-cases/candidate/get-candidate-by-job.use-case';
+import { ICreateJobInputDto, IUpdateJobInputDto } from '../../../application/dtos/job/create.dto';
 
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';
 import { CandidateRepository } from '../../../infrastructure/database/repositories/candidate.repository';
@@ -22,14 +23,9 @@ const getCandidateByJobUseCase = new GetCanidateByJobUseCase(candidateRepo);
 export const createJob = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
-    const { title, description, requirements, status } = req.body as {
-      title: string;
-      description?: string;
-      requirements?: string[];
-      status?: boolean;
-    };
+    const { title, description, requirements } = req.body as ICreateJobInputDto;
 
-    const newJob = await createJobUseCase.execute({ title, userID, description: description ?? '', requirements: requirements ?? [], status });
+    const newJob = await createJobUseCase.execute({ title, userID, description, requirements });
 
     res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
   } catch (error: unknown) {
@@ -44,14 +40,9 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
     const userID = res.locals.user.id;
     const jobId = req.params['id'] as string;
 
-    const { title, description, requirements, status } = req.body as {
-      title?: string;
-      description?: string;
-      requirements?: string[];
-      status?: boolean;
-    };
+    const updateData = req.body as IUpdateJobInputDto;
 
-    const updatedJob = await updateJobUseCase.execute(jobId, userID, { title, description, requirements, status });
+    const updatedJob = await updateJobUseCase.execute(jobId, userID, updateData);
 
     res.status(200).json({
       success: true,
@@ -65,7 +56,7 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
 };
 
 // [GET] /job
-export const getAllJob = async (req: Request, res: Response): Promise<void> => {
+export const getAllJob = async (_req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
 
@@ -81,9 +72,13 @@ export const getAllJob = async (req: Request, res: Response): Promise<void> => {
 // [GET] /job/:id/candidates 
 export const getCandidateByJob = async (req: Request, res: Response): Promise<void> => {
   try {
-    const jobID: string = req.params.id.toString() || "";
+    const jobID = req.params.id?.toString() || "";
 
-    console.log(jobID);
+    if (!jobID) {
+      res.status(400).json({ success: false, message: 'ID công việc không hợp lệ!' });
+      return;
+    }
+
     const candidates = await getCandidateByJobUseCase.execute(jobID);
 
     res.status(200).json({
