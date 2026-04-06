@@ -1,5 +1,5 @@
 import Job from '../models/job.model';
-import { JobEntity } from '../../../domain/entities/job/job.entity';
+import { JobEntity } from '../../../domain/job/job.entity';
 import type { IJobReadRepo, IJobWriteRepo } from '../../../application/ports/repositories/job.interface';
 
 export class JobRepository implements IJobReadRepo, IJobWriteRepo {

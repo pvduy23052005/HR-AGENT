@@ -1,4 +1,4 @@
-import type { CandidateEntity, CandidateStatus, VerificationStatus, IPersonal } from '../../../domain/entities/candidate';
+import type { CandidateEntity, CandidateStatus, VerificationStatus, IPersonal } from '../../../domain/candidate';
 
 export interface ICandidateData {
   jobID?: string;

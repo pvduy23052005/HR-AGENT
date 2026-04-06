@@ -2,13 +2,10 @@ import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../applicati
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
 import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../application/ports/repositories/analysis.interface';
 import type { IAIService } from '../../../application/ports/services/ai.service';
-import type { IAnalysisDetail } from '../../../domain/entities/analysis';
-import { CandidateStatus } from '../../../domain/entities/candidate';
-import { AnalysisEntity } from '../../../domain/entities/analysis';
+import { CandidateStatus } from '../../../domain/candidate';
+import { AnalysisEntity } from '../../../domain/analysis';
+import { AnalysisInputDto, AnalysisOutputDto } from '../../dtos/analysis/analysis.dto';
 
-export interface IAnalysisResult {
-  data: IAnalysisDetail;
-}
 
 export class AnalysisUseCase {
   constructor(
@@ -18,13 +15,12 @@ export class AnalysisUseCase {
     private readonly geminiService: IAIService,
   ) { }
 
-  async execute(candidateID: string, jobID: string): Promise<IAnalysisResult> {
+  async execute(input: AnalysisInputDto): Promise<AnalysisOutputDto> {
+    const { candidateID, jobID } = input;
 
     const existingAnalysis = await this.aiAnalyzeRepo.getAnalysisByCandidateIdAndJobId(candidateID, jobID);
     if (existingAnalysis) {
-      return {
-        data: existingAnalysis.getDetail(),
-      };
+      return existingAnalysis as AnalysisOutputDto;
     }
 
     const candidate = await this.candidateRepo.getById(candidateID);
@@ -53,8 +49,7 @@ export class AnalysisUseCase {
     if (!savedAnalysis) throw new Error('Lỗi khi lưu kết quả phân tích.');
 
     await this.candidateRepo.updateStatus(candidateID, { status: CandidateStatus.SCREENING });
-    return {
-      data: savedAnalysis.getDetail(),
-    };
+    return savedAnalysis as AnalysisOutputDto;
+
   }
 }

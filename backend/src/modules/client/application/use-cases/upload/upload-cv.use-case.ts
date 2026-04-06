@@ -2,8 +2,8 @@ import type { ICandidateWriteRepo, ICandidateReadRepo } from '../../../applicati
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
 import type { IUploadService } from '../../../application/ports/services/upload.service';
 import type { IAIService } from '../../../application/ports/services/ai.service';
-import { CandidateEntity } from '../../../domain/entities/candidate/candidate.entity';
-import type { ICandidateDetailProfile, ICandidateProps } from '../../../domain/entities/candidate';
+import { CandidateEntity } from '../../../domain/candidate/candidate.entity';
+import type { ICandidateDetailProfile, ICandidateProps } from '../../../domain/candidate';
 
 export interface IOutputDTO {
   candidate: ICandidateDetailProfile

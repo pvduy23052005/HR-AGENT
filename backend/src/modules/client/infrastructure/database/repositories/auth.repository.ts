@@ -1,5 +1,5 @@
 import User from '../models/user.model';
-import { UserEntity } from '../../../domain/entities/user/user.entity';
+import { UserEntity } from '../../../domain/user/user.entity';
 import { IAuth } from '../../../application/ports/repositories/auth.interface';
 
 export class AuthRepository implements IAuth {

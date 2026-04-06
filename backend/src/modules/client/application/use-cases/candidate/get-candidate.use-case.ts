@@ -1,4 +1,4 @@
-import type { ICandidateSummaryProfile } from '../../../domain/entities/candidate';
+import type { ICandidateSummaryProfile } from '../../../domain/candidate';
 import type { ICandidateReadRepo } from '../../../application/ports/repositories/candidate.interface';
 
 export class GetCandidatesUseCase {

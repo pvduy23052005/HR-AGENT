@@ -1,6 +1,6 @@
 import type { IVerificationRepository } from '../../../application/ports/repositories/verification.interface';
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../application/ports/repositories/candidate.interface';
-import { CandidateStatus, VerificationStatus } from '../../../domain/entities/candidate';
+import { CandidateStatus, VerificationStatus } from '../../../domain/candidate';
 
 export class ConfirmVerifyUseCase {
   constructor(

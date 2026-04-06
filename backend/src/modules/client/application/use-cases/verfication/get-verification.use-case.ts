@@ -1,4 +1,4 @@
-import { IVerificationProps } from '../../../domain/entities/verifycation';
+import { IVerificationProps } from '../../../domain/verifycation';
 import { IVerificationRepository } from '../../../application/ports/repositories/verification.interface';
 
 export class GetVerificationUseCase {

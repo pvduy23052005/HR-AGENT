@@ -1,4 +1,4 @@
-import type { JobEntity } from '../../../domain/entities/job/job.entity';
+import type { JobEntity } from '../../../domain/job/job.entity';
 
 export interface IJobData {
   title: string;

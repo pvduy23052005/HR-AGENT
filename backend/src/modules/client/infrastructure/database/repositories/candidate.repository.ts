@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import Candidate from '../models/candidate.model';
-import { CandidateEntity } from '../../../domain/entities/candidate/candidate.entity';
+import { CandidateEntity } from '../../../domain/candidate/candidate.entity';
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IStatus } from '../../../application/ports/repositories/candidate.interface';
 import type { ICanidateWithScore } from '../../../application/ports/repositories/candidate.interface';

@@ -1,5 +1,5 @@
 import OTP from '../models/otp.model';
-import { OTPEntity } from '../../../domain/entities/otp/otp.entity';
+import { OTPEntity } from '../../../domain/otp/otp.entity';
 import type { IOTPReadRepo, IOTPWriteRepo } from '../../../application/ports/repositories/otp.interface';
 
 export class OtpRepository implements IOTPReadRepo, IOTPWriteRepo {

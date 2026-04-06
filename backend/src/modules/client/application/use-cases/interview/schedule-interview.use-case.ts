@@ -2,11 +2,11 @@ import type { IAnalysisReadRepo } from '../../../application/ports/repositories/
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IInterviewScheduleRepository } from '../../../application/ports/repositories/interviewSchedule.interface';
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
-import type { IInterviewScheduleDetail } from '../../../domain/entities/interviewSchedule';
+import type { IInterviewScheduleDetail } from '../../../domain/interviewSchedule';
 import type { IAIService } from '../../../application/ports/services/ai.service';
 import type { IMailService } from '../../../application/ports/services/mail.service';
 import { buildInterviewCalendarInvite } from '../../../infrastructure/external-service/calendarInvite.service';
-import { CandidateStatus } from '../../../domain/entities/candidate';
+import { CandidateStatus } from '../../../domain/candidate';
 
 export type ScheduleInterviewInput = {
   userId: string;

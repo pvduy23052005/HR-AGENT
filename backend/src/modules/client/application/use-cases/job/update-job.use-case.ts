@@ -1,4 +1,4 @@
-import type { IJobSummary } from '../../../domain/entities/job';
+import type { IJobSummary } from '../../../domain/job';
 import type { IJobReadRepo, IJobWriteRepo, IJobData } from '../../../application/ports/repositories/job.interface';
 
 export class UpdateJobUseCase {

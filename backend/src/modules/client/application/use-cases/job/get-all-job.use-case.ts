@@ -1,5 +1,5 @@
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
-import type { IJobSummary } from '../../../domain/entities/job';
+import type { IJobSummary } from '../../../domain/job';
 
 export class GetAllJobUseCase {
   constructor(private readonly jobRepo: IJobReadRepo) { }

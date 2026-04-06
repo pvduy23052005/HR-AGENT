@@ -1,7 +1,7 @@
-import type { IJobSummary } from '../../../domain/entities/job';
+import type { IJobSummary } from '../../../domain/job';
 import type { IJobWriteRepo } from '../../../application/ports/repositories/job.interface';
 import type { IJobData } from '../../../application/ports/repositories/job.interface';
-import { JobEntity } from '../../../domain/entities/job';
+import { JobEntity } from '../../../domain/job';
 
 export class CreateJobUseCase {
   constructor(private readonly jobRepo: IJobWriteRepo) { }
@@ -16,7 +16,7 @@ export class CreateJobUseCase {
     )
 
     const savedJob = await this.jobRepo.create(job);
-    
+
     if (!savedJob) throw new Error("Tạo mới không thành công!")
 
     return savedJob.getSummary();

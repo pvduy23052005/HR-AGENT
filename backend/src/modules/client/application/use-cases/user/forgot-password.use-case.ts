@@ -3,7 +3,7 @@ import { htmlEmailOtp } from '../../../../../shared/templates/email/otp';
 import type { IUserReadRepo } from '../../../application/ports/repositories/user.interface';
 import type { IOTPReadRepo, IOTPWriteRepo } from '../../../application/ports/repositories/otp.interface';
 import type { IMailService } from '../../../application/ports/services/mail.service';
-import { OTPEntity } from '../../../domain/entities/otp/otp.entity';
+import { OTPEntity } from '../../../domain/otp/otp.entity';
 
 export class ForgotPasswordUseCase {
   constructor(

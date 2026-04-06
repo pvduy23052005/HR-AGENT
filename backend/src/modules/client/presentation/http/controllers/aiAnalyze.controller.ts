@@ -4,6 +4,7 @@ import { CandidateRepository } from '../../../infrastructure/database/repositori
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';
 import { AiAnalysisRepository } from '../../../infrastructure/database/repositories/aiAnalyze.repository';
 import { GeminiService } from '../../../infrastructure/external-service/gemini.service';
+import { AnalysisInputDto } from '../../../application/dtos/analysis/analysis.dto';
 
 const candidateRepository = new CandidateRepository();
 const jobRepository = new JobRepository();
@@ -13,7 +14,7 @@ const geminiService = new GeminiService();
 // [POST] ai/ananlyze
 export const analyzeCandidate = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { jobID, candidateID } = req.body as { jobID: string; candidateID: string };
+    const input = req.body as AnalysisInputDto;
 
     const analyzeUseCase = new AnalysisUseCase(
       candidateRepository,
@@ -21,13 +22,14 @@ export const analyzeCandidate = async (req: Request, res: Response): Promise<voi
       aiAnalyzeRepository,
       geminiService,
     );
-    const result = await analyzeUseCase.execute(candidateID, jobID);
+    const result = await analyzeUseCase.execute(input);
 
     res.status(200).json({
       success: true,
-      aiAnalyze: result.data,
+      aiAnalyze: result,
       message: 'Phân tích AI thành công!'
     });
+
   } catch (error: unknown) {
     const e = error as { message?: string };
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi hệ thống khi phân tích AI.' });

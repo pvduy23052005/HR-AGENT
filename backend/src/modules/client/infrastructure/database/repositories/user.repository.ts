@@ -1,5 +1,5 @@
 import User from '../models/user.model';
-import { UserEntity } from '../../../domain/entities/user/user.entity';
+import { UserEntity } from '../../../domain/user/user.entity';
 import type { IUserReadRepo, IUserWriteRepo } from '../../../application/ports/repositories/user.interface';
 
 export class UserRepository implements IUserReadRepo, IUserWriteRepo {

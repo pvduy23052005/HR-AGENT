@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import InterviewSchedule from '../models/interviewSchedule.model';
-import { InterviewScheduleEntity } from '../../../domain/entities/interviewSchedule/interviewSchedule.entity';
+import { InterviewScheduleEntity } from '../../../domain/interviewSchedule/interviewSchedule.entity';
 import type {
   IInterviewScheduleData,
   IInterviewScheduleRepository,
