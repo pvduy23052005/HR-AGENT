@@ -1,4 +1,4 @@
-import type { IAnalysisDetail, IAnalysisProps } from './analysis.types';
+import type { IAnalysisProps } from './analysis.types';
 
 export class AnalysisEntity {
   private id?: string;
@@ -33,26 +33,11 @@ export class AnalysisEntity {
     this.updatedAt = updatedAt;
   }
 
-
-  getDetail(): IAnalysisDetail {
-    return {
-      id: this.id,
-      jobID: this.jobID,
-      candidateID: this.candidateID,
-      summary: this.summary,
-      matchingScore: this.matchingScore,
-      redFlags: this.redFlags,
-      suggestedQuestions: this.suggestedQuestions,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
-    };
-  }
-
   public static create(data: IAnalysisProps): AnalysisEntity {
     if (!data.jobID || !data.jobID.toString().trim()) {
       throw new Error('Domain Error: Không thể tạo bản phân tích do thiếu JobID.');
     }
-    
+
     if (!data.candidateID || !data.candidateID.toString().trim()) {
       throw new Error('Domain Error: Không thể tạo bản phân tích do thiếu CandidateID.');
     }

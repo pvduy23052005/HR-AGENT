@@ -256,6 +256,16 @@ export class CandidateEntity {
     this.updatedAt = new Date();
   }
 
+  public updateStatus(status: CandidateStatus): void {
+    this.status = status;
+    this.updatedAt = new Date();
+  }
+
+  public updateVerificationStatus(status: VerificationStatus): void {
+    this.verificationStatus = status;
+    this.updatedAt = new Date();
+  }
+
   public getId(): string | null | undefined { return this.id }
   public setId(value: string | null): void { this.id = value; }
 

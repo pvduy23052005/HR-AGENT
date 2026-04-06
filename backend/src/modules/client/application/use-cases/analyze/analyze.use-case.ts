@@ -48,8 +48,9 @@ export class AnalysisUseCase {
 
     if (!savedAnalysis) throw new Error('Lỗi khi lưu kết quả phân tích.');
 
-    await this.candidateRepo.updateStatus(candidateID, { status: CandidateStatus.SCREENING });
-    return savedAnalysis as AnalysisOutputDto;
+    candidate.updateStatus(CandidateStatus.SCREENING);
+    await this.candidateRepo.update(candidate);
 
+    return savedAnalysis as AnalysisOutputDto;
   }
 }

@@ -24,18 +24,16 @@ export class ConfirmVerifyUseCase {
     let message = '';
 
     if (status === 'risky') {
-      await this.candidateWriteRepo.updateStatus(candidateID, {
-        verificationStatus: VerificationStatus.RISKY,
-        status: CandidateStatus.APPLIED
-      });
+      candidate.updateVerificationStatus(VerificationStatus.RISKY);
+      candidate.updateStatus(CandidateStatus.APPLIED);
       message = 'Đánh dấu rủi ro. Reset lại Ứng tuyển.';
     } else if (status === 'verified') {
-      await this.candidateWriteRepo.updateStatus(candidateID, {
-        verificationStatus: VerificationStatus.VERIFIED,
-        status: CandidateStatus.OFFER
-      });
+      candidate.updateVerificationStatus(VerificationStatus.VERIFIED);
+      candidate.updateStatus(CandidateStatus.OFFER);
       message = 'Kiểm chứng thành công! Chuyển sang Đề nghị.';
     }
+
+    await this.candidateWriteRepo.update(candidate);
 
     return message;
   }
