@@ -16,14 +16,22 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
     let endDate = new Date();
 
     if (filterCriteria === 'Theo tháng' && filterDate) {
-      const [year, month] = (filterDate as string).split('-');
-      startDate = new Date(parseInt(year), parseInt(month) - 1, 1);
-      endDate = new Date(parseInt(year), parseInt(month), 0, 23, 59, 59, 999);
+      const parts = (filterDate as string).split('-');
+      const year = parts[0];
+      const month = parts[1];
+      if (year && month) {
+        startDate = new Date(parseInt(year), parseInt(month) - 1, 1);
+        endDate = new Date(parseInt(year), parseInt(month), 0, 23, 59, 59, 999);
+      }
     } else if (filterCriteria === 'Theo quý' && filterDate) {
-      const [year, quarter] = (filterDate as string).split('-Q');
-      const month = (parseInt(quarter) - 1) * 3;
-      startDate = new Date(parseInt(year), month, 1);
-      endDate = new Date(parseInt(year), month + 3, 0, 23, 59, 59, 999);
+      const parts = (filterDate as string).split('-Q');
+      const year = parts[0];
+      const quarter = parts[1];
+      if (year && quarter) {
+        const month = (parseInt(quarter) - 1) * 3;
+        startDate = new Date(parseInt(year), month, 1);
+        endDate = new Date(parseInt(year), month + 3, 0, 23, 59, 59, 999);
+      }
     } else if (filterCriteria === 'Theo năm' && filterDate) {
       const year = parseInt(filterDate as string);
       startDate = new Date(year, 0, 1);
@@ -139,9 +147,14 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
         }
       };
       nameFormatter = (id) => {
-        const [year, month] = (id as string).split('-');
+        const parts = (id as string).split('-');
+        const year = parts[0];
+        const month = parts[1];
         const monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        return `${monthMap[parseInt(month) - 1]} ${year}`;
+        if (year && month) {
+          return `${monthMap[parseInt(month) - 1]} ${year}`;
+        }
+        return id;
       };
     }
 

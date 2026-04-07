@@ -128,24 +128,24 @@ export class CandidateEntity {
       const monthMatch = durationStr.match(/(\d+)\s*(?:tháng|month|months|mo|mos)/);
 
       let parsed = false;
-      if (yearMatch) {
+      if (yearMatch && yearMatch[1]) {
         totalMonths += parseInt(yearMatch[1], 10) * 12;
         parsed = true;
       }
-      if (monthMatch) {
+      if (monthMatch && monthMatch[1]) {
         totalMonths += parseInt(monthMatch[1], 10);
         parsed = true;
       }
 
       if (!parsed) {
         const matches = durationStr.match(/\b(19|20)\d{2}\b/g);
-        if (matches && matches.length >= 2) {
+        if (matches && matches.length >= 2 && matches[0] && matches[matches.length - 1]) {
           const startYear = parseInt(matches[0], 10);
-          const endYear = parseInt(matches[matches.length - 1], 10);
+          const endYear = parseInt(matches[matches.length - 1]!, 10);
           if (endYear >= startYear) {
             totalMonths += (endYear - startYear) * 12;
           }
-        } else if (matches && matches.length === 1 && (durationStr.includes('present') || durationStr.includes('nay') || durationStr.includes('hiện tại') || durationStr.includes('now'))) {
+        } else if (matches && matches.length === 1 && matches[0] && (durationStr.includes('present') || durationStr.includes('nay') || durationStr.includes('hiện tại') || durationStr.includes('now'))) {
           const startYear = parseInt(matches[0], 10);
           const currentYear = new Date().getFullYear();
           if (currentYear >= startYear) {

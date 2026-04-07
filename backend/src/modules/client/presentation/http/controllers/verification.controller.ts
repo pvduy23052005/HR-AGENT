@@ -6,7 +6,6 @@ import { ConfirmVerifyUseCase } from '../../../application/use-cases/verfication
 
 import { VerificationRepository } from '../../../infrastructure/database/repositories/verification.repository';
 import { CandidateRepository } from '../../../infrastructure/database/repositories/candidate.repository';
-import { CandidateStatus, VerificationStatus } from '../../../domain/candidate';
 
 const verificationRepository = new VerificationRepository();
 const candidateRepository = new CandidateRepository();

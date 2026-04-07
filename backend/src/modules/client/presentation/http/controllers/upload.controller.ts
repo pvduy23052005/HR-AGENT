@@ -19,6 +19,11 @@ export const uploadCV = async (req: Request, res: Response): Promise<void> => {
     const avatarFile = files?.avatar?.[0];
     const { jobID } = req.body as { jobID: string };
 
+    if (!cvFile) {
+      res.status(400).json({ message: 'Vui lòng tải lên file CV' });
+      return;
+    }
+
     const { candidate } = await uploadCVUseCase.execute(
       userID,
       jobID,

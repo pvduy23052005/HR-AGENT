@@ -19,7 +19,7 @@ export class UploadService implements IUploadService {
       const upload = files.map((file) => {
         return new Promise<string>((resolve, reject) => {
           const originalName = file.originalname ?? 'file_upload';
-          const cleanFileName = originalName.split('.')[0].replace(/\s+/g, '_');
+          const cleanFileName = (originalName.split('.')[0] ?? originalName).replace(/\s+/g, '_');
           const isImage = file.mimetype.startsWith('image');
           const resourceType = isImage ? 'image' : 'raw';
 
