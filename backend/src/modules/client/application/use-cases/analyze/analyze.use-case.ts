@@ -37,10 +37,10 @@ export class AnalysisUseCase {
     const analysis = AnalysisEntity.create({
       jobID,
       candidateID,
-      summary: analysisResult['summary'] as string | undefined,
-      matchingScore: analysisResult['matchingScore'] as number | undefined,
-      redFlags: analysisResult['redFlags'] as string[] | undefined,
-      suggestedQuestions: analysisResult['suggestedQuestions'] as string[] | undefined
+      summary: analysisResult['summary'] as string,
+      matchingScore: analysisResult['matchingScore'] as number,
+      redFlags: analysisResult['redFlags'] as string[],
+      suggestedQuestions: analysisResult['suggestedQuestions'] as string[]
     });
 
     const savedAnalysis = await this.aiAnalyzeRepo.create(analysis);

@@ -83,7 +83,7 @@ export class ScheduleInterviewUseCase {
         durationMinutes: input.durationMinutes,
         address: input.address,
       },
-      aiAnalysis: analysis.getDetail(),
+      aiAnalysis: analysis,
       notes: input.notes ?? '',
     };
 

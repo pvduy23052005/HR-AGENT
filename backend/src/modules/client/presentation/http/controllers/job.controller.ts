@@ -56,7 +56,7 @@ export const updateJob = async (req: Request, res: Response): Promise<void> => {
 };
 
 // [GET] /job
-export const getAllJob = async (_req: Request, res: Response): Promise<void> => {
+export const getAllJob = async (req: Request, res: Response): Promise<void> => {
   try {
     const userID = res.locals.user.id;
 

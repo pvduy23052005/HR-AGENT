@@ -78,7 +78,7 @@ export class GetStatisticsUseCase {
         ]);
 
         chartData.push({
-          name: this.MONTH_LABELS[m],
+          name: this.MONTH_LABELS[m]!,
           blueValue: cvCount,
           orangeValue: ivCount,
           grayValue: doneCount,
@@ -111,20 +111,20 @@ export class GetStatisticsUseCase {
       ]);
 
       for (const cv of cvsThisMonth) {
-        if (cv.createdAt) cvsByWeek[getWeekOfMonth(new Date(cv.createdAt))]++;
+        if (cv.createdAt) cvsByWeek[getWeekOfMonth(new Date(cv.createdAt))]!++;
       }
       for (const iv of ivThisMonth) {
-        if (iv.time) interviewsByWeek[getWeekOfMonth(new Date(iv.time))]++;
+        if (iv.time) interviewsByWeek[getWeekOfMonth(new Date(iv.time))]!++;
       }
       for (const done of doneThisMonth) {
-        if (done.updatedAt) completedByWeek[getWeekOfMonth(new Date(done.updatedAt))]++;
+        if (done.updatedAt) completedByWeek[getWeekOfMonth(new Date(done.updatedAt))]!++;
       }
 
       chartData = [1, 2, 3, 4].map((w) => ({
         name: `Tuần ${w}`,
-        blueValue: cvsByWeek[w],
-        orangeValue: interviewsByWeek[w],
-        grayValue: completedByWeek[w],
+        blueValue: cvsByWeek[w]!,
+        orangeValue: interviewsByWeek[w]!,
+        grayValue: completedByWeek[w]!,
       }));
     }
 
@@ -151,20 +151,20 @@ export class GetStatisticsUseCase {
       };
 
       for (const cv of cvsThisWeek) {
-        if (cv.createdAt) cvsByDay[dayIndex(new Date(cv.createdAt))]++;
+        if (cv.createdAt) cvsByDay[dayIndex(new Date(cv.createdAt))]!++;
       }
       for (const iv of ivThisWeek) {
-        if (iv.time) interviewsByDay[dayIndex(new Date(iv.time))]++;
+        if (iv.time) interviewsByDay[dayIndex(new Date(iv.time))]!++;
       }
       for (const done of doneThisWeek) {
-        if (done.updatedAt) completedByDay[dayIndex(new Date(done.updatedAt))]++;
+        if (done.updatedAt) completedByDay[dayIndex(new Date(done.updatedAt))]!++;
       }
 
       chartData = DAY_LABELS.map((label, i) => ({
         name: label,
-        blueValue: cvsByDay[i],
-        orangeValue: interviewsByDay[i],
-        grayValue: completedByDay[i],
+        blueValue: cvsByDay[i]!,
+        orangeValue: interviewsByDay[i]!,
+        grayValue: completedByDay[i]!,
       }));
     }
 

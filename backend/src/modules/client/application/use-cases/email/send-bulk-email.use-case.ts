@@ -85,7 +85,7 @@ export class SendBulkEmailUseCase {
 
     for (let i = 0; i < candidates.length; i++) {
       const candidate = candidates[i];
-      const candidateId = input.candidateIds[i];
+      const candidateId = input.candidateIds[i]!;
 
       try {
         if (!candidate) {
