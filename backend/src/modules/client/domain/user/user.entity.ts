@@ -7,6 +7,7 @@ export class UserEntity {
   private password: string;
   private avatar: string;
   private status: string;
+  private interviewNotificationSubscribed: boolean;
   private deleted: boolean;
   private deletedAt: Date | null;
   private createdAt: Date | undefined;
@@ -19,6 +20,7 @@ export class UserEntity {
     password,
     avatar = '',
     status = 'active',
+    interviewNotificationSubscribed = false,
     deleted = false,
     deletedAt = null,
     createdAt,
@@ -30,6 +32,7 @@ export class UserEntity {
     this.password = password;
     this.avatar = avatar;
     this.status = status;
+    this.interviewNotificationSubscribed = interviewNotificationSubscribed;
     this.deleted = deleted;
     this.deletedAt = deletedAt;
     this.createdAt = createdAt;
@@ -53,6 +56,9 @@ export class UserEntity {
 
   public getStatus(): string { return this.status; }
   public setStatus(value: string): void { this.status = value; }
+
+  public getInterviewNotificationSubscribed(): boolean { return this.interviewNotificationSubscribed; }
+  public setInterviewNotificationSubscribed(value: boolean): void { this.interviewNotificationSubscribed = value; }
 
   public getDeleted(): boolean { return this.deleted; }
   public setDeleted(value: boolean): void { this.deleted = value; }
@@ -81,6 +87,7 @@ export class UserEntity {
       email: this.email,
       avatar: this.avatar,
       status: this.status,
+      interviewNotificationSubscribed: this.interviewNotificationSubscribed,
       createdAt: this.createdAt,
     };
   }

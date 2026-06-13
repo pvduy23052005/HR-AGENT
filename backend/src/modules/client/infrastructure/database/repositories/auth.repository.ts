@@ -14,6 +14,7 @@ export class AuthRepository implements IAuth {
       password: d.password,
       avatar: d.avatar,
       status: d.status,
+      interviewNotificationSubscribed: d.interviewNotificationSubscribed ?? false,
       deleted: d.deleted,
       deletedAt: d.deletedAt,
       createdAt: d.createdAt,

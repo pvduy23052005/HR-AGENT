@@ -21,6 +21,57 @@ const verifyOtpUseCase = new VerifyOtpUseCase(userRepository, otpRepository);
 const resetPasswordUseCase = new ResetPasswordUseCase(userRepository, otpRepository, passwordService);
 const ressetPassNotOTPUseCase = new ResetPassNotOTPUseCase(userRepository, passwordService);
 
+// [GET] /user/interview-notification
+export const getInterviewNotificationSubscription = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = res.locals.user.id as string;
+    const user = await userRepository.findUserByID(userId);
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'Khong tim thay HR.' });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      subscribed: user.getInterviewNotificationSubscribed(),
+      user: user.getProfile(),
+    });
+  } catch (error: unknown) {
+    const e = error as { message?: string };
+    res.status(500).json({ success: false, message: e.message ?? 'Loi lay trang thai thong bao.' });
+  }
+};
+
+// [PATCH] /user/interview-notification
+export const updateInterviewNotificationSubscription = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = res.locals.user.id as string;
+    const { subscribed } = req.body as { subscribed?: boolean };
+
+    if (typeof subscribed !== 'boolean') {
+      res.status(400).json({ success: false, message: 'subscribed must be boolean.' });
+      return;
+    }
+
+    const user = await userRepository.updateInterviewNotificationSubscription(userId, subscribed);
+    if (!user) {
+      res.status(404).json({ success: false, message: 'Khong tim thay HR.' });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: subscribed ? 'Da bat thong bao lich phong van.' : 'Da tat thong bao lich phong van.',
+      subscribed: user.getInterviewNotificationSubscribed(),
+      user: user.getProfile(),
+    });
+  } catch (error: unknown) {
+    const e = error as { message?: string };
+    res.status(500).json({ success: false, message: e.message ?? 'Loi cap nhat thong bao.' });
+  }
+};
+
 // [POST] /user/password/forgot
 export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
   try {

@@ -8,6 +8,7 @@ export interface IUserProfile {
   email: string;
   avatar: string;
   status: string;
+  interviewNotificationSubscribed: boolean;
   createdAt: Date | undefined;
 }
 
@@ -18,6 +19,7 @@ export interface IUserProps {
   password: string;
   avatar?: string;
   status?: string;
+  interviewNotificationSubscribed?: boolean;
   deleted?: boolean;
   deletedAt?: Date | null;
   createdAt?: Date;

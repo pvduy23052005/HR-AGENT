@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     avatar: { type: String, default: '' },
     status: { type: String, default: 'active', enum: ['active', 'inactive'] },
+    interviewNotificationSubscribed: { type: Boolean, default: false },
     deleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null },
   },

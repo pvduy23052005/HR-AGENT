@@ -4,6 +4,10 @@ import { forgotPasswordValidate, otpPasswordValidate, resetPasswordValidate } fr
 import { authMiddleware } from '../middlewares/auth.middleware';
 const router = express.Router();
 
+router.get('/interview-notification', authMiddleware, controller.getInterviewNotificationSubscription);
+
+router.patch('/interview-notification', authMiddleware, controller.updateInterviewNotificationSubscription);
+
 router.post('/password/forgot', forgotPasswordValidate, controller.forgotPassword);
 
 router.post('/password/otp', otpPasswordValidate, controller.verifyOTP);

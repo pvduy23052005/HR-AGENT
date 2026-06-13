@@ -4,23 +4,37 @@ import { AiAnalysisRepository } from '../../../infrastructure/database/repositor
 import { CandidateRepository } from '../../../infrastructure/database/repositories/candidate.repository';
 import { InterviewScheduleRepository } from '../../../infrastructure/database/repositories/interviewSchedule.repository';
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';
+import { UserRepository } from '../../../infrastructure/database/repositories/user.repository';
 import { GeminiService } from '../../../infrastructure/external-service/gemini.service';
 import { MailService } from '../../../infrastructure/external-service/mail.service';
+import { EventManager } from '../../../application/events/EventManager';
+import type { InterviewEventMap } from '../../../application/events/interview.events';
+import { InterviewCandidateEmailListener } from '../../../application/events/interviewCandidateEmail.listener';
+import { InterviewCandidateStatusListener } from '../../../application/events/interviewCandidateStatus.listener';
+import { InterviewHrNotificationListener } from '../../../application/events/interviewHrNotification.listener';
 
 const candidateRepository = new CandidateRepository();
 const jobRepository = new JobRepository();
 const aiAnalysisRepository = new AiAnalysisRepository();
 const interviewScheduleRepository = new InterviewScheduleRepository();
+const userRepository = new UserRepository();
 const geminiService = new GeminiService();
 const mailService = new MailService();
+const interviewEventManager = new EventManager<InterviewEventMap>();
+
+interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateEmailListener());
+interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateStatusListener());
+interviewEventManager.subscribe('interview.scheduled', new InterviewHrNotificationListener());
 
 const scheduleInterviewUseCase = new ScheduleInterviewUseCase(
   candidateRepository,
   jobRepository,
   aiAnalysisRepository,
   interviewScheduleRepository,
+  userRepository,
   geminiService,
   mailService,
+  interviewEventManager,
 );
 
 // [POST] /interview/schedule

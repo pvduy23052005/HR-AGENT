@@ -160,6 +160,71 @@
   gap: 24px;
 }
 
+.sip-notification-panel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.sip-notification-panel__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0087f1;
+  background: #e8f4ff;
+  font-size: 24px;
+  flex: 0 0 auto;
+}
+
+.sip-notification-panel__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.sip-notification-panel__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.sip-notification-panel__desc {
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.sip-notification-toggle {
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sip-notification-toggle--on {
+  border-color: #0087f1;
+  color: #006bbf;
+  background: #eef8ff;
+}
+
+.sip-notification-toggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .sip-form-group {
   display: flex;
   flex-direction: column;
@@ -328,6 +393,15 @@
 
   .sip-form-actions {
     flex-direction: column;
+  }
+
+  .sip-notification-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sip-notification-toggle {
+    width: 100%;
   }
 
   .sip-btn {
